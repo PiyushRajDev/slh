@@ -1,0 +1,13 @@
+{
+  "name": "slh",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "echo 'Run apps individually'",
+    "lint": "echo 'Add later'",
+    "test": "echo 'Add later'"
+  }
+}
