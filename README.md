@@ -38,6 +38,7 @@ SLH is designed for **students, colleges, and recruiters** who want outcomes bas
 - Designed to scale from **500 → 500,000 students**
 
 ---
+## 🏗️ Repository Structure (Monorepo)
 
 slh/
 ├── apps/
@@ -147,5 +148,5 @@ Evaluation logic changes must update specs
 
 
 
-## 🏗️ Repository Structure (Monorepo)
+
 
