@@ -1,0 +1,21 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model DSAProfile {
+  id              String   @id @default(uuid())
+  studentId       String
+  platform        String
+  rawJson         Json?
+  normalizedJson  Json?
+  lastSyncedAt    DateTime
+
+  @@unique([studentId, platform])
+  @@index([studentId, platform])
+}

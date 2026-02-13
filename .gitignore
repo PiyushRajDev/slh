@@ -139,3 +139,29 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Env files
+.env
+.env.*
+apps/**/.env
+packages/**/.env
+
+# Build
+dist/
+build/
+
+# Logs
+logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Prisma generated
+packages/database/node_modules/.prisma
