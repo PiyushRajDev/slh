@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "moduleResolution": "node",
+    "paths": {
+      "@slh/leetcode-core": ["packages/leetcode-core/src/index.ts"],
+      "@slh/leetcode-core/*": ["packages/leetcode-core/src/*"]
+    }
+  }
+}

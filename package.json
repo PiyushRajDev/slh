@@ -9,5 +9,11 @@
     "dev": "echo 'Run apps individually'",
     "lint": "echo 'Add later'",
     "test": "echo 'Add later'"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6"
   }
 }
