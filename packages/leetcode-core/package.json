@@ -3,5 +3,8 @@
   "version": "1.0.0",
   "main": "src/index.ts",
   "types": "src/index.ts",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "p-limit": "^7.3.0"
+  }
 }

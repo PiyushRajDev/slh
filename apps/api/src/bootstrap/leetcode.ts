@@ -1,15 +1,17 @@
-import Redis from "ioredis";
 import {
   LeetCodeClient,
-  RedisCache,
-  UserScraper,
+  FullProfileScraper,
   UserService,
+  RedisCache
 } from "@slh/leetcode-core";
 
+import Redis from "ioredis";
+
 const redis = new Redis();
+const cache = new RedisCache(redis);
 
 const client = new LeetCodeClient();
-const cache = new RedisCache(redis);
-const scraper = new UserScraper(client);
+const scraper = new FullProfileScraper(client);
 
-export const userService = new UserService(cache, scraper);
+export const leetcodeService =
+  new UserService(cache, scraper);

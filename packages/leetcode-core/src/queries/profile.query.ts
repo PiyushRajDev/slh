@@ -1,5 +1,5 @@
-export const userProfileQuery = `
-query getUserProfile($username: String!) {
+export const profileQuery = `
+query getProfile($username: String!) {
   matchedUser(username: $username) {
     username
     profile {
@@ -13,6 +13,7 @@ query getUserProfile($username: String!) {
         count
       }
     }
+    submissionCalendar
   }
 }
 `;

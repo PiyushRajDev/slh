@@ -9,6 +9,7 @@
   "dependencies": {
     "@slh/leetcode-core": "*",
     "express": "^5.2.1",
+    "express-rate-limit": "^8.2.1",
     "ioredis": "^5.9.3"
   },
   "devDependencies": {
