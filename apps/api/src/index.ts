@@ -1,13 +1,9 @@
+import "./env.js";
 import express from "express";
-import dotenv from "dotenv";
-import dsaRoutes from "./api/routes/dsa.routes";
-
-import { db } from "../../../packages/database/src";
+import dsaRoutes from "./http/routes/dsa.routes.js";
+import { DSARepository, prisma } from "@slh/database";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
-
-
-dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -22,8 +18,9 @@ const limiter = rateLimit({
 app.use(express.json());
 
 app.get("/", async (req, res) => {
+    const repo = new DSARepository();
     try {
-        await db.$queryRaw`SELECT 1`;
+        await repo.healthCheck();
         res.json({ status: "ok", database: "connected" });
     } catch (error) {
         console.error(error);
@@ -34,6 +31,20 @@ app.get("/", async (req, res) => {
 app.use(limiter);
 app.use("/dsa", dsaRoutes);
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+
+// Graceful Shutdown
+const shutdown = async () => {
+    console.log("Shutting down server...");
+    server.close(async () => {
+        console.log("HTTP server closed.");
+        await prisma.$disconnect();
+        console.log("Database disconnected.");
+        process.exit(0);
+    });
+};
+
+process.on("SIGTERM", shutdown);
+process.on("SIGINT", shutdown);

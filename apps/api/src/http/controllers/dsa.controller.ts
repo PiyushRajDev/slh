@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { ProfileService } from "../../services/profile.service";
-import { getProfileSchema } from "../../utils/validator";
-import { enqueueProfileFetch } from "../../queue/profile.queue";
+import { ProfileService } from "../../services/profile.service.js";
+import { getProfileSchema } from "../requestSchema.js";
+import { enqueueProfileFetch } from "../../queue/profile.queue.js";
 
 const service = new ProfileService();
 

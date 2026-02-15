@@ -165,3 +165,26 @@ Thumbs.db
 
 # Prisma generated
 packages/database/node_modules/.prisma
+# Node
+node_modules/
+
+# Build outputs
+dist/
+build/
+coverage/
+
+# TypeScript
+*.js
+*.js.map
+*.d.ts
+
+# Logs
+*.log
+
+# Env
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db

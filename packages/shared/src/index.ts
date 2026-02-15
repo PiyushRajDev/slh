@@ -1,4 +1,3 @@
-export * from "./platform";
-export * from "./unifiedProfile";
-export * from "./profileStatus";
-export * from "./requestSchema";
+export * from "./platform.js";
+export * from "./unifiedProfile.js";
+export * from "./profileStatus.js";

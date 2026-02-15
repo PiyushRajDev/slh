@@ -1,4 +1,4 @@
-import { Platform } from "./platform";
+import { Platform } from "./platform.js";
 
 export type UnifiedDSAProfile = {
   platform: Platform;

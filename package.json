@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "echo 'Run apps individually'",
+    "build": "npm run build --workspaces --if-present",
     "lint": "echo 'Add later'",
     "test": "echo 'Add later'"
   }

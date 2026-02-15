@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getProfile, refreshProfile } from "../controllers/dsa.controller";
+import { getProfile, refreshProfile } from "../controllers/dsa.controller.js";
 
 const router = Router();
 

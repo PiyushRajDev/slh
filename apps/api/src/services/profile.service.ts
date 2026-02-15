@@ -1,8 +1,8 @@
-import { ProfileRepository } from "../repository/profile.repository";
-import { isFresh } from "./freshness.service";
+import { DSARepository } from "@slh/database";
+import { isFresh } from "./freshness.service.js";
 
 export class ProfileService {
-    private repo = new ProfileRepository();
+    private repo = new DSARepository();
 
     async getProfileStatus(studentId: string, platform: string) {
         const profile = await this.repo.find(studentId, platform);

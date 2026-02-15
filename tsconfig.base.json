@@ -1,19 +1,27 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "ESNext",
-    "moduleResolution": "Node",
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "baseUrl": ".",
     "paths": {
       "@slh/database": [
-        "packages/database/src"
+        "packages/database/src/index.ts"
       ],
       "@slh/shared": [
-        "packages/shared/src"
+        "packages/shared/src/index.ts"
+      ],
+      "@slh/dsa-core": [
+        "packages/dsa-core/src/index.ts"
       ]
     },
     "strict": true,
     "esModuleInterop": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "dist",
+    "declaration": true,
+    "sourceMap": true
   }
 }
