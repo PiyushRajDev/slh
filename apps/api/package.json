@@ -7,13 +7,23 @@
     "start": "node dist/server.js"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.4.2",
     "@slh/leetcode-core": "*",
+    "axios": "^1.13.6",
+    "bcrypt": "^6.0.0",
+    "bullmq": "^5.70.1",
+    "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "express-rate-limit": "^8.2.1",
-    "ioredis": "^5.9.3"
+    "ioredis": "^5.10.0",
+    "jsonwebtoken": "^9.0.3",
+    "pg": "^8.19.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/pg": "^8.18.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }

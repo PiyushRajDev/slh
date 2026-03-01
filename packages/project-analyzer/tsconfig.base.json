@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "moduleResolution": "node",
+        "paths": {
+            "@slh/project-analyzer": [
+                "packages/project-analyzer/src/index.ts"
+            ],
+            "@slh/project-analyzer/*": [
+                "packages/project-analyzer/src/*"
+            ]
+        }
+    }
+}

@@ -1,0 +1,163 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  role         Role      @default(STUDENT)
+  isActive     Boolean   @default(true)
+  collegeId    String?
+  college      College?  @relation(fields: [collegeId], references: [id])
+  student      Student?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  lastLoginAt  DateTime?
+
+  @@index([email])
+  @@index([collegeId])
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+  SUPER_ADMIN
+  RECRUITER
+}
+
+model College {
+  id        String    @id @default(cuid())
+  name      String
+  shortName String    @unique
+  domain    String?
+  location  String?
+  website   String?
+  settings  Json?
+  students  Student[]
+  users     User[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([shortName])
+}
+
+model Student {
+  id             String   @id @default(cuid())
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id])
+  collegeId      String?
+  college        College? @relation(fields: [collegeId], references: [id])
+  firstName      String
+  lastName       String
+  rollNumber     String
+  email          String   @unique
+  phone          String?
+  department     String
+  semester       Int
+  batch          String
+  section        String?
+  isPlaced       Boolean  @default(false)
+  placementYear  Int?
+  packageOffered Float?
+  companyName    String?
+
+  // GitHub OAuth — added for Block 0.3
+  githubUsername    String?   @unique
+  githubAccessToken String?
+  githubConnectedAt DateTime?
+
+  githubProfile   GitHubProfile?
+  dsaProfiles     DSAProfile[]
+  jriCalculations JRICalculation[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([collegeId])
+  @@index([batch])
+  @@index([department])
+}
+
+model GitHubProfile {
+  id            String      @id @default(cuid())
+  studentId     String      @unique
+  student       Student     @relation(fields: [studentId], references: [id])
+  username      String      @unique
+  profileUrl    String
+  totalRepos    Int         @default(0)
+  totalCommits  Int         @default(0)
+  totalStars    Int         @default(0)
+  totalForks    Int         @default(0)
+  languagesUsed Json
+  frameworks    Json
+  repositories  Json
+  lastFetchedAt DateTime?
+  fetchStatus   FetchStatus @default(PENDING)
+  errorMessage  String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model DSAProfile {
+  id            String      @id @default(cuid())
+  studentId     String
+  student       Student     @relation(fields: [studentId], references: [id])
+  platform      Platform
+  username      String
+  profileUrl    String
+  totalSolved   Int         @default(0)
+  easySolved    Int         @default(0)
+  mediumSolved  Int         @default(0)
+  hardSolved    Int         @default(0)
+  rating        Float?
+  lastFetchedAt DateTime?
+  fetchStatus   FetchStatus @default(PENDING)
+  errorMessage  String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@unique([studentId, platform])
+}
+
+model JRICalculation {
+  id               String   @id @default(cuid())
+  studentId        String
+  student          Student  @relation(fields: [studentId], references: [id])
+  jriScore         Float
+  githubScore      Float
+  dsaScore         Float
+  academicScore    Float
+  hackathonScore   Float
+  weights          Json
+  rawScores        Json
+  algorithmVersion String
+  createdAt        DateTime @default(now())
+
+  @@index([studentId])
+}
+
+enum FetchStatus {
+  PENDING
+  PROCESSING
+  SUCCESS
+  FAILED
+}
+
+enum Platform {
+  LEETCODE
+  CODEFORCES
+  HACKERRANK
+}

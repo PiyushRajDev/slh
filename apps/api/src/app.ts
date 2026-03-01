@@ -1,6 +1,9 @@
 import express from "express";
 import rateLimit from "express-rate-limit";
 import userRoutes from "./routes/user.routes";
+import authRouter from "./routes/auth.routes";
+import githubAuthRouter from "./routes/github.auth.routes";
+import analysisRouter from "./routes/analysis.routes";
 
 const app = express();
 
@@ -11,7 +14,7 @@ app.use(express.json());
 const leetcodeLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 30, //adjust based on need 
-  standardHeaders: true, 
+  standardHeaders: true,
   legacyHeaders: false,
   message: {
     success: false,
@@ -22,6 +25,9 @@ const leetcodeLimiter = rateLimit({
   },
 });
 
+app.use("/auth", authRouter);
+app.use("/auth", githubAuthRouter);
 app.use("/leetcode/user", leetcodeLimiter, userRoutes);
+app.use("/analysis", analysisRouter);
 
 export default app;

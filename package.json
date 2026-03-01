@@ -11,9 +11,12 @@
     "test": "echo 'Add later'"
   },
   "dependencies": {
+    "@prisma/client": "^7.4.2",
     "express": "^5.2.1"
   },
   "devDependencies": {
-    "@types/express": "^5.0.6"
+    "@types/express": "^5.0.6",
+    "dotenv": "^17.3.1",
+    "prisma": "^7.4.2"
   }
 }
