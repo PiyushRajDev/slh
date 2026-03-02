@@ -198,8 +198,8 @@ async function analyzeAST(cwd: string, sourceFiles: string[]) {
     }
 
     return {
-        complexity_avg: functionCount > 0 ? (totalComplexity / functionCount) : 0,
-        complexity_max: functionCount > 0 ? complexity_max : 0,
+        complexity_avg: functionCount > 0 ? (totalComplexity / functionCount) : null,
+        complexity_max: functionCount > 0 ? complexity_max : null,
         long_functions_count,
         long_files_count,
         duplication_percent: null,
@@ -450,7 +450,7 @@ async function analyzeGit(owner: string, repo: string, token?: string) {
         }
     }
 
-    const feature_branch_count = branches.filter(b => /^(feat|feature|bugfix|fix|chore)\//i.test(b.name) || !['main', 'master', 'develop'].includes(b.name)).length;
+    const feature_branch_count = branches.filter(b => /^(feat|feature|bugfix|fix|chore|hotfix)\//i.test(b.name)).length;
 
     // 4. Contributors
     const contributorsRes = await octokit.repos.listContributors({ owner, repo, per_page: 100 });

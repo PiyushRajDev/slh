@@ -1,6 +1,6 @@
 import { StructuralSignals } from '../signals/signals';
 
-export type ProfileId = 'production_web_app' | 'backend_api' | 'frontend_app' | 'library' | 'generic';
+export type ProfileId = 'production_web_app' | 'backend_api' | 'frontend_app' | 'ml_pipeline' | 'cli_tool' | 'library' | 'academic' | 'generic';
 
 export interface ProfileResult {
     profileId: ProfileId;
@@ -15,12 +15,14 @@ type ProfileConfig = {
     id: ProfileId;
     displayName: string;
     expectedSignals: Partial<Record<keyof StructuralSignals, number>>;
+    fitnessThreshold: number;
 };
 
 const PROFILES: ProfileConfig[] = [
     {
         id: 'production_web_app',
         displayName: 'Production Web Application',
+        fitnessThreshold: 0.60,
         expectedSignals: {
             has_frontend: 25,
             has_backend: 25,
@@ -33,6 +35,7 @@ const PROFILES: ProfileConfig[] = [
     {
         id: 'backend_api',
         displayName: 'REST/Backend API Service',
+        fitnessThreshold: 0.65,
         expectedSignals: {
             has_backend: 40,
             has_database: 30,
@@ -43,11 +46,42 @@ const PROFILES: ProfileConfig[] = [
     {
         id: 'frontend_app',
         displayName: 'Frontend Web Application',
+        fitnessThreshold: 0.50,
         expectedSignals: {
             has_frontend: 60,
             has_tests: 20,
             has_ci: 20
         }
+    },
+    {
+        id: 'ml_pipeline',
+        displayName: 'ML Pipeline / Research Project',
+        fitnessThreshold: 0.55,
+        expectedSignals: { has_tests: 25, has_documentation: 30, has_backend: 20, has_ci: 25 }
+    },
+    {
+        id: 'cli_tool',
+        displayName: 'Command-Line Tool',
+        fitnessThreshold: 0.60,
+        expectedSignals: { has_tests: 35, has_documentation: 30, has_ci: 20 }
+    },
+    {
+        id: 'library',
+        displayName: 'Reusable Library / Package',
+        fitnessThreshold: 0.65,
+        expectedSignals: { has_tests: 45, has_documentation: 35, has_ci: 20 }
+    },
+    {
+        id: 'academic',
+        displayName: 'Academic Assignment',
+        fitnessThreshold: 0.50,
+        expectedSignals: { has_documentation: 50, has_tests: 30, has_ci: 20 }
+    },
+    {
+        id: 'generic',
+        displayName: 'General Project',
+        fitnessThreshold: 0.0,
+        expectedSignals: {}
     }
 ];
 
@@ -72,13 +106,13 @@ export function evaluateProfiles(signals: StructuralSignals): ProfileResult[] {
             }
         }
 
-        const fitnessScore = totalWeight > 0 ? earnedWeight / totalWeight : 0;
+        const fitnessScore = totalWeight > 0 ? earnedWeight / totalWeight : 0.30;
 
         return {
             profileId: profile.id,
             displayName: profile.displayName,
             fitnessScore,
-            status: fitnessScore >= 0.50 ? 'active' : 'rejected',
+            status: fitnessScore >= profile.fitnessThreshold ? 'active' : 'rejected',
             matchedSignals,
             missingSignals
         };

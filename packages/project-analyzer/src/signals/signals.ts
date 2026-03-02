@@ -36,7 +36,7 @@ export function deriveSignals(metrics: RawMetrics): StructuralSignals {
 
     const has_ci = metrics?.ci_config_present === true;
 
-    const has_docker = deploy_config_types.some(d => d.toLowerCase() === 'docker') || metrics?.deploy_config_present === true;
+    const has_docker = deploy_config_types.some(d => d.toLowerCase() === 'docker' || d.toLowerCase() === 'docker compose');
 
     const is_monorepo = (folder_structure.includes('apps') && folder_structure.includes('packages')) || hasDependency(['lerna', 'turbo']);
 

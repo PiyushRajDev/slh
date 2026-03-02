@@ -18,13 +18,38 @@ export interface FinalScoreReport {
     };
 }
 
+interface ComplexityThresholds { low: number; mid: number; high: number }
+
+const COMPLEXITY_THRESHOLDS: Record<string, ComplexityThresholds> = {
+    frontend_app: { low: 5, mid: 10, high: 15 },
+    cli_tool: { low: 5, mid: 10, high: 15 },
+    library: { low: 5, mid: 10, high: 15 },
+    backend_api: { low: 7, mid: 12, high: 18 },
+    production_web_app: { low: 7, mid: 12, high: 18 },
+    academic: { low: 7, mid: 12, high: 18 },
+    ml_pipeline: { low: 10, mid: 20, high: 30 },
+    generic: { low: 7, mid: 12, high: 18 }
+};
+
 export function calculateScore(metrics: RawMetrics, profileId: ProfileId): FinalScoreReport {
     // --- Code Quality (Max 25) ---
     const complexityAvg = metrics.complexity_avg || 0;
     const longFunctionsCount = metrics.long_functions_count || 0;
     const duplicationPercent = metrics.duplication_percent || 0;
 
-    const logicDensity = Math.min(10, Math.max(0, complexityAvg * 2));
+    const thresholds = COMPLEXITY_THRESHOLDS[profileId] ?? COMPLEXITY_THRESHOLDS['generic'];
+    let logicDensity: number;
+    if (metrics.complexity_avg === null || metrics.complexity_avg === undefined) {
+        logicDensity = 0;
+    } else if (complexityAvg < thresholds.low) {
+        logicDensity = 10;
+    } else if (complexityAvg < thresholds.mid) {
+        logicDensity = 6;
+    } else if (complexityAvg < thresholds.high) {
+        logicDensity = 3;
+    } else {
+        logicDensity = 0;
+    }
     const functionHealth = Math.max(0, 10 - (longFunctionsCount * 2));
     const dryness = Math.max(0, 5 - (duplicationPercent / 2));
 
