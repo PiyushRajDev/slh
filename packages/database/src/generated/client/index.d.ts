@@ -43,6 +43,11 @@ export type DSAProfile = $Result.DefaultSelection<Prisma.$DSAProfilePayload>
  * 
  */
 export type JRICalculation = $Result.DefaultSelection<Prisma.$JRICalculationPayload>
+/**
+ * Model ProjectAnalysis
+ * 
+ */
+export type ProjectAnalysis = $Result.DefaultSelection<Prisma.$ProjectAnalysisPayload>
 
 /**
  * Enums
@@ -76,6 +81,26 @@ export const Platform: {
 
 export type Platform = (typeof Platform)[keyof typeof Platform]
 
+
+export const JobType: {
+  FETCH_GITHUB: 'FETCH_GITHUB',
+  FETCH_DSA: 'FETCH_DSA',
+  CALCULATE_JRI: 'CALCULATE_JRI',
+  ANALYZE_PROJECT: 'ANALYZE_PROJECT'
+};
+
+export type JobType = (typeof JobType)[keyof typeof JobType]
+
+
+export const AnalysisStatus: {
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
+export type AnalysisStatus = (typeof AnalysisStatus)[keyof typeof AnalysisStatus]
+
 }
 
 export type Role = $Enums.Role
@@ -89,6 +114,14 @@ export const FetchStatus: typeof $Enums.FetchStatus
 export type Platform = $Enums.Platform
 
 export const Platform: typeof $Enums.Platform
+
+export type JobType = $Enums.JobType
+
+export const JobType: typeof $Enums.JobType
+
+export type AnalysisStatus = $Enums.AnalysisStatus
+
+export const AnalysisStatus: typeof $Enums.AnalysisStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -270,6 +303,16 @@ export class PrismaClient<
     * ```
     */
   get jRICalculation(): Prisma.JRICalculationDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.projectAnalysis`: Exposes CRUD operations for the **ProjectAnalysis** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ProjectAnalyses
+    * const projectAnalyses = await prisma.projectAnalysis.findMany()
+    * ```
+    */
+  get projectAnalysis(): Prisma.ProjectAnalysisDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -709,7 +752,8 @@ export namespace Prisma {
     Student: 'Student',
     GitHubProfile: 'GitHubProfile',
     DSAProfile: 'DSAProfile',
-    JRICalculation: 'JRICalculation'
+    JRICalculation: 'JRICalculation',
+    ProjectAnalysis: 'ProjectAnalysis'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -725,7 +769,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "college" | "student" | "gitHubProfile" | "dSAProfile" | "jRICalculation"
+      modelProps: "user" | "college" | "student" | "gitHubProfile" | "dSAProfile" | "jRICalculation" | "projectAnalysis"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1173,6 +1217,80 @@ export namespace Prisma {
           }
         }
       }
+      ProjectAnalysis: {
+        payload: Prisma.$ProjectAnalysisPayload<ExtArgs>
+        fields: Prisma.ProjectAnalysisFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProjectAnalysisFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectAnalysisPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProjectAnalysisFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectAnalysisPayload>
+          }
+          findFirst: {
+            args: Prisma.ProjectAnalysisFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectAnalysisPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProjectAnalysisFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectAnalysisPayload>
+          }
+          findMany: {
+            args: Prisma.ProjectAnalysisFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectAnalysisPayload>[]
+          }
+          create: {
+            args: Prisma.ProjectAnalysisCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectAnalysisPayload>
+          }
+          createMany: {
+            args: Prisma.ProjectAnalysisCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProjectAnalysisCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectAnalysisPayload>[]
+          }
+          delete: {
+            args: Prisma.ProjectAnalysisDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectAnalysisPayload>
+          }
+          update: {
+            args: Prisma.ProjectAnalysisUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectAnalysisPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProjectAnalysisDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProjectAnalysisUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProjectAnalysisUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectAnalysisPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProjectAnalysisUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProjectAnalysisPayload>
+          }
+          aggregate: {
+            args: Prisma.ProjectAnalysisAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProjectAnalysis>
+          }
+          groupBy: {
+            args: Prisma.ProjectAnalysisGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProjectAnalysisGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProjectAnalysisCountArgs<ExtArgs>
+            result: $Utils.Optional<ProjectAnalysisCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1287,6 +1405,7 @@ export namespace Prisma {
     gitHubProfile?: GitHubProfileOmit
     dSAProfile?: DSAProfileOmit
     jRICalculation?: JRICalculationOmit
+    projectAnalysis?: ProjectAnalysisOmit
   }
 
   /* Types for Logging */
@@ -1409,11 +1528,13 @@ export namespace Prisma {
   export type StudentCountOutputType = {
     dsaProfiles: number
     jriCalculations: number
+    projectAnalyses: number
   }
 
   export type StudentCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     dsaProfiles?: boolean | StudentCountOutputTypeCountDsaProfilesArgs
     jriCalculations?: boolean | StudentCountOutputTypeCountJriCalculationsArgs
+    projectAnalyses?: boolean | StudentCountOutputTypeCountProjectAnalysesArgs
   }
 
   // Custom InputTypes
@@ -1439,6 +1560,13 @@ export namespace Prisma {
    */
   export type StudentCountOutputTypeCountJriCalculationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: JRICalculationWhereInput
+  }
+
+  /**
+   * StudentCountOutputType without action
+   */
+  export type StudentCountOutputTypeCountProjectAnalysesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProjectAnalysisWhereInput
   }
 
 
@@ -4083,6 +4211,7 @@ export namespace Prisma {
     githubProfile?: boolean | Student$githubProfileArgs<ExtArgs>
     dsaProfiles?: boolean | Student$dsaProfilesArgs<ExtArgs>
     jriCalculations?: boolean | Student$jriCalculationsArgs<ExtArgs>
+    projectAnalyses?: boolean | Student$projectAnalysesArgs<ExtArgs>
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["student"]>
 
@@ -4169,6 +4298,7 @@ export namespace Prisma {
     githubProfile?: boolean | Student$githubProfileArgs<ExtArgs>
     dsaProfiles?: boolean | Student$dsaProfilesArgs<ExtArgs>
     jriCalculations?: boolean | Student$jriCalculationsArgs<ExtArgs>
+    projectAnalyses?: boolean | Student$projectAnalysesArgs<ExtArgs>
     _count?: boolean | StudentCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type StudentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4188,6 +4318,7 @@ export namespace Prisma {
       githubProfile: Prisma.$GitHubProfilePayload<ExtArgs> | null
       dsaProfiles: Prisma.$DSAProfilePayload<ExtArgs>[]
       jriCalculations: Prisma.$JRICalculationPayload<ExtArgs>[]
+      projectAnalyses: Prisma.$ProjectAnalysisPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4610,6 +4741,7 @@ export namespace Prisma {
     githubProfile<T extends Student$githubProfileArgs<ExtArgs> = {}>(args?: Subset<T, Student$githubProfileArgs<ExtArgs>>): Prisma__GitHubProfileClient<$Result.GetResult<Prisma.$GitHubProfilePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     dsaProfiles<T extends Student$dsaProfilesArgs<ExtArgs> = {}>(args?: Subset<T, Student$dsaProfilesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DSAProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     jriCalculations<T extends Student$jriCalculationsArgs<ExtArgs> = {}>(args?: Subset<T, Student$jriCalculationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$JRICalculationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    projectAnalyses<T extends Student$projectAnalysesArgs<ExtArgs> = {}>(args?: Subset<T, Student$projectAnalysesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectAnalysisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5139,6 +5271,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: JRICalculationScalarFieldEnum | JRICalculationScalarFieldEnum[]
+  }
+
+  /**
+   * Student.projectAnalyses
+   */
+  export type Student$projectAnalysesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectAnalysis
+     */
+    select?: ProjectAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectAnalysis
+     */
+    omit?: ProjectAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectAnalysisInclude<ExtArgs> | null
+    where?: ProjectAnalysisWhereInput
+    orderBy?: ProjectAnalysisOrderByWithRelationInput | ProjectAnalysisOrderByWithRelationInput[]
+    cursor?: ProjectAnalysisWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProjectAnalysisScalarFieldEnum | ProjectAnalysisScalarFieldEnum[]
   }
 
   /**
@@ -8812,6 +8968,1241 @@ export namespace Prisma {
 
 
   /**
+   * Model ProjectAnalysis
+   */
+
+  export type AggregateProjectAnalysis = {
+    _count: ProjectAnalysisCountAggregateOutputType | null
+    _avg: ProjectAnalysisAvgAggregateOutputType | null
+    _sum: ProjectAnalysisSumAggregateOutputType | null
+    _min: ProjectAnalysisMinAggregateOutputType | null
+    _max: ProjectAnalysisMaxAggregateOutputType | null
+  }
+
+  export type ProjectAnalysisAvgAggregateOutputType = {
+    overallScore: number | null
+    flagCount: number | null
+  }
+
+  export type ProjectAnalysisSumAggregateOutputType = {
+    overallScore: number | null
+    flagCount: number | null
+  }
+
+  export type ProjectAnalysisMinAggregateOutputType = {
+    id: string | null
+    studentId: string | null
+    repoUrl: string | null
+    commitSha: string | null
+    integrityHash: string | null
+    overallScore: number | null
+    profileId: string | null
+    confidenceLevel: string | null
+    reliabilityLevel: string | null
+    flagCount: number | null
+    analyzerVersion: string | null
+    status: $Enums.AnalysisStatus | null
+    errorMessage: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProjectAnalysisMaxAggregateOutputType = {
+    id: string | null
+    studentId: string | null
+    repoUrl: string | null
+    commitSha: string | null
+    integrityHash: string | null
+    overallScore: number | null
+    profileId: string | null
+    confidenceLevel: string | null
+    reliabilityLevel: string | null
+    flagCount: number | null
+    analyzerVersion: string | null
+    status: $Enums.AnalysisStatus | null
+    errorMessage: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProjectAnalysisCountAggregateOutputType = {
+    id: number
+    studentId: number
+    repoUrl: number
+    commitSha: number
+    report: number
+    integrityHash: number
+    overallScore: number
+    profileId: number
+    confidenceLevel: number
+    reliabilityLevel: number
+    flagCount: number
+    analyzerVersion: number
+    status: number
+    errorMessage: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ProjectAnalysisAvgAggregateInputType = {
+    overallScore?: true
+    flagCount?: true
+  }
+
+  export type ProjectAnalysisSumAggregateInputType = {
+    overallScore?: true
+    flagCount?: true
+  }
+
+  export type ProjectAnalysisMinAggregateInputType = {
+    id?: true
+    studentId?: true
+    repoUrl?: true
+    commitSha?: true
+    integrityHash?: true
+    overallScore?: true
+    profileId?: true
+    confidenceLevel?: true
+    reliabilityLevel?: true
+    flagCount?: true
+    analyzerVersion?: true
+    status?: true
+    errorMessage?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProjectAnalysisMaxAggregateInputType = {
+    id?: true
+    studentId?: true
+    repoUrl?: true
+    commitSha?: true
+    integrityHash?: true
+    overallScore?: true
+    profileId?: true
+    confidenceLevel?: true
+    reliabilityLevel?: true
+    flagCount?: true
+    analyzerVersion?: true
+    status?: true
+    errorMessage?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProjectAnalysisCountAggregateInputType = {
+    id?: true
+    studentId?: true
+    repoUrl?: true
+    commitSha?: true
+    report?: true
+    integrityHash?: true
+    overallScore?: true
+    profileId?: true
+    confidenceLevel?: true
+    reliabilityLevel?: true
+    flagCount?: true
+    analyzerVersion?: true
+    status?: true
+    errorMessage?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ProjectAnalysisAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProjectAnalysis to aggregate.
+     */
+    where?: ProjectAnalysisWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectAnalyses to fetch.
+     */
+    orderBy?: ProjectAnalysisOrderByWithRelationInput | ProjectAnalysisOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ProjectAnalysisWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectAnalyses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectAnalyses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ProjectAnalyses
+    **/
+    _count?: true | ProjectAnalysisCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ProjectAnalysisAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ProjectAnalysisSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ProjectAnalysisMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ProjectAnalysisMaxAggregateInputType
+  }
+
+  export type GetProjectAnalysisAggregateType<T extends ProjectAnalysisAggregateArgs> = {
+        [P in keyof T & keyof AggregateProjectAnalysis]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProjectAnalysis[P]>
+      : GetScalarType<T[P], AggregateProjectAnalysis[P]>
+  }
+
+
+
+
+  export type ProjectAnalysisGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProjectAnalysisWhereInput
+    orderBy?: ProjectAnalysisOrderByWithAggregationInput | ProjectAnalysisOrderByWithAggregationInput[]
+    by: ProjectAnalysisScalarFieldEnum[] | ProjectAnalysisScalarFieldEnum
+    having?: ProjectAnalysisScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProjectAnalysisCountAggregateInputType | true
+    _avg?: ProjectAnalysisAvgAggregateInputType
+    _sum?: ProjectAnalysisSumAggregateInputType
+    _min?: ProjectAnalysisMinAggregateInputType
+    _max?: ProjectAnalysisMaxAggregateInputType
+  }
+
+  export type ProjectAnalysisGroupByOutputType = {
+    id: string
+    studentId: string
+    repoUrl: string
+    commitSha: string
+    report: JsonValue
+    integrityHash: string
+    overallScore: number
+    profileId: string
+    confidenceLevel: string
+    reliabilityLevel: string
+    flagCount: number
+    analyzerVersion: string
+    status: $Enums.AnalysisStatus
+    errorMessage: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ProjectAnalysisCountAggregateOutputType | null
+    _avg: ProjectAnalysisAvgAggregateOutputType | null
+    _sum: ProjectAnalysisSumAggregateOutputType | null
+    _min: ProjectAnalysisMinAggregateOutputType | null
+    _max: ProjectAnalysisMaxAggregateOutputType | null
+  }
+
+  type GetProjectAnalysisGroupByPayload<T extends ProjectAnalysisGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ProjectAnalysisGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ProjectAnalysisGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProjectAnalysisGroupByOutputType[P]>
+            : GetScalarType<T[P], ProjectAnalysisGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ProjectAnalysisSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    repoUrl?: boolean
+    commitSha?: boolean
+    report?: boolean
+    integrityHash?: boolean
+    overallScore?: boolean
+    profileId?: boolean
+    confidenceLevel?: boolean
+    reliabilityLevel?: boolean
+    flagCount?: boolean
+    analyzerVersion?: boolean
+    status?: boolean
+    errorMessage?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["projectAnalysis"]>
+
+  export type ProjectAnalysisSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    repoUrl?: boolean
+    commitSha?: boolean
+    report?: boolean
+    integrityHash?: boolean
+    overallScore?: boolean
+    profileId?: boolean
+    confidenceLevel?: boolean
+    reliabilityLevel?: boolean
+    flagCount?: boolean
+    analyzerVersion?: boolean
+    status?: boolean
+    errorMessage?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["projectAnalysis"]>
+
+  export type ProjectAnalysisSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    repoUrl?: boolean
+    commitSha?: boolean
+    report?: boolean
+    integrityHash?: boolean
+    overallScore?: boolean
+    profileId?: boolean
+    confidenceLevel?: boolean
+    reliabilityLevel?: boolean
+    flagCount?: boolean
+    analyzerVersion?: boolean
+    status?: boolean
+    errorMessage?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["projectAnalysis"]>
+
+  export type ProjectAnalysisSelectScalar = {
+    id?: boolean
+    studentId?: boolean
+    repoUrl?: boolean
+    commitSha?: boolean
+    report?: boolean
+    integrityHash?: boolean
+    overallScore?: boolean
+    profileId?: boolean
+    confidenceLevel?: boolean
+    reliabilityLevel?: boolean
+    flagCount?: boolean
+    analyzerVersion?: boolean
+    status?: boolean
+    errorMessage?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ProjectAnalysisOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "repoUrl" | "commitSha" | "report" | "integrityHash" | "overallScore" | "profileId" | "confidenceLevel" | "reliabilityLevel" | "flagCount" | "analyzerVersion" | "status" | "errorMessage" | "createdAt" | "updatedAt", ExtArgs["result"]["projectAnalysis"]>
+  export type ProjectAnalysisInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }
+  export type ProjectAnalysisIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }
+  export type ProjectAnalysisIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | StudentDefaultArgs<ExtArgs>
+  }
+
+  export type $ProjectAnalysisPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ProjectAnalysis"
+    objects: {
+      student: Prisma.$StudentPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      studentId: string
+      repoUrl: string
+      commitSha: string
+      report: Prisma.JsonValue
+      integrityHash: string
+      overallScore: number
+      profileId: string
+      confidenceLevel: string
+      reliabilityLevel: string
+      flagCount: number
+      analyzerVersion: string
+      status: $Enums.AnalysisStatus
+      errorMessage: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["projectAnalysis"]>
+    composites: {}
+  }
+
+  type ProjectAnalysisGetPayload<S extends boolean | null | undefined | ProjectAnalysisDefaultArgs> = $Result.GetResult<Prisma.$ProjectAnalysisPayload, S>
+
+  type ProjectAnalysisCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ProjectAnalysisFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ProjectAnalysisCountAggregateInputType | true
+    }
+
+  export interface ProjectAnalysisDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ProjectAnalysis'], meta: { name: 'ProjectAnalysis' } }
+    /**
+     * Find zero or one ProjectAnalysis that matches the filter.
+     * @param {ProjectAnalysisFindUniqueArgs} args - Arguments to find a ProjectAnalysis
+     * @example
+     * // Get one ProjectAnalysis
+     * const projectAnalysis = await prisma.projectAnalysis.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProjectAnalysisFindUniqueArgs>(args: SelectSubset<T, ProjectAnalysisFindUniqueArgs<ExtArgs>>): Prisma__ProjectAnalysisClient<$Result.GetResult<Prisma.$ProjectAnalysisPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ProjectAnalysis that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProjectAnalysisFindUniqueOrThrowArgs} args - Arguments to find a ProjectAnalysis
+     * @example
+     * // Get one ProjectAnalysis
+     * const projectAnalysis = await prisma.projectAnalysis.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProjectAnalysisFindUniqueOrThrowArgs>(args: SelectSubset<T, ProjectAnalysisFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ProjectAnalysisClient<$Result.GetResult<Prisma.$ProjectAnalysisPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProjectAnalysis that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectAnalysisFindFirstArgs} args - Arguments to find a ProjectAnalysis
+     * @example
+     * // Get one ProjectAnalysis
+     * const projectAnalysis = await prisma.projectAnalysis.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProjectAnalysisFindFirstArgs>(args?: SelectSubset<T, ProjectAnalysisFindFirstArgs<ExtArgs>>): Prisma__ProjectAnalysisClient<$Result.GetResult<Prisma.$ProjectAnalysisPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ProjectAnalysis that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectAnalysisFindFirstOrThrowArgs} args - Arguments to find a ProjectAnalysis
+     * @example
+     * // Get one ProjectAnalysis
+     * const projectAnalysis = await prisma.projectAnalysis.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProjectAnalysisFindFirstOrThrowArgs>(args?: SelectSubset<T, ProjectAnalysisFindFirstOrThrowArgs<ExtArgs>>): Prisma__ProjectAnalysisClient<$Result.GetResult<Prisma.$ProjectAnalysisPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ProjectAnalyses that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectAnalysisFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProjectAnalyses
+     * const projectAnalyses = await prisma.projectAnalysis.findMany()
+     * 
+     * // Get first 10 ProjectAnalyses
+     * const projectAnalyses = await prisma.projectAnalysis.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const projectAnalysisWithIdOnly = await prisma.projectAnalysis.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ProjectAnalysisFindManyArgs>(args?: SelectSubset<T, ProjectAnalysisFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectAnalysisPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ProjectAnalysis.
+     * @param {ProjectAnalysisCreateArgs} args - Arguments to create a ProjectAnalysis.
+     * @example
+     * // Create one ProjectAnalysis
+     * const ProjectAnalysis = await prisma.projectAnalysis.create({
+     *   data: {
+     *     // ... data to create a ProjectAnalysis
+     *   }
+     * })
+     * 
+     */
+    create<T extends ProjectAnalysisCreateArgs>(args: SelectSubset<T, ProjectAnalysisCreateArgs<ExtArgs>>): Prisma__ProjectAnalysisClient<$Result.GetResult<Prisma.$ProjectAnalysisPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ProjectAnalyses.
+     * @param {ProjectAnalysisCreateManyArgs} args - Arguments to create many ProjectAnalyses.
+     * @example
+     * // Create many ProjectAnalyses
+     * const projectAnalysis = await prisma.projectAnalysis.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ProjectAnalysisCreateManyArgs>(args?: SelectSubset<T, ProjectAnalysisCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProjectAnalyses and returns the data saved in the database.
+     * @param {ProjectAnalysisCreateManyAndReturnArgs} args - Arguments to create many ProjectAnalyses.
+     * @example
+     * // Create many ProjectAnalyses
+     * const projectAnalysis = await prisma.projectAnalysis.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ProjectAnalyses and only return the `id`
+     * const projectAnalysisWithIdOnly = await prisma.projectAnalysis.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ProjectAnalysisCreateManyAndReturnArgs>(args?: SelectSubset<T, ProjectAnalysisCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectAnalysisPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ProjectAnalysis.
+     * @param {ProjectAnalysisDeleteArgs} args - Arguments to delete one ProjectAnalysis.
+     * @example
+     * // Delete one ProjectAnalysis
+     * const ProjectAnalysis = await prisma.projectAnalysis.delete({
+     *   where: {
+     *     // ... filter to delete one ProjectAnalysis
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ProjectAnalysisDeleteArgs>(args: SelectSubset<T, ProjectAnalysisDeleteArgs<ExtArgs>>): Prisma__ProjectAnalysisClient<$Result.GetResult<Prisma.$ProjectAnalysisPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ProjectAnalysis.
+     * @param {ProjectAnalysisUpdateArgs} args - Arguments to update one ProjectAnalysis.
+     * @example
+     * // Update one ProjectAnalysis
+     * const projectAnalysis = await prisma.projectAnalysis.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ProjectAnalysisUpdateArgs>(args: SelectSubset<T, ProjectAnalysisUpdateArgs<ExtArgs>>): Prisma__ProjectAnalysisClient<$Result.GetResult<Prisma.$ProjectAnalysisPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ProjectAnalyses.
+     * @param {ProjectAnalysisDeleteManyArgs} args - Arguments to filter ProjectAnalyses to delete.
+     * @example
+     * // Delete a few ProjectAnalyses
+     * const { count } = await prisma.projectAnalysis.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ProjectAnalysisDeleteManyArgs>(args?: SelectSubset<T, ProjectAnalysisDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProjectAnalyses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectAnalysisUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProjectAnalyses
+     * const projectAnalysis = await prisma.projectAnalysis.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ProjectAnalysisUpdateManyArgs>(args: SelectSubset<T, ProjectAnalysisUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProjectAnalyses and returns the data updated in the database.
+     * @param {ProjectAnalysisUpdateManyAndReturnArgs} args - Arguments to update many ProjectAnalyses.
+     * @example
+     * // Update many ProjectAnalyses
+     * const projectAnalysis = await prisma.projectAnalysis.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ProjectAnalyses and only return the `id`
+     * const projectAnalysisWithIdOnly = await prisma.projectAnalysis.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ProjectAnalysisUpdateManyAndReturnArgs>(args: SelectSubset<T, ProjectAnalysisUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectAnalysisPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ProjectAnalysis.
+     * @param {ProjectAnalysisUpsertArgs} args - Arguments to update or create a ProjectAnalysis.
+     * @example
+     * // Update or create a ProjectAnalysis
+     * const projectAnalysis = await prisma.projectAnalysis.upsert({
+     *   create: {
+     *     // ... data to create a ProjectAnalysis
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProjectAnalysis we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProjectAnalysisUpsertArgs>(args: SelectSubset<T, ProjectAnalysisUpsertArgs<ExtArgs>>): Prisma__ProjectAnalysisClient<$Result.GetResult<Prisma.$ProjectAnalysisPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ProjectAnalyses.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectAnalysisCountArgs} args - Arguments to filter ProjectAnalyses to count.
+     * @example
+     * // Count the number of ProjectAnalyses
+     * const count = await prisma.projectAnalysis.count({
+     *   where: {
+     *     // ... the filter for the ProjectAnalyses we want to count
+     *   }
+     * })
+    **/
+    count<T extends ProjectAnalysisCountArgs>(
+      args?: Subset<T, ProjectAnalysisCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ProjectAnalysisCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProjectAnalysis.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectAnalysisAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ProjectAnalysisAggregateArgs>(args: Subset<T, ProjectAnalysisAggregateArgs>): Prisma.PrismaPromise<GetProjectAnalysisAggregateType<T>>
+
+    /**
+     * Group by ProjectAnalysis.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProjectAnalysisGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ProjectAnalysisGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProjectAnalysisGroupByArgs['orderBy'] }
+        : { orderBy?: ProjectAnalysisGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ProjectAnalysisGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProjectAnalysisGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ProjectAnalysis model
+   */
+  readonly fields: ProjectAnalysisFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProjectAnalysis.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProjectAnalysisClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    student<T extends StudentDefaultArgs<ExtArgs> = {}>(args?: Subset<T, StudentDefaultArgs<ExtArgs>>): Prisma__StudentClient<$Result.GetResult<Prisma.$StudentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ProjectAnalysis model
+   */
+  interface ProjectAnalysisFieldRefs {
+    readonly id: FieldRef<"ProjectAnalysis", 'String'>
+    readonly studentId: FieldRef<"ProjectAnalysis", 'String'>
+    readonly repoUrl: FieldRef<"ProjectAnalysis", 'String'>
+    readonly commitSha: FieldRef<"ProjectAnalysis", 'String'>
+    readonly report: FieldRef<"ProjectAnalysis", 'Json'>
+    readonly integrityHash: FieldRef<"ProjectAnalysis", 'String'>
+    readonly overallScore: FieldRef<"ProjectAnalysis", 'Int'>
+    readonly profileId: FieldRef<"ProjectAnalysis", 'String'>
+    readonly confidenceLevel: FieldRef<"ProjectAnalysis", 'String'>
+    readonly reliabilityLevel: FieldRef<"ProjectAnalysis", 'String'>
+    readonly flagCount: FieldRef<"ProjectAnalysis", 'Int'>
+    readonly analyzerVersion: FieldRef<"ProjectAnalysis", 'String'>
+    readonly status: FieldRef<"ProjectAnalysis", 'AnalysisStatus'>
+    readonly errorMessage: FieldRef<"ProjectAnalysis", 'String'>
+    readonly createdAt: FieldRef<"ProjectAnalysis", 'DateTime'>
+    readonly updatedAt: FieldRef<"ProjectAnalysis", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ProjectAnalysis findUnique
+   */
+  export type ProjectAnalysisFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectAnalysis
+     */
+    select?: ProjectAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectAnalysis
+     */
+    omit?: ProjectAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectAnalysisInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectAnalysis to fetch.
+     */
+    where: ProjectAnalysisWhereUniqueInput
+  }
+
+  /**
+   * ProjectAnalysis findUniqueOrThrow
+   */
+  export type ProjectAnalysisFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectAnalysis
+     */
+    select?: ProjectAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectAnalysis
+     */
+    omit?: ProjectAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectAnalysisInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectAnalysis to fetch.
+     */
+    where: ProjectAnalysisWhereUniqueInput
+  }
+
+  /**
+   * ProjectAnalysis findFirst
+   */
+  export type ProjectAnalysisFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectAnalysis
+     */
+    select?: ProjectAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectAnalysis
+     */
+    omit?: ProjectAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectAnalysisInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectAnalysis to fetch.
+     */
+    where?: ProjectAnalysisWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectAnalyses to fetch.
+     */
+    orderBy?: ProjectAnalysisOrderByWithRelationInput | ProjectAnalysisOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProjectAnalyses.
+     */
+    cursor?: ProjectAnalysisWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectAnalyses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectAnalyses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProjectAnalyses.
+     */
+    distinct?: ProjectAnalysisScalarFieldEnum | ProjectAnalysisScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectAnalysis findFirstOrThrow
+   */
+  export type ProjectAnalysisFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectAnalysis
+     */
+    select?: ProjectAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectAnalysis
+     */
+    omit?: ProjectAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectAnalysisInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectAnalysis to fetch.
+     */
+    where?: ProjectAnalysisWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectAnalyses to fetch.
+     */
+    orderBy?: ProjectAnalysisOrderByWithRelationInput | ProjectAnalysisOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ProjectAnalyses.
+     */
+    cursor?: ProjectAnalysisWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectAnalyses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectAnalyses.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ProjectAnalyses.
+     */
+    distinct?: ProjectAnalysisScalarFieldEnum | ProjectAnalysisScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectAnalysis findMany
+   */
+  export type ProjectAnalysisFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectAnalysis
+     */
+    select?: ProjectAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectAnalysis
+     */
+    omit?: ProjectAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectAnalysisInclude<ExtArgs> | null
+    /**
+     * Filter, which ProjectAnalyses to fetch.
+     */
+    where?: ProjectAnalysisWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ProjectAnalyses to fetch.
+     */
+    orderBy?: ProjectAnalysisOrderByWithRelationInput | ProjectAnalysisOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ProjectAnalyses.
+     */
+    cursor?: ProjectAnalysisWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ProjectAnalyses from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ProjectAnalyses.
+     */
+    skip?: number
+    distinct?: ProjectAnalysisScalarFieldEnum | ProjectAnalysisScalarFieldEnum[]
+  }
+
+  /**
+   * ProjectAnalysis create
+   */
+  export type ProjectAnalysisCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectAnalysis
+     */
+    select?: ProjectAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectAnalysis
+     */
+    omit?: ProjectAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectAnalysisInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ProjectAnalysis.
+     */
+    data: XOR<ProjectAnalysisCreateInput, ProjectAnalysisUncheckedCreateInput>
+  }
+
+  /**
+   * ProjectAnalysis createMany
+   */
+  export type ProjectAnalysisCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ProjectAnalyses.
+     */
+    data: ProjectAnalysisCreateManyInput | ProjectAnalysisCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProjectAnalysis createManyAndReturn
+   */
+  export type ProjectAnalysisCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectAnalysis
+     */
+    select?: ProjectAnalysisSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectAnalysis
+     */
+    omit?: ProjectAnalysisOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProjectAnalyses.
+     */
+    data: ProjectAnalysisCreateManyInput | ProjectAnalysisCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectAnalysisIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProjectAnalysis update
+   */
+  export type ProjectAnalysisUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectAnalysis
+     */
+    select?: ProjectAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectAnalysis
+     */
+    omit?: ProjectAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectAnalysisInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ProjectAnalysis.
+     */
+    data: XOR<ProjectAnalysisUpdateInput, ProjectAnalysisUncheckedUpdateInput>
+    /**
+     * Choose, which ProjectAnalysis to update.
+     */
+    where: ProjectAnalysisWhereUniqueInput
+  }
+
+  /**
+   * ProjectAnalysis updateMany
+   */
+  export type ProjectAnalysisUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ProjectAnalyses.
+     */
+    data: XOR<ProjectAnalysisUpdateManyMutationInput, ProjectAnalysisUncheckedUpdateManyInput>
+    /**
+     * Filter which ProjectAnalyses to update
+     */
+    where?: ProjectAnalysisWhereInput
+    /**
+     * Limit how many ProjectAnalyses to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProjectAnalysis updateManyAndReturn
+   */
+  export type ProjectAnalysisUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectAnalysis
+     */
+    select?: ProjectAnalysisSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectAnalysis
+     */
+    omit?: ProjectAnalysisOmit<ExtArgs> | null
+    /**
+     * The data used to update ProjectAnalyses.
+     */
+    data: XOR<ProjectAnalysisUpdateManyMutationInput, ProjectAnalysisUncheckedUpdateManyInput>
+    /**
+     * Filter which ProjectAnalyses to update
+     */
+    where?: ProjectAnalysisWhereInput
+    /**
+     * Limit how many ProjectAnalyses to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectAnalysisIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ProjectAnalysis upsert
+   */
+  export type ProjectAnalysisUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectAnalysis
+     */
+    select?: ProjectAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectAnalysis
+     */
+    omit?: ProjectAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectAnalysisInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ProjectAnalysis to update in case it exists.
+     */
+    where: ProjectAnalysisWhereUniqueInput
+    /**
+     * In case the ProjectAnalysis found by the `where` argument doesn't exist, create a new ProjectAnalysis with this data.
+     */
+    create: XOR<ProjectAnalysisCreateInput, ProjectAnalysisUncheckedCreateInput>
+    /**
+     * In case the ProjectAnalysis was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProjectAnalysisUpdateInput, ProjectAnalysisUncheckedUpdateInput>
+  }
+
+  /**
+   * ProjectAnalysis delete
+   */
+  export type ProjectAnalysisDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectAnalysis
+     */
+    select?: ProjectAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectAnalysis
+     */
+    omit?: ProjectAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectAnalysisInclude<ExtArgs> | null
+    /**
+     * Filter which ProjectAnalysis to delete.
+     */
+    where: ProjectAnalysisWhereUniqueInput
+  }
+
+  /**
+   * ProjectAnalysis deleteMany
+   */
+  export type ProjectAnalysisDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ProjectAnalyses to delete
+     */
+    where?: ProjectAnalysisWhereInput
+    /**
+     * Limit how many ProjectAnalyses to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProjectAnalysis without action
+   */
+  export type ProjectAnalysisDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ProjectAnalysis
+     */
+    select?: ProjectAnalysisSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProjectAnalysis
+     */
+    omit?: ProjectAnalysisOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectAnalysisInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -8940,6 +10331,28 @@ export namespace Prisma {
   };
 
   export type JRICalculationScalarFieldEnum = (typeof JRICalculationScalarFieldEnum)[keyof typeof JRICalculationScalarFieldEnum]
+
+
+  export const ProjectAnalysisScalarFieldEnum: {
+    id: 'id',
+    studentId: 'studentId',
+    repoUrl: 'repoUrl',
+    commitSha: 'commitSha',
+    report: 'report',
+    integrityHash: 'integrityHash',
+    overallScore: 'overallScore',
+    profileId: 'profileId',
+    confidenceLevel: 'confidenceLevel',
+    reliabilityLevel: 'reliabilityLevel',
+    flagCount: 'flagCount',
+    analyzerVersion: 'analyzerVersion',
+    status: 'status',
+    errorMessage: 'errorMessage',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ProjectAnalysisScalarFieldEnum = (typeof ProjectAnalysisScalarFieldEnum)[keyof typeof ProjectAnalysisScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -9111,6 +10524,20 @@ export namespace Prisma {
    * Reference to a field of type 'Platform[]'
    */
   export type ListEnumPlatformFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Platform[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'AnalysisStatus'
+   */
+  export type EnumAnalysisStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AnalysisStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'AnalysisStatus[]'
+   */
+  export type ListEnumAnalysisStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AnalysisStatus[]'>
     
   /**
    * Deep Input Types
@@ -9303,6 +10730,7 @@ export namespace Prisma {
     githubProfile?: XOR<GitHubProfileNullableScalarRelationFilter, GitHubProfileWhereInput> | null
     dsaProfiles?: DSAProfileListRelationFilter
     jriCalculations?: JRICalculationListRelationFilter
+    projectAnalyses?: ProjectAnalysisListRelationFilter
   }
 
   export type StudentOrderByWithRelationInput = {
@@ -9332,6 +10760,7 @@ export namespace Prisma {
     githubProfile?: GitHubProfileOrderByWithRelationInput
     dsaProfiles?: DSAProfileOrderByRelationAggregateInput
     jriCalculations?: JRICalculationOrderByRelationAggregateInput
+    projectAnalyses?: ProjectAnalysisOrderByRelationAggregateInput
   }
 
   export type StudentWhereUniqueInput = Prisma.AtLeast<{
@@ -9364,6 +10793,7 @@ export namespace Prisma {
     githubProfile?: XOR<GitHubProfileNullableScalarRelationFilter, GitHubProfileWhereInput> | null
     dsaProfiles?: DSAProfileListRelationFilter
     jriCalculations?: JRICalculationListRelationFilter
+    projectAnalyses?: ProjectAnalysisListRelationFilter
   }, "id" | "userId" | "email" | "githubUsername">
 
   export type StudentOrderByWithAggregationInput = {
@@ -9729,6 +11159,118 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"JRICalculation"> | Date | string
   }
 
+  export type ProjectAnalysisWhereInput = {
+    AND?: ProjectAnalysisWhereInput | ProjectAnalysisWhereInput[]
+    OR?: ProjectAnalysisWhereInput[]
+    NOT?: ProjectAnalysisWhereInput | ProjectAnalysisWhereInput[]
+    id?: StringFilter<"ProjectAnalysis"> | string
+    studentId?: StringFilter<"ProjectAnalysis"> | string
+    repoUrl?: StringFilter<"ProjectAnalysis"> | string
+    commitSha?: StringFilter<"ProjectAnalysis"> | string
+    report?: JsonFilter<"ProjectAnalysis">
+    integrityHash?: StringFilter<"ProjectAnalysis"> | string
+    overallScore?: IntFilter<"ProjectAnalysis"> | number
+    profileId?: StringFilter<"ProjectAnalysis"> | string
+    confidenceLevel?: StringFilter<"ProjectAnalysis"> | string
+    reliabilityLevel?: StringFilter<"ProjectAnalysis"> | string
+    flagCount?: IntFilter<"ProjectAnalysis"> | number
+    analyzerVersion?: StringFilter<"ProjectAnalysis"> | string
+    status?: EnumAnalysisStatusFilter<"ProjectAnalysis"> | $Enums.AnalysisStatus
+    errorMessage?: StringNullableFilter<"ProjectAnalysis"> | string | null
+    createdAt?: DateTimeFilter<"ProjectAnalysis"> | Date | string
+    updatedAt?: DateTimeFilter<"ProjectAnalysis"> | Date | string
+    student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+  }
+
+  export type ProjectAnalysisOrderByWithRelationInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    repoUrl?: SortOrder
+    commitSha?: SortOrder
+    report?: SortOrder
+    integrityHash?: SortOrder
+    overallScore?: SortOrder
+    profileId?: SortOrder
+    confidenceLevel?: SortOrder
+    reliabilityLevel?: SortOrder
+    flagCount?: SortOrder
+    analyzerVersion?: SortOrder
+    status?: SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    student?: StudentOrderByWithRelationInput
+  }
+
+  export type ProjectAnalysisWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ProjectAnalysisWhereInput | ProjectAnalysisWhereInput[]
+    OR?: ProjectAnalysisWhereInput[]
+    NOT?: ProjectAnalysisWhereInput | ProjectAnalysisWhereInput[]
+    studentId?: StringFilter<"ProjectAnalysis"> | string
+    repoUrl?: StringFilter<"ProjectAnalysis"> | string
+    commitSha?: StringFilter<"ProjectAnalysis"> | string
+    report?: JsonFilter<"ProjectAnalysis">
+    integrityHash?: StringFilter<"ProjectAnalysis"> | string
+    overallScore?: IntFilter<"ProjectAnalysis"> | number
+    profileId?: StringFilter<"ProjectAnalysis"> | string
+    confidenceLevel?: StringFilter<"ProjectAnalysis"> | string
+    reliabilityLevel?: StringFilter<"ProjectAnalysis"> | string
+    flagCount?: IntFilter<"ProjectAnalysis"> | number
+    analyzerVersion?: StringFilter<"ProjectAnalysis"> | string
+    status?: EnumAnalysisStatusFilter<"ProjectAnalysis"> | $Enums.AnalysisStatus
+    errorMessage?: StringNullableFilter<"ProjectAnalysis"> | string | null
+    createdAt?: DateTimeFilter<"ProjectAnalysis"> | Date | string
+    updatedAt?: DateTimeFilter<"ProjectAnalysis"> | Date | string
+    student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
+  }, "id">
+
+  export type ProjectAnalysisOrderByWithAggregationInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    repoUrl?: SortOrder
+    commitSha?: SortOrder
+    report?: SortOrder
+    integrityHash?: SortOrder
+    overallScore?: SortOrder
+    profileId?: SortOrder
+    confidenceLevel?: SortOrder
+    reliabilityLevel?: SortOrder
+    flagCount?: SortOrder
+    analyzerVersion?: SortOrder
+    status?: SortOrder
+    errorMessage?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ProjectAnalysisCountOrderByAggregateInput
+    _avg?: ProjectAnalysisAvgOrderByAggregateInput
+    _max?: ProjectAnalysisMaxOrderByAggregateInput
+    _min?: ProjectAnalysisMinOrderByAggregateInput
+    _sum?: ProjectAnalysisSumOrderByAggregateInput
+  }
+
+  export type ProjectAnalysisScalarWhereWithAggregatesInput = {
+    AND?: ProjectAnalysisScalarWhereWithAggregatesInput | ProjectAnalysisScalarWhereWithAggregatesInput[]
+    OR?: ProjectAnalysisScalarWhereWithAggregatesInput[]
+    NOT?: ProjectAnalysisScalarWhereWithAggregatesInput | ProjectAnalysisScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProjectAnalysis"> | string
+    studentId?: StringWithAggregatesFilter<"ProjectAnalysis"> | string
+    repoUrl?: StringWithAggregatesFilter<"ProjectAnalysis"> | string
+    commitSha?: StringWithAggregatesFilter<"ProjectAnalysis"> | string
+    report?: JsonWithAggregatesFilter<"ProjectAnalysis">
+    integrityHash?: StringWithAggregatesFilter<"ProjectAnalysis"> | string
+    overallScore?: IntWithAggregatesFilter<"ProjectAnalysis"> | number
+    profileId?: StringWithAggregatesFilter<"ProjectAnalysis"> | string
+    confidenceLevel?: StringWithAggregatesFilter<"ProjectAnalysis"> | string
+    reliabilityLevel?: StringWithAggregatesFilter<"ProjectAnalysis"> | string
+    flagCount?: IntWithAggregatesFilter<"ProjectAnalysis"> | number
+    analyzerVersion?: StringWithAggregatesFilter<"ProjectAnalysis"> | string
+    status?: EnumAnalysisStatusWithAggregatesFilter<"ProjectAnalysis"> | $Enums.AnalysisStatus
+    errorMessage?: StringNullableWithAggregatesFilter<"ProjectAnalysis"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ProjectAnalysis"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ProjectAnalysis"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     email: string
@@ -9933,6 +11475,7 @@ export namespace Prisma {
     githubProfile?: GitHubProfileCreateNestedOneWithoutStudentInput
     dsaProfiles?: DSAProfileCreateNestedManyWithoutStudentInput
     jriCalculations?: JRICalculationCreateNestedManyWithoutStudentInput
+    projectAnalyses?: ProjectAnalysisCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateInput = {
@@ -9960,6 +11503,7 @@ export namespace Prisma {
     githubProfile?: GitHubProfileUncheckedCreateNestedOneWithoutStudentInput
     dsaProfiles?: DSAProfileUncheckedCreateNestedManyWithoutStudentInput
     jriCalculations?: JRICalculationUncheckedCreateNestedManyWithoutStudentInput
+    projectAnalyses?: ProjectAnalysisUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUpdateInput = {
@@ -9987,6 +11531,7 @@ export namespace Prisma {
     githubProfile?: GitHubProfileUpdateOneWithoutStudentNestedInput
     dsaProfiles?: DSAProfileUpdateManyWithoutStudentNestedInput
     jriCalculations?: JRICalculationUpdateManyWithoutStudentNestedInput
+    projectAnalyses?: ProjectAnalysisUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateInput = {
@@ -10014,6 +11559,7 @@ export namespace Prisma {
     githubProfile?: GitHubProfileUncheckedUpdateOneWithoutStudentNestedInput
     dsaProfiles?: DSAProfileUncheckedUpdateManyWithoutStudentNestedInput
     jriCalculations?: JRICalculationUncheckedUpdateManyWithoutStudentNestedInput
+    projectAnalyses?: ProjectAnalysisUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentCreateManyInput = {
@@ -10440,6 +11986,138 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ProjectAnalysisCreateInput = {
+    id?: string
+    repoUrl: string
+    commitSha: string
+    report: JsonNullValueInput | InputJsonValue
+    integrityHash: string
+    overallScore: number
+    profileId: string
+    confidenceLevel: string
+    reliabilityLevel: string
+    flagCount: number
+    analyzerVersion: string
+    status?: $Enums.AnalysisStatus
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: StudentCreateNestedOneWithoutProjectAnalysesInput
+  }
+
+  export type ProjectAnalysisUncheckedCreateInput = {
+    id?: string
+    studentId: string
+    repoUrl: string
+    commitSha: string
+    report: JsonNullValueInput | InputJsonValue
+    integrityHash: string
+    overallScore: number
+    profileId: string
+    confidenceLevel: string
+    reliabilityLevel: string
+    flagCount: number
+    analyzerVersion: string
+    status?: $Enums.AnalysisStatus
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProjectAnalysisUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    repoUrl?: StringFieldUpdateOperationsInput | string
+    commitSha?: StringFieldUpdateOperationsInput | string
+    report?: JsonNullValueInput | InputJsonValue
+    integrityHash?: StringFieldUpdateOperationsInput | string
+    overallScore?: IntFieldUpdateOperationsInput | number
+    profileId?: StringFieldUpdateOperationsInput | string
+    confidenceLevel?: StringFieldUpdateOperationsInput | string
+    reliabilityLevel?: StringFieldUpdateOperationsInput | string
+    flagCount?: IntFieldUpdateOperationsInput | number
+    analyzerVersion?: StringFieldUpdateOperationsInput | string
+    status?: EnumAnalysisStatusFieldUpdateOperationsInput | $Enums.AnalysisStatus
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: StudentUpdateOneRequiredWithoutProjectAnalysesNestedInput
+  }
+
+  export type ProjectAnalysisUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    repoUrl?: StringFieldUpdateOperationsInput | string
+    commitSha?: StringFieldUpdateOperationsInput | string
+    report?: JsonNullValueInput | InputJsonValue
+    integrityHash?: StringFieldUpdateOperationsInput | string
+    overallScore?: IntFieldUpdateOperationsInput | number
+    profileId?: StringFieldUpdateOperationsInput | string
+    confidenceLevel?: StringFieldUpdateOperationsInput | string
+    reliabilityLevel?: StringFieldUpdateOperationsInput | string
+    flagCount?: IntFieldUpdateOperationsInput | number
+    analyzerVersion?: StringFieldUpdateOperationsInput | string
+    status?: EnumAnalysisStatusFieldUpdateOperationsInput | $Enums.AnalysisStatus
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectAnalysisCreateManyInput = {
+    id?: string
+    studentId: string
+    repoUrl: string
+    commitSha: string
+    report: JsonNullValueInput | InputJsonValue
+    integrityHash: string
+    overallScore: number
+    profileId: string
+    confidenceLevel: string
+    reliabilityLevel: string
+    flagCount: number
+    analyzerVersion: string
+    status?: $Enums.AnalysisStatus
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProjectAnalysisUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    repoUrl?: StringFieldUpdateOperationsInput | string
+    commitSha?: StringFieldUpdateOperationsInput | string
+    report?: JsonNullValueInput | InputJsonValue
+    integrityHash?: StringFieldUpdateOperationsInput | string
+    overallScore?: IntFieldUpdateOperationsInput | number
+    profileId?: StringFieldUpdateOperationsInput | string
+    confidenceLevel?: StringFieldUpdateOperationsInput | string
+    reliabilityLevel?: StringFieldUpdateOperationsInput | string
+    flagCount?: IntFieldUpdateOperationsInput | number
+    analyzerVersion?: StringFieldUpdateOperationsInput | string
+    status?: EnumAnalysisStatusFieldUpdateOperationsInput | $Enums.AnalysisStatus
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectAnalysisUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    repoUrl?: StringFieldUpdateOperationsInput | string
+    commitSha?: StringFieldUpdateOperationsInput | string
+    report?: JsonNullValueInput | InputJsonValue
+    integrityHash?: StringFieldUpdateOperationsInput | string
+    overallScore?: IntFieldUpdateOperationsInput | number
+    profileId?: StringFieldUpdateOperationsInput | string
+    confidenceLevel?: StringFieldUpdateOperationsInput | string
+    reliabilityLevel?: StringFieldUpdateOperationsInput | string
+    flagCount?: IntFieldUpdateOperationsInput | number
+    analyzerVersion?: StringFieldUpdateOperationsInput | string
+    status?: EnumAnalysisStatusFieldUpdateOperationsInput | $Enums.AnalysisStatus
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -10795,11 +12473,21 @@ export namespace Prisma {
     none?: JRICalculationWhereInput
   }
 
+  export type ProjectAnalysisListRelationFilter = {
+    every?: ProjectAnalysisWhereInput
+    some?: ProjectAnalysisWhereInput
+    none?: ProjectAnalysisWhereInput
+  }
+
   export type DSAProfileOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type JRICalculationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ProjectAnalysisOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -11244,6 +12932,88 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
+  export type EnumAnalysisStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.AnalysisStatus | EnumAnalysisStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AnalysisStatus[] | ListEnumAnalysisStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AnalysisStatus[] | ListEnumAnalysisStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAnalysisStatusFilter<$PrismaModel> | $Enums.AnalysisStatus
+  }
+
+  export type ProjectAnalysisCountOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    repoUrl?: SortOrder
+    commitSha?: SortOrder
+    report?: SortOrder
+    integrityHash?: SortOrder
+    overallScore?: SortOrder
+    profileId?: SortOrder
+    confidenceLevel?: SortOrder
+    reliabilityLevel?: SortOrder
+    flagCount?: SortOrder
+    analyzerVersion?: SortOrder
+    status?: SortOrder
+    errorMessage?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProjectAnalysisAvgOrderByAggregateInput = {
+    overallScore?: SortOrder
+    flagCount?: SortOrder
+  }
+
+  export type ProjectAnalysisMaxOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    repoUrl?: SortOrder
+    commitSha?: SortOrder
+    integrityHash?: SortOrder
+    overallScore?: SortOrder
+    profileId?: SortOrder
+    confidenceLevel?: SortOrder
+    reliabilityLevel?: SortOrder
+    flagCount?: SortOrder
+    analyzerVersion?: SortOrder
+    status?: SortOrder
+    errorMessage?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProjectAnalysisMinOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    repoUrl?: SortOrder
+    commitSha?: SortOrder
+    integrityHash?: SortOrder
+    overallScore?: SortOrder
+    profileId?: SortOrder
+    confidenceLevel?: SortOrder
+    reliabilityLevel?: SortOrder
+    flagCount?: SortOrder
+    analyzerVersion?: SortOrder
+    status?: SortOrder
+    errorMessage?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProjectAnalysisSumOrderByAggregateInput = {
+    overallScore?: SortOrder
+    flagCount?: SortOrder
+  }
+
+  export type EnumAnalysisStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AnalysisStatus | EnumAnalysisStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AnalysisStatus[] | ListEnumAnalysisStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AnalysisStatus[] | ListEnumAnalysisStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAnalysisStatusWithAggregatesFilter<$PrismaModel> | $Enums.AnalysisStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAnalysisStatusFilter<$PrismaModel>
+    _max?: NestedEnumAnalysisStatusFilter<$PrismaModel>
+  }
+
   export type CollegeCreateNestedOneWithoutUsersInput = {
     create?: XOR<CollegeCreateWithoutUsersInput, CollegeUncheckedCreateWithoutUsersInput>
     connectOrCreate?: CollegeCreateOrConnectWithoutUsersInput
@@ -11432,6 +13202,13 @@ export namespace Prisma {
     connect?: JRICalculationWhereUniqueInput | JRICalculationWhereUniqueInput[]
   }
 
+  export type ProjectAnalysisCreateNestedManyWithoutStudentInput = {
+    create?: XOR<ProjectAnalysisCreateWithoutStudentInput, ProjectAnalysisUncheckedCreateWithoutStudentInput> | ProjectAnalysisCreateWithoutStudentInput[] | ProjectAnalysisUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: ProjectAnalysisCreateOrConnectWithoutStudentInput | ProjectAnalysisCreateOrConnectWithoutStudentInput[]
+    createMany?: ProjectAnalysisCreateManyStudentInputEnvelope
+    connect?: ProjectAnalysisWhereUniqueInput | ProjectAnalysisWhereUniqueInput[]
+  }
+
   export type GitHubProfileUncheckedCreateNestedOneWithoutStudentInput = {
     create?: XOR<GitHubProfileCreateWithoutStudentInput, GitHubProfileUncheckedCreateWithoutStudentInput>
     connectOrCreate?: GitHubProfileCreateOrConnectWithoutStudentInput
@@ -11450,6 +13227,13 @@ export namespace Prisma {
     connectOrCreate?: JRICalculationCreateOrConnectWithoutStudentInput | JRICalculationCreateOrConnectWithoutStudentInput[]
     createMany?: JRICalculationCreateManyStudentInputEnvelope
     connect?: JRICalculationWhereUniqueInput | JRICalculationWhereUniqueInput[]
+  }
+
+  export type ProjectAnalysisUncheckedCreateNestedManyWithoutStudentInput = {
+    create?: XOR<ProjectAnalysisCreateWithoutStudentInput, ProjectAnalysisUncheckedCreateWithoutStudentInput> | ProjectAnalysisCreateWithoutStudentInput[] | ProjectAnalysisUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: ProjectAnalysisCreateOrConnectWithoutStudentInput | ProjectAnalysisCreateOrConnectWithoutStudentInput[]
+    createMany?: ProjectAnalysisCreateManyStudentInputEnvelope
+    connect?: ProjectAnalysisWhereUniqueInput | ProjectAnalysisWhereUniqueInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -11532,6 +13316,20 @@ export namespace Prisma {
     deleteMany?: JRICalculationScalarWhereInput | JRICalculationScalarWhereInput[]
   }
 
+  export type ProjectAnalysisUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<ProjectAnalysisCreateWithoutStudentInput, ProjectAnalysisUncheckedCreateWithoutStudentInput> | ProjectAnalysisCreateWithoutStudentInput[] | ProjectAnalysisUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: ProjectAnalysisCreateOrConnectWithoutStudentInput | ProjectAnalysisCreateOrConnectWithoutStudentInput[]
+    upsert?: ProjectAnalysisUpsertWithWhereUniqueWithoutStudentInput | ProjectAnalysisUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: ProjectAnalysisCreateManyStudentInputEnvelope
+    set?: ProjectAnalysisWhereUniqueInput | ProjectAnalysisWhereUniqueInput[]
+    disconnect?: ProjectAnalysisWhereUniqueInput | ProjectAnalysisWhereUniqueInput[]
+    delete?: ProjectAnalysisWhereUniqueInput | ProjectAnalysisWhereUniqueInput[]
+    connect?: ProjectAnalysisWhereUniqueInput | ProjectAnalysisWhereUniqueInput[]
+    update?: ProjectAnalysisUpdateWithWhereUniqueWithoutStudentInput | ProjectAnalysisUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: ProjectAnalysisUpdateManyWithWhereWithoutStudentInput | ProjectAnalysisUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: ProjectAnalysisScalarWhereInput | ProjectAnalysisScalarWhereInput[]
+  }
+
   export type GitHubProfileUncheckedUpdateOneWithoutStudentNestedInput = {
     create?: XOR<GitHubProfileCreateWithoutStudentInput, GitHubProfileUncheckedCreateWithoutStudentInput>
     connectOrCreate?: GitHubProfileCreateOrConnectWithoutStudentInput
@@ -11568,6 +13366,20 @@ export namespace Prisma {
     update?: JRICalculationUpdateWithWhereUniqueWithoutStudentInput | JRICalculationUpdateWithWhereUniqueWithoutStudentInput[]
     updateMany?: JRICalculationUpdateManyWithWhereWithoutStudentInput | JRICalculationUpdateManyWithWhereWithoutStudentInput[]
     deleteMany?: JRICalculationScalarWhereInput | JRICalculationScalarWhereInput[]
+  }
+
+  export type ProjectAnalysisUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<ProjectAnalysisCreateWithoutStudentInput, ProjectAnalysisUncheckedCreateWithoutStudentInput> | ProjectAnalysisCreateWithoutStudentInput[] | ProjectAnalysisUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: ProjectAnalysisCreateOrConnectWithoutStudentInput | ProjectAnalysisCreateOrConnectWithoutStudentInput[]
+    upsert?: ProjectAnalysisUpsertWithWhereUniqueWithoutStudentInput | ProjectAnalysisUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: ProjectAnalysisCreateManyStudentInputEnvelope
+    set?: ProjectAnalysisWhereUniqueInput | ProjectAnalysisWhereUniqueInput[]
+    disconnect?: ProjectAnalysisWhereUniqueInput | ProjectAnalysisWhereUniqueInput[]
+    delete?: ProjectAnalysisWhereUniqueInput | ProjectAnalysisWhereUniqueInput[]
+    connect?: ProjectAnalysisWhereUniqueInput | ProjectAnalysisWhereUniqueInput[]
+    update?: ProjectAnalysisUpdateWithWhereUniqueWithoutStudentInput | ProjectAnalysisUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: ProjectAnalysisUpdateManyWithWhereWithoutStudentInput | ProjectAnalysisUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: ProjectAnalysisScalarWhereInput | ProjectAnalysisScalarWhereInput[]
   }
 
   export type StudentCreateNestedOneWithoutGithubProfileInput = {
@@ -11626,6 +13438,24 @@ export namespace Prisma {
     upsert?: StudentUpsertWithoutJriCalculationsInput
     connect?: StudentWhereUniqueInput
     update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutJriCalculationsInput, StudentUpdateWithoutJriCalculationsInput>, StudentUncheckedUpdateWithoutJriCalculationsInput>
+  }
+
+  export type StudentCreateNestedOneWithoutProjectAnalysesInput = {
+    create?: XOR<StudentCreateWithoutProjectAnalysesInput, StudentUncheckedCreateWithoutProjectAnalysesInput>
+    connectOrCreate?: StudentCreateOrConnectWithoutProjectAnalysesInput
+    connect?: StudentWhereUniqueInput
+  }
+
+  export type EnumAnalysisStatusFieldUpdateOperationsInput = {
+    set?: $Enums.AnalysisStatus
+  }
+
+  export type StudentUpdateOneRequiredWithoutProjectAnalysesNestedInput = {
+    create?: XOR<StudentCreateWithoutProjectAnalysesInput, StudentUncheckedCreateWithoutProjectAnalysesInput>
+    connectOrCreate?: StudentCreateOrConnectWithoutProjectAnalysesInput
+    upsert?: StudentUpsertWithoutProjectAnalysesInput
+    connect?: StudentWhereUniqueInput
+    update?: XOR<XOR<StudentUpdateToOneWithWhereWithoutProjectAnalysesInput, StudentUpdateWithoutProjectAnalysesInput>, StudentUncheckedUpdateWithoutProjectAnalysesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -11958,6 +13788,23 @@ export namespace Prisma {
     _max?: NestedFloatFilter<$PrismaModel>
   }
 
+  export type NestedEnumAnalysisStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.AnalysisStatus | EnumAnalysisStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AnalysisStatus[] | ListEnumAnalysisStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AnalysisStatus[] | ListEnumAnalysisStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAnalysisStatusFilter<$PrismaModel> | $Enums.AnalysisStatus
+  }
+
+  export type NestedEnumAnalysisStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AnalysisStatus | EnumAnalysisStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.AnalysisStatus[] | ListEnumAnalysisStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AnalysisStatus[] | ListEnumAnalysisStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumAnalysisStatusWithAggregatesFilter<$PrismaModel> | $Enums.AnalysisStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAnalysisStatusFilter<$PrismaModel>
+    _max?: NestedEnumAnalysisStatusFilter<$PrismaModel>
+  }
+
   export type CollegeCreateWithoutUsersInput = {
     id?: string
     name: string
@@ -12013,6 +13860,7 @@ export namespace Prisma {
     githubProfile?: GitHubProfileCreateNestedOneWithoutStudentInput
     dsaProfiles?: DSAProfileCreateNestedManyWithoutStudentInput
     jriCalculations?: JRICalculationCreateNestedManyWithoutStudentInput
+    projectAnalyses?: ProjectAnalysisCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutUserInput = {
@@ -12039,6 +13887,7 @@ export namespace Prisma {
     githubProfile?: GitHubProfileUncheckedCreateNestedOneWithoutStudentInput
     dsaProfiles?: DSAProfileUncheckedCreateNestedManyWithoutStudentInput
     jriCalculations?: JRICalculationUncheckedCreateNestedManyWithoutStudentInput
+    projectAnalyses?: ProjectAnalysisUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutUserInput = {
@@ -12118,6 +13967,7 @@ export namespace Prisma {
     githubProfile?: GitHubProfileUpdateOneWithoutStudentNestedInput
     dsaProfiles?: DSAProfileUpdateManyWithoutStudentNestedInput
     jriCalculations?: JRICalculationUpdateManyWithoutStudentNestedInput
+    projectAnalyses?: ProjectAnalysisUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutUserInput = {
@@ -12144,6 +13994,7 @@ export namespace Prisma {
     githubProfile?: GitHubProfileUncheckedUpdateOneWithoutStudentNestedInput
     dsaProfiles?: DSAProfileUncheckedUpdateManyWithoutStudentNestedInput
     jriCalculations?: JRICalculationUncheckedUpdateManyWithoutStudentNestedInput
+    projectAnalyses?: ProjectAnalysisUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentCreateWithoutCollegeInput = {
@@ -12170,6 +14021,7 @@ export namespace Prisma {
     githubProfile?: GitHubProfileCreateNestedOneWithoutStudentInput
     dsaProfiles?: DSAProfileCreateNestedManyWithoutStudentInput
     jriCalculations?: JRICalculationCreateNestedManyWithoutStudentInput
+    projectAnalyses?: ProjectAnalysisCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutCollegeInput = {
@@ -12196,6 +14048,7 @@ export namespace Prisma {
     githubProfile?: GitHubProfileUncheckedCreateNestedOneWithoutStudentInput
     dsaProfiles?: DSAProfileUncheckedCreateNestedManyWithoutStudentInput
     jriCalculations?: JRICalculationUncheckedCreateNestedManyWithoutStudentInput
+    projectAnalyses?: ProjectAnalysisUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutCollegeInput = {
@@ -12497,6 +14350,52 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ProjectAnalysisCreateWithoutStudentInput = {
+    id?: string
+    repoUrl: string
+    commitSha: string
+    report: JsonNullValueInput | InputJsonValue
+    integrityHash: string
+    overallScore: number
+    profileId: string
+    confidenceLevel: string
+    reliabilityLevel: string
+    flagCount: number
+    analyzerVersion: string
+    status?: $Enums.AnalysisStatus
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProjectAnalysisUncheckedCreateWithoutStudentInput = {
+    id?: string
+    repoUrl: string
+    commitSha: string
+    report: JsonNullValueInput | InputJsonValue
+    integrityHash: string
+    overallScore: number
+    profileId: string
+    confidenceLevel: string
+    reliabilityLevel: string
+    flagCount: number
+    analyzerVersion: string
+    status?: $Enums.AnalysisStatus
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProjectAnalysisCreateOrConnectWithoutStudentInput = {
+    where: ProjectAnalysisWhereUniqueInput
+    create: XOR<ProjectAnalysisCreateWithoutStudentInput, ProjectAnalysisUncheckedCreateWithoutStudentInput>
+  }
+
+  export type ProjectAnalysisCreateManyStudentInputEnvelope = {
+    data: ProjectAnalysisCreateManyStudentInput | ProjectAnalysisCreateManyStudentInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutStudentInput = {
     update: XOR<UserUpdateWithoutStudentInput, UserUncheckedUpdateWithoutStudentInput>
     create: XOR<UserCreateWithoutStudentInput, UserUncheckedCreateWithoutStudentInput>
@@ -12686,6 +14585,44 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"JRICalculation"> | Date | string
   }
 
+  export type ProjectAnalysisUpsertWithWhereUniqueWithoutStudentInput = {
+    where: ProjectAnalysisWhereUniqueInput
+    update: XOR<ProjectAnalysisUpdateWithoutStudentInput, ProjectAnalysisUncheckedUpdateWithoutStudentInput>
+    create: XOR<ProjectAnalysisCreateWithoutStudentInput, ProjectAnalysisUncheckedCreateWithoutStudentInput>
+  }
+
+  export type ProjectAnalysisUpdateWithWhereUniqueWithoutStudentInput = {
+    where: ProjectAnalysisWhereUniqueInput
+    data: XOR<ProjectAnalysisUpdateWithoutStudentInput, ProjectAnalysisUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type ProjectAnalysisUpdateManyWithWhereWithoutStudentInput = {
+    where: ProjectAnalysisScalarWhereInput
+    data: XOR<ProjectAnalysisUpdateManyMutationInput, ProjectAnalysisUncheckedUpdateManyWithoutStudentInput>
+  }
+
+  export type ProjectAnalysisScalarWhereInput = {
+    AND?: ProjectAnalysisScalarWhereInput | ProjectAnalysisScalarWhereInput[]
+    OR?: ProjectAnalysisScalarWhereInput[]
+    NOT?: ProjectAnalysisScalarWhereInput | ProjectAnalysisScalarWhereInput[]
+    id?: StringFilter<"ProjectAnalysis"> | string
+    studentId?: StringFilter<"ProjectAnalysis"> | string
+    repoUrl?: StringFilter<"ProjectAnalysis"> | string
+    commitSha?: StringFilter<"ProjectAnalysis"> | string
+    report?: JsonFilter<"ProjectAnalysis">
+    integrityHash?: StringFilter<"ProjectAnalysis"> | string
+    overallScore?: IntFilter<"ProjectAnalysis"> | number
+    profileId?: StringFilter<"ProjectAnalysis"> | string
+    confidenceLevel?: StringFilter<"ProjectAnalysis"> | string
+    reliabilityLevel?: StringFilter<"ProjectAnalysis"> | string
+    flagCount?: IntFilter<"ProjectAnalysis"> | number
+    analyzerVersion?: StringFilter<"ProjectAnalysis"> | string
+    status?: EnumAnalysisStatusFilter<"ProjectAnalysis"> | $Enums.AnalysisStatus
+    errorMessage?: StringNullableFilter<"ProjectAnalysis"> | string | null
+    createdAt?: DateTimeFilter<"ProjectAnalysis"> | Date | string
+    updatedAt?: DateTimeFilter<"ProjectAnalysis"> | Date | string
+  }
+
   export type StudentCreateWithoutGithubProfileInput = {
     id?: string
     firstName: string
@@ -12710,6 +14647,7 @@ export namespace Prisma {
     college?: CollegeCreateNestedOneWithoutStudentsInput
     dsaProfiles?: DSAProfileCreateNestedManyWithoutStudentInput
     jriCalculations?: JRICalculationCreateNestedManyWithoutStudentInput
+    projectAnalyses?: ProjectAnalysisCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutGithubProfileInput = {
@@ -12736,6 +14674,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     dsaProfiles?: DSAProfileUncheckedCreateNestedManyWithoutStudentInput
     jriCalculations?: JRICalculationUncheckedCreateNestedManyWithoutStudentInput
+    projectAnalyses?: ProjectAnalysisUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutGithubProfileInput = {
@@ -12778,6 +14717,7 @@ export namespace Prisma {
     college?: CollegeUpdateOneWithoutStudentsNestedInput
     dsaProfiles?: DSAProfileUpdateManyWithoutStudentNestedInput
     jriCalculations?: JRICalculationUpdateManyWithoutStudentNestedInput
+    projectAnalyses?: ProjectAnalysisUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutGithubProfileInput = {
@@ -12804,6 +14744,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dsaProfiles?: DSAProfileUncheckedUpdateManyWithoutStudentNestedInput
     jriCalculations?: JRICalculationUncheckedUpdateManyWithoutStudentNestedInput
+    projectAnalyses?: ProjectAnalysisUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentCreateWithoutDsaProfilesInput = {
@@ -12830,6 +14771,7 @@ export namespace Prisma {
     college?: CollegeCreateNestedOneWithoutStudentsInput
     githubProfile?: GitHubProfileCreateNestedOneWithoutStudentInput
     jriCalculations?: JRICalculationCreateNestedManyWithoutStudentInput
+    projectAnalyses?: ProjectAnalysisCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutDsaProfilesInput = {
@@ -12856,6 +14798,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     githubProfile?: GitHubProfileUncheckedCreateNestedOneWithoutStudentInput
     jriCalculations?: JRICalculationUncheckedCreateNestedManyWithoutStudentInput
+    projectAnalyses?: ProjectAnalysisUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutDsaProfilesInput = {
@@ -12898,6 +14841,7 @@ export namespace Prisma {
     college?: CollegeUpdateOneWithoutStudentsNestedInput
     githubProfile?: GitHubProfileUpdateOneWithoutStudentNestedInput
     jriCalculations?: JRICalculationUpdateManyWithoutStudentNestedInput
+    projectAnalyses?: ProjectAnalysisUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutDsaProfilesInput = {
@@ -12924,6 +14868,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     githubProfile?: GitHubProfileUncheckedUpdateOneWithoutStudentNestedInput
     jriCalculations?: JRICalculationUncheckedUpdateManyWithoutStudentNestedInput
+    projectAnalyses?: ProjectAnalysisUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentCreateWithoutJriCalculationsInput = {
@@ -12950,6 +14895,7 @@ export namespace Prisma {
     college?: CollegeCreateNestedOneWithoutStudentsInput
     githubProfile?: GitHubProfileCreateNestedOneWithoutStudentInput
     dsaProfiles?: DSAProfileCreateNestedManyWithoutStudentInput
+    projectAnalyses?: ProjectAnalysisCreateNestedManyWithoutStudentInput
   }
 
   export type StudentUncheckedCreateWithoutJriCalculationsInput = {
@@ -12976,6 +14922,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     githubProfile?: GitHubProfileUncheckedCreateNestedOneWithoutStudentInput
     dsaProfiles?: DSAProfileUncheckedCreateNestedManyWithoutStudentInput
+    projectAnalyses?: ProjectAnalysisUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type StudentCreateOrConnectWithoutJriCalculationsInput = {
@@ -13018,6 +14965,7 @@ export namespace Prisma {
     college?: CollegeUpdateOneWithoutStudentsNestedInput
     githubProfile?: GitHubProfileUpdateOneWithoutStudentNestedInput
     dsaProfiles?: DSAProfileUpdateManyWithoutStudentNestedInput
+    projectAnalyses?: ProjectAnalysisUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutJriCalculationsInput = {
@@ -13044,6 +14992,131 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     githubProfile?: GitHubProfileUncheckedUpdateOneWithoutStudentNestedInput
     dsaProfiles?: DSAProfileUncheckedUpdateManyWithoutStudentNestedInput
+    projectAnalyses?: ProjectAnalysisUncheckedUpdateManyWithoutStudentNestedInput
+  }
+
+  export type StudentCreateWithoutProjectAnalysesInput = {
+    id?: string
+    firstName: string
+    lastName: string
+    rollNumber: string
+    email: string
+    phone?: string | null
+    department: string
+    semester: number
+    batch: string
+    section?: string | null
+    isPlaced?: boolean
+    placementYear?: number | null
+    packageOffered?: number | null
+    companyName?: string | null
+    githubUsername?: string | null
+    githubAccessToken?: string | null
+    githubConnectedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutStudentInput
+    college?: CollegeCreateNestedOneWithoutStudentsInput
+    githubProfile?: GitHubProfileCreateNestedOneWithoutStudentInput
+    dsaProfiles?: DSAProfileCreateNestedManyWithoutStudentInput
+    jriCalculations?: JRICalculationCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentUncheckedCreateWithoutProjectAnalysesInput = {
+    id?: string
+    userId: string
+    collegeId?: string | null
+    firstName: string
+    lastName: string
+    rollNumber: string
+    email: string
+    phone?: string | null
+    department: string
+    semester: number
+    batch: string
+    section?: string | null
+    isPlaced?: boolean
+    placementYear?: number | null
+    packageOffered?: number | null
+    companyName?: string | null
+    githubUsername?: string | null
+    githubAccessToken?: string | null
+    githubConnectedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    githubProfile?: GitHubProfileUncheckedCreateNestedOneWithoutStudentInput
+    dsaProfiles?: DSAProfileUncheckedCreateNestedManyWithoutStudentInput
+    jriCalculations?: JRICalculationUncheckedCreateNestedManyWithoutStudentInput
+  }
+
+  export type StudentCreateOrConnectWithoutProjectAnalysesInput = {
+    where: StudentWhereUniqueInput
+    create: XOR<StudentCreateWithoutProjectAnalysesInput, StudentUncheckedCreateWithoutProjectAnalysesInput>
+  }
+
+  export type StudentUpsertWithoutProjectAnalysesInput = {
+    update: XOR<StudentUpdateWithoutProjectAnalysesInput, StudentUncheckedUpdateWithoutProjectAnalysesInput>
+    create: XOR<StudentCreateWithoutProjectAnalysesInput, StudentUncheckedCreateWithoutProjectAnalysesInput>
+    where?: StudentWhereInput
+  }
+
+  export type StudentUpdateToOneWithWhereWithoutProjectAnalysesInput = {
+    where?: StudentWhereInput
+    data: XOR<StudentUpdateWithoutProjectAnalysesInput, StudentUncheckedUpdateWithoutProjectAnalysesInput>
+  }
+
+  export type StudentUpdateWithoutProjectAnalysesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    rollNumber?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: StringFieldUpdateOperationsInput | string
+    semester?: IntFieldUpdateOperationsInput | number
+    batch?: StringFieldUpdateOperationsInput | string
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    isPlaced?: BoolFieldUpdateOperationsInput | boolean
+    placementYear?: NullableIntFieldUpdateOperationsInput | number | null
+    packageOffered?: NullableFloatFieldUpdateOperationsInput | number | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    githubUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    githubAccessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    githubConnectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutStudentNestedInput
+    college?: CollegeUpdateOneWithoutStudentsNestedInput
+    githubProfile?: GitHubProfileUpdateOneWithoutStudentNestedInput
+    dsaProfiles?: DSAProfileUpdateManyWithoutStudentNestedInput
+    jriCalculations?: JRICalculationUpdateManyWithoutStudentNestedInput
+  }
+
+  export type StudentUncheckedUpdateWithoutProjectAnalysesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    collegeId?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: StringFieldUpdateOperationsInput | string
+    lastName?: StringFieldUpdateOperationsInput | string
+    rollNumber?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: StringFieldUpdateOperationsInput | string
+    semester?: IntFieldUpdateOperationsInput | number
+    batch?: StringFieldUpdateOperationsInput | string
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    isPlaced?: BoolFieldUpdateOperationsInput | boolean
+    placementYear?: NullableIntFieldUpdateOperationsInput | number | null
+    packageOffered?: NullableFloatFieldUpdateOperationsInput | number | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    githubUsername?: NullableStringFieldUpdateOperationsInput | string | null
+    githubAccessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    githubConnectedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    githubProfile?: GitHubProfileUncheckedUpdateOneWithoutStudentNestedInput
+    dsaProfiles?: DSAProfileUncheckedUpdateManyWithoutStudentNestedInput
+    jriCalculations?: JRICalculationUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentCreateManyCollegeInput = {
@@ -13104,6 +15177,7 @@ export namespace Prisma {
     githubProfile?: GitHubProfileUpdateOneWithoutStudentNestedInput
     dsaProfiles?: DSAProfileUpdateManyWithoutStudentNestedInput
     jriCalculations?: JRICalculationUpdateManyWithoutStudentNestedInput
+    projectAnalyses?: ProjectAnalysisUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateWithoutCollegeInput = {
@@ -13130,6 +15204,7 @@ export namespace Prisma {
     githubProfile?: GitHubProfileUncheckedUpdateOneWithoutStudentNestedInput
     dsaProfiles?: DSAProfileUncheckedUpdateManyWithoutStudentNestedInput
     jriCalculations?: JRICalculationUncheckedUpdateManyWithoutStudentNestedInput
+    projectAnalyses?: ProjectAnalysisUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type StudentUncheckedUpdateManyWithoutCollegeInput = {
@@ -13220,6 +15295,24 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type ProjectAnalysisCreateManyStudentInput = {
+    id?: string
+    repoUrl: string
+    commitSha: string
+    report: JsonNullValueInput | InputJsonValue
+    integrityHash: string
+    overallScore: number
+    profileId: string
+    confidenceLevel: string
+    reliabilityLevel: string
+    flagCount: number
+    analyzerVersion: string
+    status?: $Enums.AnalysisStatus
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type DSAProfileUpdateWithoutStudentInput = {
     id?: StringFieldUpdateOperationsInput | string
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
@@ -13308,6 +15401,60 @@ export namespace Prisma {
     rawScores?: JsonNullValueInput | InputJsonValue
     algorithmVersion?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectAnalysisUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    repoUrl?: StringFieldUpdateOperationsInput | string
+    commitSha?: StringFieldUpdateOperationsInput | string
+    report?: JsonNullValueInput | InputJsonValue
+    integrityHash?: StringFieldUpdateOperationsInput | string
+    overallScore?: IntFieldUpdateOperationsInput | number
+    profileId?: StringFieldUpdateOperationsInput | string
+    confidenceLevel?: StringFieldUpdateOperationsInput | string
+    reliabilityLevel?: StringFieldUpdateOperationsInput | string
+    flagCount?: IntFieldUpdateOperationsInput | number
+    analyzerVersion?: StringFieldUpdateOperationsInput | string
+    status?: EnumAnalysisStatusFieldUpdateOperationsInput | $Enums.AnalysisStatus
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectAnalysisUncheckedUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    repoUrl?: StringFieldUpdateOperationsInput | string
+    commitSha?: StringFieldUpdateOperationsInput | string
+    report?: JsonNullValueInput | InputJsonValue
+    integrityHash?: StringFieldUpdateOperationsInput | string
+    overallScore?: IntFieldUpdateOperationsInput | number
+    profileId?: StringFieldUpdateOperationsInput | string
+    confidenceLevel?: StringFieldUpdateOperationsInput | string
+    reliabilityLevel?: StringFieldUpdateOperationsInput | string
+    flagCount?: IntFieldUpdateOperationsInput | number
+    analyzerVersion?: StringFieldUpdateOperationsInput | string
+    status?: EnumAnalysisStatusFieldUpdateOperationsInput | $Enums.AnalysisStatus
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectAnalysisUncheckedUpdateManyWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    repoUrl?: StringFieldUpdateOperationsInput | string
+    commitSha?: StringFieldUpdateOperationsInput | string
+    report?: JsonNullValueInput | InputJsonValue
+    integrityHash?: StringFieldUpdateOperationsInput | string
+    overallScore?: IntFieldUpdateOperationsInput | number
+    profileId?: StringFieldUpdateOperationsInput | string
+    confidenceLevel?: StringFieldUpdateOperationsInput | string
+    reliabilityLevel?: StringFieldUpdateOperationsInput | string
+    flagCount?: IntFieldUpdateOperationsInput | number
+    analyzerVersion?: StringFieldUpdateOperationsInput | string
+    status?: EnumAnalysisStatusFieldUpdateOperationsInput | $Enums.AnalysisStatus
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

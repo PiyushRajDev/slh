@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import { tmpdir } from "os";
-import path from "path";
+import * as path from "path";
 import { v4 as uuidv4 } from "uuid";
 import simpleGit from "simple-git";
 
@@ -15,7 +15,7 @@ const CLONE_TIMEOUT_MS = 30_000;
 
 function sanitizeUrl(url: string, token?: string): string {
     if (!token) return url;
-    return url.replaceAll(token, "[REDACTED]");
+    return url.split(token).join("[REDACTED]");
 }
 
 // ---------------------------------------------------------------------------

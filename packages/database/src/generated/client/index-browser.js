@@ -219,6 +219,25 @@ exports.Prisma.JRICalculationScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.ProjectAnalysisScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  repoUrl: 'repoUrl',
+  commitSha: 'commitSha',
+  report: 'report',
+  integrityHash: 'integrityHash',
+  overallScore: 'overallScore',
+  profileId: 'profileId',
+  confidenceLevel: 'confidenceLevel',
+  reliabilityLevel: 'reliabilityLevel',
+  flagCount: 'flagCount',
+  analyzerVersion: 'analyzerVersion',
+  status: 'status',
+  errorMessage: 'errorMessage',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -268,13 +287,21 @@ exports.Platform = exports.$Enums.Platform = {
   HACKERRANK: 'HACKERRANK'
 };
 
+exports.AnalysisStatus = exports.$Enums.AnalysisStatus = {
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   College: 'College',
   Student: 'Student',
   GitHubProfile: 'GitHubProfile',
   DSAProfile: 'DSAProfile',
-  JRICalculation: 'JRICalculation'
+  JRICalculation: 'JRICalculation',
+  ProjectAnalysis: 'ProjectAnalysis'
 };
 
 /**

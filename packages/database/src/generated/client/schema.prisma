@@ -81,6 +81,7 @@ model Student {
   githubProfile   GitHubProfile?
   dsaProfiles     DSAProfile[]
   jriCalculations JRICalculation[]
+  projectAnalyses ProjectAnalysis[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -160,4 +161,45 @@ enum Platform {
   LEETCODE
   CODEFORCES
   HACKERRANK
+}
+
+enum JobType {
+  FETCH_GITHUB
+  FETCH_DSA
+  CALCULATE_JRI
+  ANALYZE_PROJECT
+}
+
+enum AnalysisStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+}
+
+model ProjectAnalysis {
+  id               String         @id @default(cuid())
+  studentId        String
+  student          Student        @relation(fields: [studentId], references: [id])
+  repoUrl          String
+  commitSha        String
+  report           Json
+  integrityHash    String
+  overallScore     Int
+  profileId        String
+  confidenceLevel  String
+  reliabilityLevel String
+  flagCount        Int
+  analyzerVersion  String
+  status           AnalysisStatus @default(COMPLETED)
+  errorMessage     String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  @@index([studentId])
+  @@index([repoUrl])
+  @@index([commitSha])
+  @@index([overallScore])
+  @@index([analyzerVersion])
+  @@index([studentId, createdAt])
 }
