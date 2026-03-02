@@ -3,7 +3,7 @@ import rateLimit from "express-rate-limit";
 import userRoutes from "./routes/user.routes";
 import authRouter from "./routes/auth.routes";
 import githubAuthRouter from "./routes/github.auth.routes";
-import analysisRouter from "./routes/analysis.routes";
+import analysisRouter from "./routes/analysis";
 
 const app = express();
 
@@ -28,6 +28,6 @@ const leetcodeLimiter = rateLimit({
 app.use("/auth", authRouter);
 app.use("/auth", githubAuthRouter);
 app.use("/leetcode/user", leetcodeLimiter, userRoutes);
-app.use("/analysis", analysisRouter);
+app.use("/api/projects", analysisRouter);
 
 export default app;

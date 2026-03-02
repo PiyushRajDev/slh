@@ -12,6 +12,11 @@ async function main() {
     process.exit(1);
   }
 
+  if (!record.integrityHash) {
+    console.log('Error: Found record lacks an integrityHash');
+    process.exit(1);
+  }
+
   const result = verifyIntegrity(
     record.report as any,
     record.integrityHash
