@@ -182,14 +182,14 @@ model ProjectAnalysis {
   studentId        String
   student          Student        @relation(fields: [studentId], references: [id])
   repoUrl          String
-  commitSha        String
-  report           Json
-  integrityHash    String
-  overallScore     Int
-  profileId        String
-  confidenceLevel  String
-  reliabilityLevel String
-  flagCount        Int
+  commitSha        String?
+  report           Json?
+  integrityHash    String?
+  overallScore     Int?
+  profileId        String?
+  confidenceLevel  String?
+  reliabilityLevel String?
+  flagCount        Int?
   analyzerVersion  String
   status           AnalysisStatus @default(COMPLETED)
   errorMessage     String?

@@ -1,0 +1,9 @@
+-- AlterTable
+ALTER TABLE "ProjectAnalysis" ALTER COLUMN "commitSha" DROP NOT NULL,
+ALTER COLUMN "report" DROP NOT NULL,
+ALTER COLUMN "integrityHash" DROP NOT NULL,
+ALTER COLUMN "overallScore" DROP NOT NULL,
+ALTER COLUMN "profileId" DROP NOT NULL,
+ALTER COLUMN "confidenceLevel" DROP NOT NULL,
+ALTER COLUMN "reliabilityLevel" DROP NOT NULL,
+ALTER COLUMN "flagCount" DROP NOT NULL;

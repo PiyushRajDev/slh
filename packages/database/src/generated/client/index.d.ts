@@ -9202,14 +9202,14 @@ export namespace Prisma {
     id: string
     studentId: string
     repoUrl: string
-    commitSha: string
-    report: JsonValue
-    integrityHash: string
-    overallScore: number
-    profileId: string
-    confidenceLevel: string
-    reliabilityLevel: string
-    flagCount: number
+    commitSha: string | null
+    report: JsonValue | null
+    integrityHash: string | null
+    overallScore: number | null
+    profileId: string | null
+    confidenceLevel: string | null
+    reliabilityLevel: string | null
+    flagCount: number | null
     analyzerVersion: string
     status: $Enums.AnalysisStatus
     errorMessage: string | null
@@ -9335,14 +9335,14 @@ export namespace Prisma {
       id: string
       studentId: string
       repoUrl: string
-      commitSha: string
-      report: Prisma.JsonValue
-      integrityHash: string
-      overallScore: number
-      profileId: string
-      confidenceLevel: string
-      reliabilityLevel: string
-      flagCount: number
+      commitSha: string | null
+      report: Prisma.JsonValue | null
+      integrityHash: string | null
+      overallScore: number | null
+      profileId: string | null
+      confidenceLevel: string | null
+      reliabilityLevel: string | null
+      flagCount: number | null
       analyzerVersion: string
       status: $Enums.AnalysisStatus
       errorMessage: string | null
@@ -11166,14 +11166,14 @@ export namespace Prisma {
     id?: StringFilter<"ProjectAnalysis"> | string
     studentId?: StringFilter<"ProjectAnalysis"> | string
     repoUrl?: StringFilter<"ProjectAnalysis"> | string
-    commitSha?: StringFilter<"ProjectAnalysis"> | string
-    report?: JsonFilter<"ProjectAnalysis">
-    integrityHash?: StringFilter<"ProjectAnalysis"> | string
-    overallScore?: IntFilter<"ProjectAnalysis"> | number
-    profileId?: StringFilter<"ProjectAnalysis"> | string
-    confidenceLevel?: StringFilter<"ProjectAnalysis"> | string
-    reliabilityLevel?: StringFilter<"ProjectAnalysis"> | string
-    flagCount?: IntFilter<"ProjectAnalysis"> | number
+    commitSha?: StringNullableFilter<"ProjectAnalysis"> | string | null
+    report?: JsonNullableFilter<"ProjectAnalysis">
+    integrityHash?: StringNullableFilter<"ProjectAnalysis"> | string | null
+    overallScore?: IntNullableFilter<"ProjectAnalysis"> | number | null
+    profileId?: StringNullableFilter<"ProjectAnalysis"> | string | null
+    confidenceLevel?: StringNullableFilter<"ProjectAnalysis"> | string | null
+    reliabilityLevel?: StringNullableFilter<"ProjectAnalysis"> | string | null
+    flagCount?: IntNullableFilter<"ProjectAnalysis"> | number | null
     analyzerVersion?: StringFilter<"ProjectAnalysis"> | string
     status?: EnumAnalysisStatusFilter<"ProjectAnalysis"> | $Enums.AnalysisStatus
     errorMessage?: StringNullableFilter<"ProjectAnalysis"> | string | null
@@ -11186,14 +11186,14 @@ export namespace Prisma {
     id?: SortOrder
     studentId?: SortOrder
     repoUrl?: SortOrder
-    commitSha?: SortOrder
-    report?: SortOrder
-    integrityHash?: SortOrder
-    overallScore?: SortOrder
-    profileId?: SortOrder
-    confidenceLevel?: SortOrder
-    reliabilityLevel?: SortOrder
-    flagCount?: SortOrder
+    commitSha?: SortOrderInput | SortOrder
+    report?: SortOrderInput | SortOrder
+    integrityHash?: SortOrderInput | SortOrder
+    overallScore?: SortOrderInput | SortOrder
+    profileId?: SortOrderInput | SortOrder
+    confidenceLevel?: SortOrderInput | SortOrder
+    reliabilityLevel?: SortOrderInput | SortOrder
+    flagCount?: SortOrderInput | SortOrder
     analyzerVersion?: SortOrder
     status?: SortOrder
     errorMessage?: SortOrderInput | SortOrder
@@ -11209,14 +11209,14 @@ export namespace Prisma {
     NOT?: ProjectAnalysisWhereInput | ProjectAnalysisWhereInput[]
     studentId?: StringFilter<"ProjectAnalysis"> | string
     repoUrl?: StringFilter<"ProjectAnalysis"> | string
-    commitSha?: StringFilter<"ProjectAnalysis"> | string
-    report?: JsonFilter<"ProjectAnalysis">
-    integrityHash?: StringFilter<"ProjectAnalysis"> | string
-    overallScore?: IntFilter<"ProjectAnalysis"> | number
-    profileId?: StringFilter<"ProjectAnalysis"> | string
-    confidenceLevel?: StringFilter<"ProjectAnalysis"> | string
-    reliabilityLevel?: StringFilter<"ProjectAnalysis"> | string
-    flagCount?: IntFilter<"ProjectAnalysis"> | number
+    commitSha?: StringNullableFilter<"ProjectAnalysis"> | string | null
+    report?: JsonNullableFilter<"ProjectAnalysis">
+    integrityHash?: StringNullableFilter<"ProjectAnalysis"> | string | null
+    overallScore?: IntNullableFilter<"ProjectAnalysis"> | number | null
+    profileId?: StringNullableFilter<"ProjectAnalysis"> | string | null
+    confidenceLevel?: StringNullableFilter<"ProjectAnalysis"> | string | null
+    reliabilityLevel?: StringNullableFilter<"ProjectAnalysis"> | string | null
+    flagCount?: IntNullableFilter<"ProjectAnalysis"> | number | null
     analyzerVersion?: StringFilter<"ProjectAnalysis"> | string
     status?: EnumAnalysisStatusFilter<"ProjectAnalysis"> | $Enums.AnalysisStatus
     errorMessage?: StringNullableFilter<"ProjectAnalysis"> | string | null
@@ -11229,14 +11229,14 @@ export namespace Prisma {
     id?: SortOrder
     studentId?: SortOrder
     repoUrl?: SortOrder
-    commitSha?: SortOrder
-    report?: SortOrder
-    integrityHash?: SortOrder
-    overallScore?: SortOrder
-    profileId?: SortOrder
-    confidenceLevel?: SortOrder
-    reliabilityLevel?: SortOrder
-    flagCount?: SortOrder
+    commitSha?: SortOrderInput | SortOrder
+    report?: SortOrderInput | SortOrder
+    integrityHash?: SortOrderInput | SortOrder
+    overallScore?: SortOrderInput | SortOrder
+    profileId?: SortOrderInput | SortOrder
+    confidenceLevel?: SortOrderInput | SortOrder
+    reliabilityLevel?: SortOrderInput | SortOrder
+    flagCount?: SortOrderInput | SortOrder
     analyzerVersion?: SortOrder
     status?: SortOrder
     errorMessage?: SortOrderInput | SortOrder
@@ -11256,14 +11256,14 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"ProjectAnalysis"> | string
     studentId?: StringWithAggregatesFilter<"ProjectAnalysis"> | string
     repoUrl?: StringWithAggregatesFilter<"ProjectAnalysis"> | string
-    commitSha?: StringWithAggregatesFilter<"ProjectAnalysis"> | string
-    report?: JsonWithAggregatesFilter<"ProjectAnalysis">
-    integrityHash?: StringWithAggregatesFilter<"ProjectAnalysis"> | string
-    overallScore?: IntWithAggregatesFilter<"ProjectAnalysis"> | number
-    profileId?: StringWithAggregatesFilter<"ProjectAnalysis"> | string
-    confidenceLevel?: StringWithAggregatesFilter<"ProjectAnalysis"> | string
-    reliabilityLevel?: StringWithAggregatesFilter<"ProjectAnalysis"> | string
-    flagCount?: IntWithAggregatesFilter<"ProjectAnalysis"> | number
+    commitSha?: StringNullableWithAggregatesFilter<"ProjectAnalysis"> | string | null
+    report?: JsonNullableWithAggregatesFilter<"ProjectAnalysis">
+    integrityHash?: StringNullableWithAggregatesFilter<"ProjectAnalysis"> | string | null
+    overallScore?: IntNullableWithAggregatesFilter<"ProjectAnalysis"> | number | null
+    profileId?: StringNullableWithAggregatesFilter<"ProjectAnalysis"> | string | null
+    confidenceLevel?: StringNullableWithAggregatesFilter<"ProjectAnalysis"> | string | null
+    reliabilityLevel?: StringNullableWithAggregatesFilter<"ProjectAnalysis"> | string | null
+    flagCount?: IntNullableWithAggregatesFilter<"ProjectAnalysis"> | number | null
     analyzerVersion?: StringWithAggregatesFilter<"ProjectAnalysis"> | string
     status?: EnumAnalysisStatusWithAggregatesFilter<"ProjectAnalysis"> | $Enums.AnalysisStatus
     errorMessage?: StringNullableWithAggregatesFilter<"ProjectAnalysis"> | string | null
@@ -11989,14 +11989,14 @@ export namespace Prisma {
   export type ProjectAnalysisCreateInput = {
     id?: string
     repoUrl: string
-    commitSha: string
-    report: JsonNullValueInput | InputJsonValue
-    integrityHash: string
-    overallScore: number
-    profileId: string
-    confidenceLevel: string
-    reliabilityLevel: string
-    flagCount: number
+    commitSha?: string | null
+    report?: NullableJsonNullValueInput | InputJsonValue
+    integrityHash?: string | null
+    overallScore?: number | null
+    profileId?: string | null
+    confidenceLevel?: string | null
+    reliabilityLevel?: string | null
+    flagCount?: number | null
     analyzerVersion: string
     status?: $Enums.AnalysisStatus
     errorMessage?: string | null
@@ -12009,14 +12009,14 @@ export namespace Prisma {
     id?: string
     studentId: string
     repoUrl: string
-    commitSha: string
-    report: JsonNullValueInput | InputJsonValue
-    integrityHash: string
-    overallScore: number
-    profileId: string
-    confidenceLevel: string
-    reliabilityLevel: string
-    flagCount: number
+    commitSha?: string | null
+    report?: NullableJsonNullValueInput | InputJsonValue
+    integrityHash?: string | null
+    overallScore?: number | null
+    profileId?: string | null
+    confidenceLevel?: string | null
+    reliabilityLevel?: string | null
+    flagCount?: number | null
     analyzerVersion: string
     status?: $Enums.AnalysisStatus
     errorMessage?: string | null
@@ -12027,14 +12027,14 @@ export namespace Prisma {
   export type ProjectAnalysisUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     repoUrl?: StringFieldUpdateOperationsInput | string
-    commitSha?: StringFieldUpdateOperationsInput | string
-    report?: JsonNullValueInput | InputJsonValue
-    integrityHash?: StringFieldUpdateOperationsInput | string
-    overallScore?: IntFieldUpdateOperationsInput | number
-    profileId?: StringFieldUpdateOperationsInput | string
-    confidenceLevel?: StringFieldUpdateOperationsInput | string
-    reliabilityLevel?: StringFieldUpdateOperationsInput | string
-    flagCount?: IntFieldUpdateOperationsInput | number
+    commitSha?: NullableStringFieldUpdateOperationsInput | string | null
+    report?: NullableJsonNullValueInput | InputJsonValue
+    integrityHash?: NullableStringFieldUpdateOperationsInput | string | null
+    overallScore?: NullableIntFieldUpdateOperationsInput | number | null
+    profileId?: NullableStringFieldUpdateOperationsInput | string | null
+    confidenceLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    reliabilityLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    flagCount?: NullableIntFieldUpdateOperationsInput | number | null
     analyzerVersion?: StringFieldUpdateOperationsInput | string
     status?: EnumAnalysisStatusFieldUpdateOperationsInput | $Enums.AnalysisStatus
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12047,14 +12047,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     repoUrl?: StringFieldUpdateOperationsInput | string
-    commitSha?: StringFieldUpdateOperationsInput | string
-    report?: JsonNullValueInput | InputJsonValue
-    integrityHash?: StringFieldUpdateOperationsInput | string
-    overallScore?: IntFieldUpdateOperationsInput | number
-    profileId?: StringFieldUpdateOperationsInput | string
-    confidenceLevel?: StringFieldUpdateOperationsInput | string
-    reliabilityLevel?: StringFieldUpdateOperationsInput | string
-    flagCount?: IntFieldUpdateOperationsInput | number
+    commitSha?: NullableStringFieldUpdateOperationsInput | string | null
+    report?: NullableJsonNullValueInput | InputJsonValue
+    integrityHash?: NullableStringFieldUpdateOperationsInput | string | null
+    overallScore?: NullableIntFieldUpdateOperationsInput | number | null
+    profileId?: NullableStringFieldUpdateOperationsInput | string | null
+    confidenceLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    reliabilityLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    flagCount?: NullableIntFieldUpdateOperationsInput | number | null
     analyzerVersion?: StringFieldUpdateOperationsInput | string
     status?: EnumAnalysisStatusFieldUpdateOperationsInput | $Enums.AnalysisStatus
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12066,14 +12066,14 @@ export namespace Prisma {
     id?: string
     studentId: string
     repoUrl: string
-    commitSha: string
-    report: JsonNullValueInput | InputJsonValue
-    integrityHash: string
-    overallScore: number
-    profileId: string
-    confidenceLevel: string
-    reliabilityLevel: string
-    flagCount: number
+    commitSha?: string | null
+    report?: NullableJsonNullValueInput | InputJsonValue
+    integrityHash?: string | null
+    overallScore?: number | null
+    profileId?: string | null
+    confidenceLevel?: string | null
+    reliabilityLevel?: string | null
+    flagCount?: number | null
     analyzerVersion: string
     status?: $Enums.AnalysisStatus
     errorMessage?: string | null
@@ -12084,14 +12084,14 @@ export namespace Prisma {
   export type ProjectAnalysisUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     repoUrl?: StringFieldUpdateOperationsInput | string
-    commitSha?: StringFieldUpdateOperationsInput | string
-    report?: JsonNullValueInput | InputJsonValue
-    integrityHash?: StringFieldUpdateOperationsInput | string
-    overallScore?: IntFieldUpdateOperationsInput | number
-    profileId?: StringFieldUpdateOperationsInput | string
-    confidenceLevel?: StringFieldUpdateOperationsInput | string
-    reliabilityLevel?: StringFieldUpdateOperationsInput | string
-    flagCount?: IntFieldUpdateOperationsInput | number
+    commitSha?: NullableStringFieldUpdateOperationsInput | string | null
+    report?: NullableJsonNullValueInput | InputJsonValue
+    integrityHash?: NullableStringFieldUpdateOperationsInput | string | null
+    overallScore?: NullableIntFieldUpdateOperationsInput | number | null
+    profileId?: NullableStringFieldUpdateOperationsInput | string | null
+    confidenceLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    reliabilityLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    flagCount?: NullableIntFieldUpdateOperationsInput | number | null
     analyzerVersion?: StringFieldUpdateOperationsInput | string
     status?: EnumAnalysisStatusFieldUpdateOperationsInput | $Enums.AnalysisStatus
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -12103,14 +12103,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     studentId?: StringFieldUpdateOperationsInput | string
     repoUrl?: StringFieldUpdateOperationsInput | string
-    commitSha?: StringFieldUpdateOperationsInput | string
-    report?: JsonNullValueInput | InputJsonValue
-    integrityHash?: StringFieldUpdateOperationsInput | string
-    overallScore?: IntFieldUpdateOperationsInput | number
-    profileId?: StringFieldUpdateOperationsInput | string
-    confidenceLevel?: StringFieldUpdateOperationsInput | string
-    reliabilityLevel?: StringFieldUpdateOperationsInput | string
-    flagCount?: IntFieldUpdateOperationsInput | number
+    commitSha?: NullableStringFieldUpdateOperationsInput | string | null
+    report?: NullableJsonNullValueInput | InputJsonValue
+    integrityHash?: NullableStringFieldUpdateOperationsInput | string | null
+    overallScore?: NullableIntFieldUpdateOperationsInput | number | null
+    profileId?: NullableStringFieldUpdateOperationsInput | string | null
+    confidenceLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    reliabilityLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    flagCount?: NullableIntFieldUpdateOperationsInput | number | null
     analyzerVersion?: StringFieldUpdateOperationsInput | string
     status?: EnumAnalysisStatusFieldUpdateOperationsInput | $Enums.AnalysisStatus
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -14353,14 +14353,14 @@ export namespace Prisma {
   export type ProjectAnalysisCreateWithoutStudentInput = {
     id?: string
     repoUrl: string
-    commitSha: string
-    report: JsonNullValueInput | InputJsonValue
-    integrityHash: string
-    overallScore: number
-    profileId: string
-    confidenceLevel: string
-    reliabilityLevel: string
-    flagCount: number
+    commitSha?: string | null
+    report?: NullableJsonNullValueInput | InputJsonValue
+    integrityHash?: string | null
+    overallScore?: number | null
+    profileId?: string | null
+    confidenceLevel?: string | null
+    reliabilityLevel?: string | null
+    flagCount?: number | null
     analyzerVersion: string
     status?: $Enums.AnalysisStatus
     errorMessage?: string | null
@@ -14371,14 +14371,14 @@ export namespace Prisma {
   export type ProjectAnalysisUncheckedCreateWithoutStudentInput = {
     id?: string
     repoUrl: string
-    commitSha: string
-    report: JsonNullValueInput | InputJsonValue
-    integrityHash: string
-    overallScore: number
-    profileId: string
-    confidenceLevel: string
-    reliabilityLevel: string
-    flagCount: number
+    commitSha?: string | null
+    report?: NullableJsonNullValueInput | InputJsonValue
+    integrityHash?: string | null
+    overallScore?: number | null
+    profileId?: string | null
+    confidenceLevel?: string | null
+    reliabilityLevel?: string | null
+    flagCount?: number | null
     analyzerVersion: string
     status?: $Enums.AnalysisStatus
     errorMessage?: string | null
@@ -14608,14 +14608,14 @@ export namespace Prisma {
     id?: StringFilter<"ProjectAnalysis"> | string
     studentId?: StringFilter<"ProjectAnalysis"> | string
     repoUrl?: StringFilter<"ProjectAnalysis"> | string
-    commitSha?: StringFilter<"ProjectAnalysis"> | string
-    report?: JsonFilter<"ProjectAnalysis">
-    integrityHash?: StringFilter<"ProjectAnalysis"> | string
-    overallScore?: IntFilter<"ProjectAnalysis"> | number
-    profileId?: StringFilter<"ProjectAnalysis"> | string
-    confidenceLevel?: StringFilter<"ProjectAnalysis"> | string
-    reliabilityLevel?: StringFilter<"ProjectAnalysis"> | string
-    flagCount?: IntFilter<"ProjectAnalysis"> | number
+    commitSha?: StringNullableFilter<"ProjectAnalysis"> | string | null
+    report?: JsonNullableFilter<"ProjectAnalysis">
+    integrityHash?: StringNullableFilter<"ProjectAnalysis"> | string | null
+    overallScore?: IntNullableFilter<"ProjectAnalysis"> | number | null
+    profileId?: StringNullableFilter<"ProjectAnalysis"> | string | null
+    confidenceLevel?: StringNullableFilter<"ProjectAnalysis"> | string | null
+    reliabilityLevel?: StringNullableFilter<"ProjectAnalysis"> | string | null
+    flagCount?: IntNullableFilter<"ProjectAnalysis"> | number | null
     analyzerVersion?: StringFilter<"ProjectAnalysis"> | string
     status?: EnumAnalysisStatusFilter<"ProjectAnalysis"> | $Enums.AnalysisStatus
     errorMessage?: StringNullableFilter<"ProjectAnalysis"> | string | null
@@ -15298,14 +15298,14 @@ export namespace Prisma {
   export type ProjectAnalysisCreateManyStudentInput = {
     id?: string
     repoUrl: string
-    commitSha: string
-    report: JsonNullValueInput | InputJsonValue
-    integrityHash: string
-    overallScore: number
-    profileId: string
-    confidenceLevel: string
-    reliabilityLevel: string
-    flagCount: number
+    commitSha?: string | null
+    report?: NullableJsonNullValueInput | InputJsonValue
+    integrityHash?: string | null
+    overallScore?: number | null
+    profileId?: string | null
+    confidenceLevel?: string | null
+    reliabilityLevel?: string | null
+    flagCount?: number | null
     analyzerVersion: string
     status?: $Enums.AnalysisStatus
     errorMessage?: string | null
@@ -15406,14 +15406,14 @@ export namespace Prisma {
   export type ProjectAnalysisUpdateWithoutStudentInput = {
     id?: StringFieldUpdateOperationsInput | string
     repoUrl?: StringFieldUpdateOperationsInput | string
-    commitSha?: StringFieldUpdateOperationsInput | string
-    report?: JsonNullValueInput | InputJsonValue
-    integrityHash?: StringFieldUpdateOperationsInput | string
-    overallScore?: IntFieldUpdateOperationsInput | number
-    profileId?: StringFieldUpdateOperationsInput | string
-    confidenceLevel?: StringFieldUpdateOperationsInput | string
-    reliabilityLevel?: StringFieldUpdateOperationsInput | string
-    flagCount?: IntFieldUpdateOperationsInput | number
+    commitSha?: NullableStringFieldUpdateOperationsInput | string | null
+    report?: NullableJsonNullValueInput | InputJsonValue
+    integrityHash?: NullableStringFieldUpdateOperationsInput | string | null
+    overallScore?: NullableIntFieldUpdateOperationsInput | number | null
+    profileId?: NullableStringFieldUpdateOperationsInput | string | null
+    confidenceLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    reliabilityLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    flagCount?: NullableIntFieldUpdateOperationsInput | number | null
     analyzerVersion?: StringFieldUpdateOperationsInput | string
     status?: EnumAnalysisStatusFieldUpdateOperationsInput | $Enums.AnalysisStatus
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15424,14 +15424,14 @@ export namespace Prisma {
   export type ProjectAnalysisUncheckedUpdateWithoutStudentInput = {
     id?: StringFieldUpdateOperationsInput | string
     repoUrl?: StringFieldUpdateOperationsInput | string
-    commitSha?: StringFieldUpdateOperationsInput | string
-    report?: JsonNullValueInput | InputJsonValue
-    integrityHash?: StringFieldUpdateOperationsInput | string
-    overallScore?: IntFieldUpdateOperationsInput | number
-    profileId?: StringFieldUpdateOperationsInput | string
-    confidenceLevel?: StringFieldUpdateOperationsInput | string
-    reliabilityLevel?: StringFieldUpdateOperationsInput | string
-    flagCount?: IntFieldUpdateOperationsInput | number
+    commitSha?: NullableStringFieldUpdateOperationsInput | string | null
+    report?: NullableJsonNullValueInput | InputJsonValue
+    integrityHash?: NullableStringFieldUpdateOperationsInput | string | null
+    overallScore?: NullableIntFieldUpdateOperationsInput | number | null
+    profileId?: NullableStringFieldUpdateOperationsInput | string | null
+    confidenceLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    reliabilityLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    flagCount?: NullableIntFieldUpdateOperationsInput | number | null
     analyzerVersion?: StringFieldUpdateOperationsInput | string
     status?: EnumAnalysisStatusFieldUpdateOperationsInput | $Enums.AnalysisStatus
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
@@ -15442,14 +15442,14 @@ export namespace Prisma {
   export type ProjectAnalysisUncheckedUpdateManyWithoutStudentInput = {
     id?: StringFieldUpdateOperationsInput | string
     repoUrl?: StringFieldUpdateOperationsInput | string
-    commitSha?: StringFieldUpdateOperationsInput | string
-    report?: JsonNullValueInput | InputJsonValue
-    integrityHash?: StringFieldUpdateOperationsInput | string
-    overallScore?: IntFieldUpdateOperationsInput | number
-    profileId?: StringFieldUpdateOperationsInput | string
-    confidenceLevel?: StringFieldUpdateOperationsInput | string
-    reliabilityLevel?: StringFieldUpdateOperationsInput | string
-    flagCount?: IntFieldUpdateOperationsInput | number
+    commitSha?: NullableStringFieldUpdateOperationsInput | string | null
+    report?: NullableJsonNullValueInput | InputJsonValue
+    integrityHash?: NullableStringFieldUpdateOperationsInput | string | null
+    overallScore?: NullableIntFieldUpdateOperationsInput | number | null
+    profileId?: NullableStringFieldUpdateOperationsInput | string | null
+    confidenceLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    reliabilityLevel?: NullableStringFieldUpdateOperationsInput | string | null
+    flagCount?: NullableIntFieldUpdateOperationsInput | number | null
     analyzerVersion?: StringFieldUpdateOperationsInput | string
     status?: EnumAnalysisStatusFieldUpdateOperationsInput | $Enums.AnalysisStatus
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null

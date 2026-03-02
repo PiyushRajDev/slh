@@ -9,21 +9,7 @@ export interface AnalyzeProjectPayload {
 }
 
 export async function handleAnalyzeProject(payload: AnalyzeProjectPayload): Promise<void> {
-    // Step 1 - Idempotency guard
-    const existing = await prisma.projectAnalysis.findFirst({
-        where: {
-            studentId: payload.studentId,
-            repoUrl: payload.repoUrl,
-            status: 'COMPLETED'
-        }
-    });
-
-    if (existing) {
-        console.log(`[ANALYZE_PROJECT] Already completed for student: ${payload.studentId}, repo: ${payload.repoUrl}`);
-        return;
-    }
-
-    // Step 2 - Fetch student token
+    // Step 1 - Fetch student token
     const student = await prisma.student.findUnique({
         where: { id: payload.studentId },
         select: { githubAccessToken: true }
@@ -46,14 +32,6 @@ export async function handleAnalyzeProject(payload: AnalyzeProjectPayload): Prom
             data: {
                 studentId: payload.studentId,
                 repoUrl: payload.repoUrl,
-                commitSha: 'unknown',
-                report: {},
-                integrityHash: 'unknown',
-                overallScore: 0,
-                profileId: 'unknown',
-                confidenceLevel: 'UNKNOWN',
-                reliabilityLevel: 'UNKNOWN',
-                flagCount: 0,
                 analyzerVersion: '1.0.0',
                 status: 'FAILED',
                 errorMessage: `[${errorOutput.stage}] ${errorOutput.error}`
@@ -64,6 +42,21 @@ export async function handleAnalyzeProject(payload: AnalyzeProjectPayload): Prom
 
     // Step 6 - If pipeline returns success: true
     const persistencePayload = buildPersistencePayload(output.report);
+
+    // Idempotency guard (after pipeline, matching commitSha)
+    const existing = await prisma.projectAnalysis.findFirst({
+        where: {
+            studentId: payload.studentId,
+            repoUrl: payload.repoUrl,
+            commitSha: persistencePayload.commitSha,
+            status: 'COMPLETED'
+        }
+    });
+
+    if (existing) {
+        console.log(`[ANALYZE_PROJECT] same commit already analysed: student=${payload.studentId}, repo=${payload.repoUrl}, commit=${persistencePayload.commitSha}`);
+        return;
+    }
 
     await prisma.projectAnalysis.create({
         data: {
