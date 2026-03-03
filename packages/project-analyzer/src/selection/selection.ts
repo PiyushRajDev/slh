@@ -1,6 +1,6 @@
 import { ProfileResult } from '../profiles/profiles';
 import { FinalScoreReport } from '../scoring/scoring';
-import { AntiGamingReport, AntiGamingFlag } from '../anti-gaming/anti-gaming';
+import { AntiGamingReport } from '../anti-gaming/anti-gaming';
 
 export interface SelectionResult {
     profileId: string;
@@ -10,6 +10,8 @@ export interface SelectionResult {
     reliabilityLevel: 'HIGH' | 'MEDIUM' | 'LOW';
     defensibleScore: number;
     fitnessScore: number;
+    isAmbiguous: boolean;
+    runnerUpProfileId: string | null;
 }
 
 export interface AnalysisCandidate {
@@ -24,25 +26,14 @@ export function selectBestProfile(candidates: AnalysisCandidate[]): SelectionRes
     }
 
     const calculatedCandidates = candidates.map(candidate => {
-        let penalty = 0.0;
-
-        candidate.antiGaming.flags.forEach((flag: AntiGamingFlag) => {
-            if (flag.severity === 'low') penalty += 0.05;
-            else if (flag.severity === 'medium') penalty += 0.15;
-            else if (flag.severity === 'high') penalty += 0.30;
-        });
-
-        const reliabilityScore = Math.max(0.0, Math.min(1.0, 1.0 - penalty));
-
-        let reliabilityLevel: 'HIGH' | 'MEDIUM' | 'LOW' = 'LOW';
-        if (reliabilityScore >= 0.85) {
-            reliabilityLevel = 'HIGH';
-        } else if (reliabilityScore >= 0.65) {
-            reliabilityLevel = 'MEDIUM';
-        }
-
+        const reliabilityScore = candidate.antiGaming.reliabilityScore;
+        const reliabilityLevel = candidate.antiGaming.reliabilityLevel;
         const rawScore = candidate.score.overallScore;
-        const defensibleScore = rawScore * reliabilityScore;
+        const fitnessScore = candidate.profile.fitnessScore;
+
+        // Step 3: Calculate Defensible Score
+        // defensible_score = score * fitness * reliability
+        const defensibleScore = rawScore * fitnessScore * reliabilityScore;
 
         return {
             profileId: candidate.profile.profileId,
@@ -51,24 +42,50 @@ export function selectBestProfile(candidates: AnalysisCandidate[]): SelectionRes
             reliabilityScore,
             reliabilityLevel,
             defensibleScore,
-            fitnessScore: candidate.profile.fitnessScore,
+            fitnessScore,
             isActive: candidate.profile.status === 'active'
         };
     });
 
-    const activeCandidates = calculatedCandidates.filter(c => c.isActive);
+    // Step 2: Filter by Fitness Threshold. The active status reflects fitness threshold passing from evaluateProfiles.
+    let activeCandidates = calculatedCandidates.filter(c => c.isActive);
 
-    // Fallback if no active candidates exist
-    const candidatesToConsider = activeCandidates.length > 0 ? activeCandidates : calculatedCandidates;
+    // Case 1: No Valid Profiles -> Use generic fallback
+    if (activeCandidates.length === 0) {
+        activeCandidates = calculatedCandidates; // consider all, generic will likely win or fallback is best
+    }
 
-    candidatesToConsider.sort((a, b) => {
-        if (b.defensibleScore !== a.defensibleScore) {
+    // Step 4: Select Winner
+    activeCandidates.sort((a, b) => {
+        // Primary sort: Defensible Score
+        if (Math.abs(b.defensibleScore - a.defensibleScore) > 0.001) {
             return b.defensibleScore - a.defensibleScore;
         }
-        return b.fitnessScore - a.fitnessScore;
+        // Tie break 1: Raw Score
+        if (b.rawScore !== a.rawScore) {
+            return b.rawScore - a.rawScore;
+        }
+        // Tie break 2: Fitness Score
+        if (b.fitnessScore !== a.fitnessScore) {
+            return b.fitnessScore - a.fitnessScore;
+        }
+        // Tie break 3: Reliability
+        return b.reliabilityScore - a.reliabilityScore;
     });
 
-    const winner = candidatesToConsider[0];
+    const winner = activeCandidates[0];
+
+    // Step 5: Record Runner-Up (Optional)
+    let isAmbiguous = false;
+    let runnerUpProfileId: string | null = null;
+
+    if (activeCandidates.length > 1) {
+        const secondBest = activeCandidates[1];
+        if (secondBest.defensibleScore >= 0.95 * winner.defensibleScore) {
+            isAmbiguous = true;
+            runnerUpProfileId = secondBest.profileId;
+        }
+    }
 
     return {
         profileId: winner.profileId,
@@ -77,6 +94,8 @@ export function selectBestProfile(candidates: AnalysisCandidate[]): SelectionRes
         reliabilityScore: winner.reliabilityScore,
         reliabilityLevel: winner.reliabilityLevel,
         defensibleScore: winner.defensibleScore,
-        fitnessScore: winner.fitnessScore
+        fitnessScore: winner.fitnessScore,
+        isAmbiguous,
+        runnerUpProfileId
     };
 }

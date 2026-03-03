@@ -74,12 +74,12 @@ const HARDENED_GAUNTLET = [
         {
           profile: { profileId: 'exploit', displayName: '', status: 'active', fitnessScore: 1 } as any,
           score: { overallScore: 100 } as any,
-          antiGaming: { flags: Array(10).fill({ severity: 'high' }) } as any
+          antiGaming: { flags: Array(10).fill({ severity: 'high' }), reliabilityScore: 0.02 } as any
         },
         {
           profile: { profileId: 'clean', displayName: '', status: 'active', fitnessScore: 0.5 } as any,
           score: { overallScore: 20 } as any,
-          antiGaming: { flags: [] } as any
+          antiGaming: { flags: [], reliabilityScore: 1.0 } as any
         }
       ];
 
@@ -99,8 +99,8 @@ const HARDENED_GAUNTLET = [
         commit_span_days: 2
       } as RawMetrics;
 
-      const report = detectGaming(metrics, {} as any);
-      const emptyShell = report.flags.find(f => f.pattern === 'Empty Shell');
+      const report = detectGaming(metrics, {} as any, 'generic');
+      const emptyShell = report.flags.find(f => f.pattern.includes('Boilerplate') || f.pattern.includes('Shell'));
 
       return emptyShell?.severity === 'high';
     },

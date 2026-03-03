@@ -40,7 +40,7 @@ export async function runPipeline(
                 const candidates: AnalysisCandidate[] = await Promise.all(
                     profilesToScore.map(async (profile) => {
                         const score = calculateScore(metrics, profile.profileId);
-                        const antiGaming = detectGaming(metrics, signals);
+                        const antiGaming = detectGaming(metrics, signals, profile.profileId);
                         return { profile, score, antiGaming };
                     })
                 );
@@ -50,7 +50,7 @@ export async function runPipeline(
                 const finalScore = calculateScore(metrics, selection.profileId as ProfileId);
 
                 const winnerCandidate = candidates.find(c => c.profile.profileId === selection.profileId);
-                const winnerAntiGaming = winnerCandidate?.antiGaming ?? { flags: [], flagCount: 0 };
+                const winnerAntiGaming = winnerCandidate?.antiGaming ?? { flags: [], flagCount: 0, reliabilityScore: 1.0, reliabilityLevel: 'HIGH' };
 
                 report = formatReport(
                     repoUrl,

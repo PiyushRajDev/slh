@@ -25,7 +25,7 @@ export const analysisService = {
         }
 
         // 3. Queue job with deduplication ID
-        const jobId = `${studentId}-${repoUrl}-${Date.now()}`;
+        const jobId = `${studentId}-${repoUrl.replace(/[^a-zA-Z0-9]/g, '-')}-${Date.now()}`;
         await queue.add('ANALYZE_PROJECT', { studentId, repoUrl }, { jobId });
 
         return { jobId, repoUrl };
