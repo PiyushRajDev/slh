@@ -1,0 +1,31 @@
+{
+  "name": "@slh/codeforces",
+  "version": "3.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "ts-node src/server/api.server.ts",
+    "worker": "ts-node src/queue/cf.worker.ts",
+    "cli": "ts-node src/server/cli.ts",
+    "build": "tsc",
+    "start": "node dist/src/server/api.server.js",
+    "start:worker": "node dist/src/queue/cf.worker.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "bottleneck": "^2.19.5",
+    "bullmq": "^5.70.1",
+    "express": "^4.22.1",
+    "express-rate-limit": "^7.1.0",
+    "helmet": "^7.2.0",
+    "ioredis": "^5.3.2",
+    "p-limit": "^4.0.0",
+    "redis": "^5.11.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.0"
+  }
+}
