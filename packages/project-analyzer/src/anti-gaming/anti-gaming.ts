@@ -110,9 +110,11 @@ export function detectGaming(metrics: RawMetrics, signals: StructuralSignals, pr
     // Bypass: projects with 100+ commits AND reasonable LOC/commit ratio are genuinely active —
     // low complexity is legitimate (e.g., ESLint plugins, config tools).
     // But 5M LOC / 200 commits = 25k LOC/commit is still suspicious.
-    const locPerCommit = commitCount > 0 ? totalLoc / commitCount : totalLoc;
-    const isGenuinelyActive = commitCount > 100 && locPerCommit < 500;
-    if (totalLoc > 1000 && complexityAvg <= Math.log(Math.max(1, totalLoc / 1000) * 2) && !isGenuinelyActive) {
+    const sourceLoc = metrics.source_loc || totalLoc;
+    const locPerCommit = commitCount > 0 ? sourceLoc / commitCount : sourceLoc;
+    // Bypass: genuinely active projects (20+ commits, reasonable LOC/commit)
+    const isGenuinelyActive = commitCount >= 20 && locPerCommit < 3000 && complexityAvg >= 2.5;
+    if (sourceLoc > 1000 && complexityAvg <= Math.log(Math.max(1, sourceLoc / 1000) * 2) && !isGenuinelyActive) {
         flags.push({
             pattern: 'Empty Shell / Boilerplate',
             severity: 'high',

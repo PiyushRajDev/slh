@@ -43,7 +43,13 @@ export default function SubmitPage() {
             if (res.status === 200) {
                 setStatusType('info');
                 setStatusText('Analysis already completed — see results below');
-                await checkLatestReport(repoUrl);
+                const analysisId = res.data?.analysisId;
+                if (analysisId) {
+                    const detail = await client.get(`/api/projects/analyses/${analysisId}`);
+                    if (detail.data) setReport(detail.data);
+                } else {
+                    await checkLatestReport(repoUrl);
+                }
             } else if (res.status === 202) {
                 setStatusType('success');
                 setStatusText('Analysis queued — results will appear below when complete');

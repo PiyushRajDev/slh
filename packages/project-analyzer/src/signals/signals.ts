@@ -197,12 +197,16 @@ export function deriveSignals(metrics: RawMetrics): StructuralSignals {
     const hasConsoleScripts = metrics?.has_console_scripts === true;
     const usesArgparse = metrics?.uses_argparse === true;
     // Python CLI entrypoint detection via file patterns
-    const hasCliEntrypoint = files.some(f =>
-        f === 'cli.py' || f === 'cli.ts' || f === 'cli.js' ||
-        f.endsWith('/cli.py') || f.endsWith('/cli.ts') || f.endsWith('/cli.js') ||
-        f === '__main__.py' || f.endsWith('/__main__.py') ||
-        f === 'main.py' || f === 'app.py'
-    );
+    // Only match CLI entrypoints at root or one level deep (not buried in sub-packages)
+    const hasCliEntrypoint = files.some(f => {
+        const depth = f.split('/').length;
+        return depth <= 2 && (
+            f === 'cli.py' || f === 'cli.ts' || f === 'cli.js' ||
+            f.endsWith('/cli.py') || f.endsWith('/cli.ts') || f.endsWith('/cli.js') ||
+            f === '__main__.py' || f.endsWith('/__main__.py') ||
+            f === 'main.py' || f === 'app.py'
+        );
+    });
     const is_cli_tool = cliDeps || hasBinField || hasConsoleScripts || usesArgparse || hasCliEntrypoint;
 
     // ── is_cli_entrypoint (positive CLI discriminator) ────────────
