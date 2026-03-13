@@ -7,7 +7,7 @@ import simpleGit from "simple-git";
 const GITHUB_URL_REGEX =
     /^https:\/\/github\.com\/([a-zA-Z0-9_.-]+)\/([a-zA-Z0-9_.-]+)\/?$/;
 
-const CLONE_TIMEOUT_MS = 30_000;
+const CLONE_TIMEOUT_MS = 120_000;
 
 // ---------------------------------------------------------------------------
 // Private helper — strips tokens from error messages

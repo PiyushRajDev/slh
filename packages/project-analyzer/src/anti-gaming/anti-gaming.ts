@@ -1,5 +1,6 @@
 import { RawMetrics } from '../metrics/metrics';
 import { StructuralSignals } from '../signals/signals';
+import { AuthenticityMetrics } from '../authenticity/authenticity';
 
 export interface AntiGamingFlag {
     pattern: string;
@@ -15,7 +16,7 @@ export interface AntiGamingReport {
     reliabilityLevel: 'HIGH' | 'MEDIUM' | 'LOW';
 }
 
-export function detectGaming(metrics: RawMetrics, signals: StructuralSignals, profileId: string): AntiGamingReport {
+export function detectGaming(metrics: RawMetrics, signals: StructuralSignals, profileId: string, authenticity?: AuthenticityMetrics): AntiGamingReport {
     const flags: AntiGamingFlag[] = [];
 
     const totalLoc = metrics.total_loc || 0;
@@ -106,7 +107,12 @@ export function detectGaming(metrics: RawMetrics, signals: StructuralSignals, pr
 
     // Pattern 8: Boilerplate Heavy & Empty Shells
     // (We use log-scaling as requested by tier-3 gauntlet)
-    if (totalLoc > 1000 && complexityAvg <= Math.log(Math.max(1, totalLoc / 1000) * 2)) {
+    // Bypass: projects with 100+ commits AND reasonable LOC/commit ratio are genuinely active —
+    // low complexity is legitimate (e.g., ESLint plugins, config tools).
+    // But 5M LOC / 200 commits = 25k LOC/commit is still suspicious.
+    const locPerCommit = commitCount > 0 ? totalLoc / commitCount : totalLoc;
+    const isGenuinelyActive = commitCount > 100 && locPerCommit < 500;
+    if (totalLoc > 1000 && complexityAvg <= Math.log(Math.max(1, totalLoc / 1000) * 2) && !isGenuinelyActive) {
         flags.push({
             pattern: 'Empty Shell / Boilerplate',
             severity: 'high',
@@ -127,15 +133,26 @@ export function detectGaming(metrics: RawMetrics, signals: StructuralSignals, pr
         });
     }
 
-    // Pattern 10: Minimal Project
-    if (fileCount < 10 && totalLoc < 500 && depCount < 3) {
-        let severity: 'low' | 'medium' | 'high' = 'low'; // default CLI/Academic
+    // Pattern 10: Minimal Project — skip for cli_tool/academic where minimal is normal
+    if (fileCount < 10 && totalLoc < 500 && depCount < 3 && profileId !== 'cli_tool' && profileId !== 'academic') {
+        let severity: 'low' | 'medium' | 'high' = 'low';
         if (profileId === 'production_web_app' || profileId === 'backend_api' || profileId === 'frontend_app') severity = 'medium';
         flags.push({
             pattern: 'Minimal Project',
             severity,
             description: 'Very minimal project scope',
             evidence: { file_count: fileCount, total_loc: totalLoc }
+        });
+    }
+
+    // Pattern 11: Scaffolded Project — most deps never imported
+    // Conservative threshold: 0.20 (not 0.30) to avoid false positives on Python/CLI repos
+    if (authenticity?.dependency_usage_ratio != null && authenticity.dependency_usage_ratio < 0.20) {
+        flags.push({
+            pattern: 'Scaffolded Project',
+            severity: 'medium',
+            description: 'Most declared dependencies are not imported in source code — likely scaffolded or template-generated',
+            evidence: { dependency_usage_ratio: authenticity.dependency_usage_ratio, threshold: 0.20 }
         });
     }
 

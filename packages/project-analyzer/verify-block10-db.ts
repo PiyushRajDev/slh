@@ -72,9 +72,9 @@ async function main() {
     assert('profileId matches', readRecord.profileId === payload.profileId);
     assert('analyzerVersion === "1.0.0"', readRecord.analyzerVersion === '1.0.0');
     assert('status === "COMPLETED"', readRecord.status === 'COMPLETED');
-    assert('integrityHash is 64 chars', readRecord.integrityHash.length === 64);
+    assert('integrityHash is 64 chars', readRecord.integrityHash!.length === 64);
 
-    const isIntact = verifyIntegrity(readRecord.report as unknown as AnalysisReport, readRecord.integrityHash);
+    const isIntact = verifyIntegrity(readRecord.report as unknown as AnalysisReport, readRecord.integrityHash!);
     assert('verifyIntegrity returns true on DB fetched report', isIntact);
 
     // Cleanup

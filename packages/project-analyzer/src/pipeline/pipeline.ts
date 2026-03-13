@@ -7,6 +7,8 @@ import { detectGaming } from '../anti-gaming/anti-gaming';
 import { selectBestProfile, AnalysisCandidate } from '../selection/selection';
 import { calculateConfidence } from '../confidence/confidence';
 import { formatReport, AnalysisReport } from '../report/report';
+import { scanImports } from '../authenticity/import-scanner';
+import { analyzeAuthenticity, AuthenticityMetrics } from '../authenticity/authenticity';
 
 export interface PipelineResult {
     success: true;
@@ -31,23 +33,28 @@ export async function runPipeline(
         await withClonedRepo(repoUrl, token, async (localPath) => {
             try {
                 const metrics = await extractRawMetrics(localPath, repoUrl, token);
+
+                // Phase 1: Authenticity Analysis
+                const importedPackages = await scanImports(localPath, metrics.files);
+                const authenticity = await analyzeAuthenticity(localPath, metrics, importedPackages);
+
                 const signals = deriveSignals(metrics);
-                const profiles = evaluateProfiles(signals);
+                const profiles = evaluateProfiles(signals, metrics);
 
                 const activeProfiles = profiles.filter(p => p.status === 'active');
                 const profilesToScore = activeProfiles.length > 0 ? activeProfiles : profiles;
 
                 const candidates: AnalysisCandidate[] = await Promise.all(
                     profilesToScore.map(async (profile) => {
-                        const score = calculateScore(metrics, profile.profileId);
-                        const antiGaming = detectGaming(metrics, signals, profile.profileId);
+                        const score = calculateScore(metrics, profile.profileId, authenticity);
+                        const antiGaming = detectGaming(metrics, signals, profile.profileId, authenticity);
                         return { profile, score, antiGaming };
                     })
                 );
 
-                const selection = selectBestProfile(candidates);
+                const selection = selectBestProfile(candidates, signals, metrics);
                 const confidence = calculateConfidence(metrics, selection);
-                const finalScore = calculateScore(metrics, selection.profileId as ProfileId);
+                const finalScore = calculateScore(metrics, selection.profileId as ProfileId, authenticity);
 
                 const winnerCandidate = candidates.find(c => c.profile.profileId === selection.profileId);
                 const winnerAntiGaming = winnerCandidate?.antiGaming ?? { flags: [], flagCount: 0, reliabilityScore: 1.0, reliabilityLevel: 'HIGH' };

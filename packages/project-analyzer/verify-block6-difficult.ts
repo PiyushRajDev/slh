@@ -7,15 +7,18 @@ const GAUNTLET_SCENARIOS: { name: string; candidates: AnalysisCandidate[]; expec
       {
         profile: { profileId: 'backend_api', displayName: 'Backend API', status: 'active', fitnessScore: 0.9 } as any,
         score: { overallScore: 92 } as any,
-        antiGaming: { flags: [{ severity: 'high' }, { severity: 'medium' }] } as any // Reliability: 1.0 - 0.30 - 0.15 = 0.55
+        antiGaming: { flags: [{ severity: 'high' }, { severity: 'medium' }], flagCount: 2, reliabilityScore: 0.595, reliabilityLevel: 'LOW' } as any
+        // Defensible: 92 * 0.9 * 0.595 = 49.27
       },
       {
         profile: { profileId: 'production_web_app', displayName: 'Web App', status: 'active', fitnessScore: 0.7 } as any,
         score: { overallScore: 68 } as any,
-        antiGaming: { flags: [] } as any // Reliability: 1.0
+        antiGaming: { flags: [], flagCount: 0, reliabilityScore: 1.0, reliabilityLevel: 'HIGH' } as any
+        // Defensible: 68 * 0.7 * 1.0 = 47.6
       }
     ],
-    expectedProfile: 'production_web_app' // 92 * 0.55 = 50.6 vs 68 * 1.0 = 68
+    // 49.27 > 47.6, so backend_api wins despite having flags
+    expectedProfile: 'backend_api'
   },
   {
     name: "Scenario B: Tied Defensible Scores (Fitness Tie-breaker)",
@@ -23,15 +26,17 @@ const GAUNTLET_SCENARIOS: { name: string; candidates: AnalysisCandidate[]; expec
       {
         profile: { profileId: 'frontend_app', displayName: 'Frontend', status: 'active', fitnessScore: 0.6 } as any,
         score: { overallScore: 50 } as any,
-        antiGaming: { flags: [] } as any
+        antiGaming: { flags: [], flagCount: 0, reliabilityScore: 1.0, reliabilityLevel: 'HIGH' } as any
+        // Defensible: 50 * 0.6 * 1.0 = 30
       },
       {
         profile: { profileId: 'production_web_app', displayName: 'Web App', status: 'active', fitnessScore: 0.85 } as any,
         score: { overallScore: 50 } as any,
-        antiGaming: { flags: [] } as any
+        antiGaming: { flags: [], flagCount: 0, reliabilityScore: 1.0, reliabilityLevel: 'HIGH' } as any
+        // Defensible: 50 * 0.85 * 1.0 = 42.5
       }
     ],
-    expectedProfile: 'production_web_app' // Both are 50, but Web App has higher fitness
+    expectedProfile: 'production_web_app' // Higher defensible score (42.5 vs 30)
   },
   {
     name: "Scenario C: Extreme Dampening (The 'Fake' Repo)",
@@ -39,10 +44,11 @@ const GAUNTLET_SCENARIOS: { name: string; candidates: AnalysisCandidate[]; expec
       {
         profile: { profileId: 'generic', displayName: 'Generic', status: 'active', fitnessScore: 0.5 } as any,
         score: { overallScore: 95 } as any,
-        antiGaming: { flags: [{ severity: 'high' }, { severity: 'high' }, { severity: 'high' }] } as any // Reliability: 0.1
+        antiGaming: { flags: [{ severity: 'high' }, { severity: 'high' }, { severity: 'high' }], flagCount: 3, reliabilityScore: 0.343, reliabilityLevel: 'LOW' } as any
+        // Defensible: 95 * 0.5 * 0.343 = 16.3
       }
     ],
-    expectedProfile: 'generic' // Must still return a result even if score is crushed
+    expectedProfile: 'generic' // Must still return a result
   }
 ];
 

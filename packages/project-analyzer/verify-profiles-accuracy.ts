@@ -22,9 +22,12 @@ function buildMetrics(partial: Partial<RawMetrics>, deps: string[]): RawMetrics 
         avg_commit_size: 50, commit_message_avg_length: 35, conventional_commit_ratio: 0.4,
         branch_count: 3, feature_branch_count: 1,
         ci_config_present: false, deploy_config_present: false, deploy_config_types: [],
+        ci_config_quality: 0,
         file_count: 20, folder_count: 5, total_loc: 3000, source_loc: 2000,
         languages: { '.py': 3000 }, primary_language: 'py',
         dependency_count: deps.length, dependencies: deps,
+        files: [], has_main_export: false, has_bin_field: false,
+        markup_loc: { md: 50, html: 0, css: 0 },  // default: assume a basic README exists
         is_fork: false, contributor_count: 1, top_contributor_percent: 100,
         extraction_timestamp: new Date().toISOString(), extraction_version: '1.1.0', commit_sha: null,
         ...partial
@@ -40,7 +43,11 @@ const TESTS: TestCase[] = [
     },
     {
         name: '📓 Jupyter notebook project (langchain)',
-        metrics: { languages: { '.py': 1000, '.ipynb': 500 }, primary_language: 'py', file_count: 10, total_loc: 1500 },
+        metrics: {
+            languages: { '.py': 1000, '.ipynb': 500 }, primary_language: 'py',
+            file_count: 10, total_loc: 1500,
+            files: ['notebook.ipynb', 'utils.py', 'README.md']
+        },
         deps: ['langchain', 'openai', 'numpy'],
         expectedTop: 'ml_pipeline',
     },
@@ -78,11 +85,13 @@ const TESTS: TestCase[] = [
     },
     {
         name: '📦 Library / package (tests + docs, no frontend/backend)',
-        // Libraries have: heavy tests + documentation. No CLI deps. Not minimal (>50 files).
+        // Libraries have: heavy tests + documentation + main export. No CLI deps. Not minimal (>50 files).
         metrics: {
             file_count: 60, total_loc: 8000, // > 50 so is_minimal = false
             test_file_count: 12, test_to_code_ratio: 0.45, assertion_count: 80,
-            languages: { '.ts': 6000, '.md': 500 }
+            languages: { '.ts': 6000, '.md': 500 },
+            files: ['package.json', 'src/index.ts', 'src/utils.ts', 'README.md'],
+            has_main_export: true
         },
         deps: ['jest', 'vitest'],
         expectedTop: 'library',
@@ -98,7 +107,11 @@ const TESTS: TestCase[] = [
     },
     {
         name: '🔲 Empty project — must be generic at score 0.0 (not 0.30)',
-        metrics: { file_count: 0, total_loc: 0, dependencies: [], languages: {} },
+        metrics: {
+            file_count: 0, total_loc: 0, dependencies: [], languages: {},
+            markup_loc: { md: 0, html: 0, css: 0 },
+            commit_span_days: 30  // not short timeline
+        },
         deps: [],
         expectedTop: 'generic',
         assertions: (profiles) => {

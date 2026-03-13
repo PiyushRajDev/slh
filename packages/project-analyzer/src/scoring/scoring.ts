@@ -1,5 +1,6 @@
 import { RawMetrics } from '../metrics/metrics';
 import { ProfileId, getProfileScoringWeights } from '../profiles/profiles';
+import { AuthenticityMetrics } from '../authenticity/authenticity';
 
 export interface DimensionScore {
     score: number;
@@ -36,7 +37,7 @@ function safeNum(val: number | null | undefined, fallback = 0): number {
     return Number.isFinite(n) && n >= 0 ? n : fallback;
 }
 
-export function calculateScore(metrics: RawMetrics, profileId: ProfileId): FinalScoreReport {
+export function calculateScore(metrics: RawMetrics, profileId: ProfileId, authenticity?: AuthenticityMetrics): FinalScoreReport {
     const weights = getProfileScoringWeights(profileId);
     const thresholds = COMPLEXITY_THRESHOLDS[profileId] ?? COMPLEXITY_THRESHOLDS['generic'];
 
@@ -72,25 +73,61 @@ export function calculateScore(metrics: RawMetrics, profileId: ProfileId): Final
     const lintViolations = safeNum(metrics.lint_violations_count, -1);
     const lintScore = lintViolations < 0 ? 5 : lintViolations === 0 ? 5 : lintViolations <= 5 ? 3 : lintViolations <= 15 ? 1 : 0;
 
-    const codeQualityScore = Math.min(25, Math.max(0, logicDensity + functionHealth + dryness + lintScore));
+    // Style consistency bonus (0-3): from authenticity analysis — additive on top of base
+    const styleConsistencyRaw = authenticity?.style_consistency;
+    const styleBonus = styleConsistencyRaw != null ? Math.round(styleConsistencyRaw * 3) : 0;
+
+    // Nesting discipline bonus (0-3): additive on top of base
+    const maxNestingDepth = safeNum(metrics.max_nesting_depth, -1);
+    let nestingBonus = 0;
+    if (maxNestingDepth >= 0 && maxNestingDepth !== null) {
+        nestingBonus = maxNestingDepth <= 4 ? 3 : maxNestingDepth <= 6 ? 2 : maxNestingDepth <= 8 ? 1 : 0;
+    }
+
+    // Function size discipline bonus (0-2): additive on top of base
+    let funcSizeBonus = 0;
+    if (metrics.function_lengths && metrics.function_lengths.length > 0) {
+        const shortCount = metrics.function_lengths.filter(len => len < 30).length;
+        const shortRatio = shortCount / metrics.function_lengths.length;
+        funcSizeBonus = shortRatio > 0.70 ? 2 : shortRatio > 0.50 ? 1 : 0;
+    }
+
+    let codeQualityScore = Math.min(25, Math.max(0, logicDensity + functionHealth + dryness + lintScore + styleBonus + nestingBonus + funcSizeBonus));
+
+    // LOC-based CQ ceiling: toy projects can't max out code quality
+    const totalLoc = safeNum(metrics.total_loc);
+    if (totalLoc < 200) {
+        codeQualityScore = Math.min(codeQualityScore, 10);
+    } else if (totalLoc < 500) {
+        codeQualityScore = Math.min(codeQualityScore, 17);
+    }
 
     // -------------------------------------------------------
     // Dimension 2: Architecture (Max 20)
     // -------------------------------------------------------
     const folderCount = safeNum(metrics.folder_count);
-    const couplingScore = safeNum(metrics.coupling_score);
-    const circularDeps = safeNum(metrics.circular_dependencies_count, -1);
+    const circularDeps = safeNum(metrics.circular_dependencies_count);
 
     // Structure score (0-8): tiered on folder count
     const structureScore = folderCount <= 1 ? 1 : folderCount <= 3 ? 3 : folderCount <= 8 ? 5 : folderCount <= 15 ? 7 : 8;
 
-    // Circular dependency score (0-7): null (uncomputed) → give full 7 (benefit of doubt)
-    const circDepScore = circularDeps < 0 ? 7 : circularDeps === 0 ? 7 : circularDeps <= 2 ? 4 : 0;
+    // Circular dependency score (0-5): now always computed (no more null/benefit-of-doubt)
+    const circDepScore = circularDeps === 0 ? 5 : circularDeps <= 2 ? 3 : circularDeps <= 5 ? 1 : 0;
 
-    // Coupling score (0-5): avg fan-out per module
-    const couplingPoints = couplingScore < 5 ? 5 : couplingScore < 10 ? 3 : 1;
+    // Fan-out discipline (0-3): penalize overly-coupled modules
+    const avgFanOut = safeNum(metrics.avg_fan_out);
+    const fanOutScore = avgFanOut <= 4 ? 3 : avgFanOut <= 8 ? 2 : avgFanOut <= 12 ? 1 : 0;
 
-    const archScore = Math.min(20, Math.max(0, structureScore + circDepScore + couplingPoints));
+    // Orphan penalty (0-2): reward connected codebases
+    const sourceFileCount = safeNum(metrics.file_count, 1);
+    const orphanRatio = sourceFileCount > 0 ? safeNum(metrics.orphan_module_count) / sourceFileCount : 0;
+    const orphanScore = orphanRatio <= 0.10 ? 2 : orphanRatio <= 0.25 ? 1 : 0;
+
+    // Dependency usage ratio bonus (0-2): from authenticity analysis — additive on top of base
+    const depUsageRaw = authenticity?.dependency_usage_ratio;
+    const depUsageBonus = depUsageRaw != null ? Math.round(depUsageRaw * 2) : 0;
+
+    const archScore = Math.min(20, Math.max(0, structureScore + circDepScore + fanOutScore + orphanScore + depUsageBonus));
 
     // -------------------------------------------------------
     // Dimension 3: Testing (Max 25)
@@ -116,10 +153,18 @@ export function calculateScore(metrics: RawMetrics, profileId: ProfileId): Final
             : testFileCount >= 1 ? 1
                 : 0;
 
-    const testingScore = Math.min(25, Math.max(0, testRigor + ciIntegration + testCountQuality));
+    // Assertion density bonus (0-3): additive on top of base
+    const assertionDensity = safeNum(metrics.assertion_density, -1);
+    let densityBonus = 0;
+    if (assertionDensity >= 0) {
+        densityBonus = assertionDensity >= 5 ? 3 : assertionDensity >= 2 ? 2 : assertionDensity >= 0.5 ? 1 : 0;
+    }
+
+    const testingScore = Math.min(25, Math.max(0, testRigor + ciIntegration + testCountQuality + densityBonus));
 
     // -------------------------------------------------------
     // Dimension 4: Git Discipline (Max 20)
+    // If GitHub API failed (commit_count === null), we simply give 0 points rather than crashing.
     // -------------------------------------------------------
     const commitCount = safeNum(metrics.commit_count);
     const spreadRatio = safeNum(metrics.commit_spread_ratio);
@@ -142,8 +187,12 @@ export function calculateScore(metrics: RawMetrics, profileId: ProfileId): Final
         gitSpread = spreadRatio >= 0.30 ? 6 : spreadRatio >= 0.15 ? 4 : 1;
     }
 
-    // Message quality (0-4)
-    const gitMessage = (msgAvgLen >= 30 && conventionalRatio >= 0.5) ? 4 : msgAvgLen >= 20 ? 2 : 0;
+    // Message quality (0-4): base from raw metrics, bonus from authenticity if available
+    let gitMessage = (msgAvgLen >= 30 && conventionalRatio >= 0.5) ? 4 : msgAvgLen >= 20 ? 2 : 0;
+    // Authenticity commit quality can give up to +2 bonus
+    if (authenticity?.commit_message_quality != null) {
+        gitMessage = Math.min(4, gitMessage + Math.round(authenticity.commit_message_quality * 2));
+    }
 
     // Branch workflow (0-4)
     // Academic: max 2 pts per doc
@@ -187,8 +236,17 @@ export function calculateScore(metrics: RawMetrics, profileId: ProfileId): Final
         10 * weights.devops
     ))));
 
+    // Fix 5: Academic profile score ceiling — simple projects shouldn't score 70+
+    let cappedScore = profileId === 'academic' ? Math.min(65, overallScore) : overallScore;
+
+    // Entry point validity: soft penalty instead of hard cap
+    // repos without a valid entry point lose up to 10 points, but aren't crushed
+    if (authenticity && !authenticity.has_valid_entry_point) {
+        cappedScore = Math.max(0, cappedScore - 10);
+    }
+
     return {
-        overallScore,
+        overallScore: cappedScore,
         dimensions: {
             codeQuality: {
                 score: codeQualityScore,
@@ -198,7 +256,7 @@ export function calculateScore(metrics: RawMetrics, profileId: ProfileId): Final
             architecture: {
                 score: archScore,
                 max: 20,
-                breakdown: { structureScore, circDepScore, couplingPoints }
+                breakdown: { structureScore, circDepScore, fanOutScore, orphanScore }
             },
             testing: {
                 score: testingScore,

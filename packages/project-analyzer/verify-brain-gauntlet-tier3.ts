@@ -43,7 +43,7 @@ const TIER3_GAUNTLET = [
                     commit_span_days: 60
                 } as RawMetrics;
 
-                const report = detectGaming(metrics, {} as any);
+                const report = detectGaming(metrics, {} as any, 'generic');
 
                 if (report.flags.some(f => f.severity === 'high')) {
                     highFlagTriggered = true;
@@ -170,7 +170,7 @@ const TIER3_GAUNTLET = [
             } as RawMetrics;
 
             const score = calculateScore(metrics, 'backend_api');
-            const gaming = detectGaming(metrics, {} as any);
+            const gaming = detectGaming(metrics, {} as any, 'backend_api');
 
             const selection = {
                 fitnessScore: 0.95,

@@ -7,11 +7,18 @@ const signals: StructuralSignals = {
     has_database: true,
     has_tests: false,
     has_ci: false,
+    has_deployment_config: false,
     has_docker: false,
     is_monorepo: false,
     has_documentation: false,
     is_short_timeline: false,
-    has_heavy_framework: false
+    has_heavy_framework: false,
+    has_ml_components: false,
+    has_notebooks: false,
+    is_minimal: false,
+    is_library_package: false,
+    is_cli_tool: false,
+    is_cli_entrypoint: false
 };
 
 const results = evaluateProfiles(signals);

@@ -1,38 +1,38 @@
 import { runPipeline } from './src/pipeline/pipeline';
-import 'dotenv/config';
 
 const urls = [
-    'https://github.com/facebook/create-react-app',
-    'https://github.com/simonplend/express-api-starter',
-    'https://github.com/huggingface/transformers',
-    'https://github.com/pallets/click',
-    'https://github.com/axios/axios',
-    'https://github.com/piyushyadav0191/empty-test'
+  'https://github.com/cneuralnetwork/video-dwd-cli',
+  'https://github.com/cneuralnetwork/ML-Project-CLI',
+  'https://github.com/PiyushRajDev/slh',
 ];
 
 async function main() {
-    console.log('--- Starting multi-repo evaluation URL tests ---');
-    const token = process.env.GITHUB_TOKEN;
-    if (!token) console.error('Warning: GITHUB_TOKEN not set, might hit rate limits');
-    for (const url of urls) {
-        try {
-            console.log(`\nAnalyzing: ${url} ...`);
-            const result = await runPipeline(url, token);
-            if (!result.success) {
-                console.error(`❌ Failed analysis properly: ${result.error} (Stage: ${result.stage})`);
-                continue;
-            }
-            const report = result.report;
-            console.log(`✅ Selected Profile: ${report.selection.displayName}`);
-            console.log(`✅ Score: ${report.selection.rawScore}/100 (Defensible: ${report.selection.defensibleScore.toFixed(1)})`);
-            console.log(`✅ Confidence: ${report.confidence.level} (${report.confidence.overallConfidence.toFixed(2)})`);
-            console.log(`✅ Anti-Gaming Flags: ${report.antiGaming.flags.length}`);
-            if (report.antiGaming.flags.length > 0) {
-                console.log(`   Flags: ${report.antiGaming.flags.map(f => f.pattern).join(', ')}`);
-            }
-        } catch (e) {
-            console.error(`❌ Crashed: ${url}`, e);
-        }
+  console.log('--- Starting multi-repo evaluation URL tests ---');
+  const token = process.env.GITHUB_TOKEN;
+  if (!token) console.error('Warning: GITHUB_TOKEN not set');
+
+  for (const url of urls) {
+    try {
+      console.log(`\nAnalyzing: ${url} ...`);
+      const result = await runPipeline(url, token);
+      if (!result.success) {
+        console.error(`❌ Failed: ${result.error} (Stage: ${result.stage})`);
+        continue;
+      }
+      const r = result.report;
+      console.log(`✅ Profile:     ${r.summary.profileId} — ${r.summary.displayName}`);
+      console.log(`✅ Score:       ${r.summary.overallScore}/100`);
+      console.log(`✅ Confidence:  ${r.summary.confidenceLevel}`);
+      console.log(`✅ Reliability: ${r.summary.reliabilityLevel}`);
+      console.log(`✅ Lang:        ${r.details.metrics.primary_language}`);
+      console.log(`✅ Flags:       ${r.details.antiGaming.flagCount}`);
+      if (r.details.antiGaming.flagCount > 0) {
+        console.log(`   Patterns: ${r.details.antiGaming.flags.map((f: any) => f.pattern).join(', ')}`);
+      }
+    } catch (e) {
+      console.error(`❌ Crashed: ${url}`, e);
     }
+  }
 }
+
 main();

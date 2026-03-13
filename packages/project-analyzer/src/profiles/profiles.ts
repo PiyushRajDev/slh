@@ -1,4 +1,5 @@
 import { StructuralSignals } from '../signals/signals';
+import { RawMetrics } from '../metrics/metrics';
 
 export type ProfileId = 'production_web_app' | 'backend_api' | 'frontend_app' | 'ml_pipeline' | 'cli_tool' | 'library' | 'academic' | 'generic';
 
@@ -51,7 +52,7 @@ const PROFILES: ProfileConfig[] = [
     {
         id: 'backend_api',
         displayName: 'Backend API Service',
-        fitnessThreshold: 0.65,
+        fitnessThreshold: 0.55,
         expectedSignals: {
             has_backend: 40,
             has_database: 25,
@@ -93,7 +94,6 @@ const PROFILES: ProfileConfig[] = [
             has_documentation: 15
         },
         scoringWeights: {
-            // ML code is inherently complex — weight quality lower, git discipline higher
             codeQuality: 0.20,
             architecture: 0.20,
             testing: 0.20,
@@ -106,33 +106,35 @@ const PROFILES: ProfileConfig[] = [
         displayName: 'Command-Line Tool',
         fitnessThreshold: 0.60,
         expectedSignals: {
-            is_minimal: 20,
-            has_tests: 30,
-            has_documentation: 25
+            is_cli_entrypoint: 40,
+            has_tests: 25,
+            has_documentation: 20,
+            has_ci: 15
         },
         scoringWeights: {
             codeQuality: 0.35,
             architecture: 0.15,
             testing: 0.30,
             git: 0.20,
-            devops: 0.0  // N/A for CLIs
+            devops: 0.0
         }
     },
     {
         id: 'library',
         displayName: 'Reusable Library / Package',
-        fitnessThreshold: 0.65,
+        fitnessThreshold: 0.50,
         expectedSignals: {
             has_tests: 40,
+            is_library_package: 35,
             has_documentation: 30,
             is_minimal: 10
         },
         scoringWeights: {
             codeQuality: 0.35,
             architecture: 0.20,
-            testing: 0.35,  // Critical for libraries
+            testing: 0.35,
             git: 0.10,
-            devops: 0.0  // Libraries don't deploy
+            devops: 0.0
         }
     },
     {
@@ -146,9 +148,9 @@ const PROFILES: ProfileConfig[] = [
         scoringWeights: {
             codeQuality: 0.30,
             architecture: 0.20,
-            testing: 0.15,  // Lower expectations
-            git: 0.15,      // Lower weight
-            devops: 0.0     // Often irrelevant for assignments
+            testing: 0.15,
+            git: 0.15,
+            devops: 0.0
         }
     },
     {
@@ -172,7 +174,11 @@ export function getProfileScoringWeights(profileId: ProfileId): ProfileScoringWe
     return profile?.scoringWeights ?? PROFILES[PROFILES.length - 1].scoringWeights;
 }
 
-export function evaluateProfiles(signals: StructuralSignals): ProfileResult[] {
+/**
+ * Evaluate profiles with dominance logic.
+ * Accepts optional metrics for academic hard gating (stars, commits, span, authors).
+ */
+export function evaluateProfiles(signals: StructuralSignals, metrics?: Partial<RawMetrics>): ProfileResult[] {
     const results: ProfileResult[] = PROFILES.map(profile => {
         let totalWeight = 0;
         let earnedWeight = 0;
@@ -194,7 +200,124 @@ export function evaluateProfiles(signals: StructuralSignals): ProfileResult[] {
         }
 
         // Generic gets 0.0 (not 0.30) so it only wins if truly nothing matches
-        const fitnessScore = totalWeight > 0 ? earnedWeight / totalWeight : 0.0;
+        let fitnessScore = totalWeight > 0 ? earnedWeight / totalWeight : 0.0;
+
+        // ═══════════════════════════════════════════════════════════════
+        // DOMINANCE RULES — applied after base fitness calculation
+        // ═══════════════════════════════════════════════════════════════
+
+        // ── Rule 1: Academic Hard Gating ──────────────────────────────
+        // Academic must only activate when structural weakness exists.
+        if (profile.id === 'academic') {
+            const commitCount = metrics?.commit_count ?? 0;
+            const commitSpanDays = metrics?.commit_span_days ?? 0;
+            const contributorCount = metrics?.contributor_count ?? 1;
+
+            // Pre-score suppression: mature repos are NOT academic
+            if (commitCount > 150 || commitSpanDays > 365 || contributorCount > 2) {
+                fitnessScore = Math.max(0, fitnessScore - 0.50);
+            }
+
+            // Academic REQUIRES positive evidence — not just absence of infra
+            // No evidence → zero out completely
+            const hasAcademicEvidence = signals.is_short_timeline;
+            if (!hasAcademicEvidence) {
+                fitnessScore = 0;
+            }
+
+            // ML suppresses academic
+            if (signals.has_ml_components) {
+                fitnessScore = Math.max(0, fitnessScore - 0.20);
+            }
+
+            // Safety: academic must never win for high-activity repos
+            if (commitSpanDays > 730) {
+                fitnessScore = 0;
+            }
+        }
+
+        // ── Rule 2: Backend Dominance Over Library ────────────────────
+        // Additive suppression — each condition stacks independently
+        if (profile.id === 'library') {
+            if (signals.has_backend) {
+                fitnessScore = Math.max(0, fitnessScore - 0.35);
+            }
+            if (signals.has_backend && signals.has_database) {
+                fitnessScore = Math.max(0, fitnessScore - 0.10); // additional on top of -0.35
+            }
+            if (signals.has_docker) {
+                fitnessScore = Math.max(0, fitnessScore - 0.20);
+            }
+            // Safety: library must not win if has_backend + high commit count
+            const commitCount = metrics?.commit_count ?? 0;
+            if (signals.has_backend && commitCount > 100) {
+                fitnessScore = Math.max(0, fitnessScore - 0.20);
+            }
+        }
+
+        // Boost backend when server signals are present
+        if (profile.id === 'backend_api') {
+            if (signals.has_docker) {
+                fitnessScore = Math.min(1.0, fitnessScore + 0.10);
+            }
+        }
+
+        // ── Rule 3: CLI Dominance Boost ───────────────────────────────
+        // Fix 3: Suppress cli_tool when backend/frontend structure present
+        if (profile.id === 'cli_tool') {
+            if (signals.has_backend) {
+                fitnessScore = Math.max(0, fitnessScore - 0.35);
+            }
+            if (signals.has_frontend) {
+                fitnessScore = Math.max(0, fitnessScore - 0.25);
+            }
+        }
+        if (signals.is_cli_tool) {
+            if (profile.id === 'cli_tool') {
+                fitnessScore = Math.min(1.0, fitnessScore + 0.35);
+            }
+            if (profile.id === 'academic') {
+                fitnessScore = Math.max(0, fitnessScore - 0.25);
+            }
+            if (profile.id === 'library') {
+                // Stronger suppression: CLI tools with library-like packaging should still classify as CLI
+                fitnessScore = Math.max(0, fitnessScore - 0.25);
+            }
+            if (profile.id === 'generic') {
+                fitnessScore = Math.max(0, fitnessScore - 0.20);
+            }
+        }
+
+        // ── Rule 4: Production Web App Reinforcement ─────────────────
+        if (signals.has_frontend && signals.has_backend) {
+            if (profile.id === 'production_web_app') {
+                fitnessScore = Math.min(1.0, fitnessScore + 0.30);
+            }
+            if (profile.id === 'library') {
+                fitnessScore = Math.max(0, fitnessScore - 0.30);
+            }
+            if (profile.id === 'academic') {
+                fitnessScore = Math.max(0, fitnessScore - 0.30);
+            }
+        }
+
+        // ── Rule 5: Monorepo → production_web_app boost ──────────────
+        // Fix 6: Well-structured monorepos should not fall to generic
+        if (signals.is_monorepo && profile.id === 'production_web_app') {
+            fitnessScore = Math.min(1.0, fitnessScore + 0.20);
+        }
+
+        // ── Rule 6: Academic infra cap ───────────────────────────────
+        // Fix 5: Academic with strong infrastructure shouldn't score high
+        if (profile.id === 'academic' && signals.has_tests && signals.has_ci) {
+            fitnessScore = Math.max(0, fitnessScore - 0.15);
+        }
+
+        // ── Rule 7: Library ↔ Frontend mutual suppression ────────────
+        // R2-5: Libraries with frontend deps shouldn't become frontend_app
+        if (profile.id === 'frontend_app' && signals.is_library_package) {
+            fitnessScore = Math.max(0, fitnessScore - 0.30);
+        }
 
         return {
             profileId: profile.id,
