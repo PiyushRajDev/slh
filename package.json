@@ -12,7 +12,11 @@
   },
   "dependencies": {
     "@prisma/client": "^7.4.2",
-    "express": "^5.2.1"
+    "axios": "^1.14.0",
+    "bottleneck": "^2.19.5",
+    "express": "^5.2.1",
+    "ioredis": "^5.10.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",

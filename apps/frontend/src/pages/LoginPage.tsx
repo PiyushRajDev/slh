@@ -15,7 +15,7 @@ export default function LoginPage() {
 
     useEffect(() => {
         if (token) {
-            navigate('/', { replace: true });
+            navigate('/project-analysis', { replace: true });
         }
     }, [token, navigate]);
 
@@ -28,7 +28,7 @@ export default function LoginPage() {
             const response = await client.post('/auth/login', { email, password });
             if (response.data?.data?.tokens?.accessToken) {
                 login(response.data.data.tokens.accessToken);
-                navigate('/');
+                navigate('/project-analysis');
             } else {
                 setError("Authentication payload invalid from upstream.");
             }

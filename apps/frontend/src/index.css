@@ -1,1 +1,63 @@
 @import "tailwindcss";
+
+:root {
+  --slh-ink: #10233d;
+  --slh-sky: #2f8f9d;
+  --slh-sun: #f7b267;
+  --slh-coral: #f76f5e;
+  --slh-cream: #f7f4ef;
+  --font-display: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
+  --font-sans: "Segoe UI", "Avenir Next", "Helvetica Neue", sans-serif;
+  color: var(--slh-ink);
+  background:
+    radial-gradient(circle at top left, rgba(247, 178, 103, 0.28), transparent 28%),
+    radial-gradient(circle at top right, rgba(47, 143, 157, 0.18), transparent 26%),
+    linear-gradient(180deg, #fffefb 0%, var(--slh-cream) 100%);
+  font-family: var(--font-sans);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: transparent;
+  color: var(--slh-ink);
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.display-face {
+  font-family: var(--font-display);
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float-card {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.card-rise {
+  animation: rise-in 620ms ease both;
+}
+
+.float-card {
+  animation: float-card 7s ease-in-out infinite;
+}

@@ -7,8 +7,8 @@ export default function NotFoundPage() {
                 <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">404</h1>
                 <p className="text-xl text-gray-600">Page not found</p>
                 <div className="pt-4">
-                    <Link to="/" className="text-base font-medium text-blue-600 hover:text-blue-500">
-                        Return to Dashboard &rarr;
+                    <Link to="/students" className="text-base font-medium text-blue-600 hover:text-blue-500">
+                        Return to Preview &rarr;
                     </Link>
                 </div>
             </div>
