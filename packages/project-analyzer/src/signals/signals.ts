@@ -2,7 +2,10 @@ import { RawMetrics } from '../metrics/metrics';
 
 export interface StructuralSignals {
     has_frontend: boolean;
+    has_static_frontend: boolean;
     has_backend: boolean;
+    has_api_routes: boolean;
+    has_server_entrypoint: boolean;
     has_database: boolean;
     has_tests: boolean;
     has_ci: boolean;
@@ -16,6 +19,9 @@ export interface StructuralSignals {
     has_notebooks: boolean;
     is_minimal: boolean;
     is_library_package: boolean;
+    has_library_exports: boolean;
+    has_academic_markers: boolean;
+    has_git_history: boolean;
     is_cli_tool: boolean;         // CLI-specific entrypoint/framework detected
     is_cli_entrypoint: boolean;   // positive CLI discriminator: bin field, __main__.py, cli deps + entry
 }
@@ -26,8 +32,11 @@ export function deriveSignals(metrics: RawMetrics): StructuralSignals {
     const folder_structure = metrics?.folder_structure || [];
     const files = metrics?.files || [];
     const markup = metrics?.markup_loc || { md: 0, html: 0, css: 0 };
+    const readmeKeywords = (metrics?.readme_keywords || []).map(k => k.toLowerCase());
 
     const hasDependency = (deps: string[]) => deps.some(d => dependencies.includes(d));
+    const hasReadmeKeyword = (keywords: string[]) =>
+        keywords.some(keyword => readmeKeywords.some(readmeKeyword => readmeKeyword.includes(keyword)));
 
     // ── has_database (computed early — used by has_backend) ──────
     const sqlLoc = languages['.sql'] || 0;
@@ -71,10 +80,23 @@ export function deriveSignals(metrics: RawMetrics): StructuralSignals {
     const frontendSvcRe = /services?\/(?:web|frontend|client)\//i;
     const hasDeepFrontend = files.some(f => frontendAppRe.test(f) || frontendPkgRe.test(f) || frontendSvcRe.test(f));
     const significantMarkup = (markup.html + markup.css) > 500;
+    const hasStaticEntrypoint = files.some(f => /(^|\/)index\.html$/i.test(f));
+    const hasStaticAssets = files.some(f => /^(public|assets|static)\//i.test(f)) ||
+        folder_structure.some(f => ['public', 'assets', 'static'].includes(f));
+    const hasClientScript = files.some(f =>
+        /(^|\/)(main|app|index)\.(js|ts|jsx|tsx)$/i.test(f) || /^src\/client\//.test(f)
+    );
+    const hasStaticFrontend = hasStaticEntrypoint && (
+        markup.css > 20 ||
+        hasClientScript ||
+        hasStaticAssets ||
+        metrics?.deploy_config_present === true ||
+        hasReadmeKeyword(['frontend', 'portfolio', 'landing page', 'ui', 'static site'])
+    );
 
     // Fix 1 + R2-3: dep + structure, suppressed for libraries unless there's a strong application entrypoint
     const has_frontend = (hasFrontendDep && (hasAppEntrypoint || (hasFrontendStructure && !rawIsLibrary)))
-        || hasDeepFrontend || significantMarkup;
+        || hasDeepFrontend || significantMarkup || hasStaticFrontend;
 
     // ── has_backend ───────────────────────────────────────────────
     const backendFolders = ['routes', 'controllers', 'middleware', 'handlers'];
@@ -86,6 +108,7 @@ export function deriveSignals(metrics: RawMetrics): StructuralSignals {
     const hasDeepBackend = files.some(f =>
         backendAppRe.test(f) || backendPkgRe.test(f) || backendSrcRe.test(f) || backendSvcRe.test(f)
     );
+    const hasApiRoutes = files.some(f => /(^|\/)(routes?|controllers?|middleware|handlers?)\//i.test(f) || /^src\/api\//i.test(f));
     const hasBackendDep = hasDependency([
         'express', 'nestjs', '@nestjs/core', 'fastify', 'koa',
         'django', 'flask', 'fastapi', 'tornado', 'aiohttp', 'bottle',
@@ -94,9 +117,20 @@ export function deriveSignals(metrics: RawMetrics): StructuralSignals {
         'actix-web', 'rocket', 'axum', 'rails', 'sinatra',
         'bun', 'hono', 'elysia', '@hapi/hapi', 'h3', 'nitro'
     ]);
+    const hasServerEntrypoint = files.some(f =>
+        /(^|\/)(server|api)\.(ts|tsx|js|jsx|py|go|java)$/i.test(f) ||
+        (hasBackendDep && /(^|\/)app\.(py|ts|js)$/i.test(f))
+    );
+    const hasEnvConfig = files.some(f =>
+        /(^|\/)\.env(\..+)?$/i.test(f) ||
+        /(^|\/)\.env\.example$/i.test(f) ||
+        /(^|\/)(config|configs)\//i.test(f)
+    );
     // Fix 4 + R2-2: dep + structure, or dep + database as proof
     const has_backend = (hasBackendDep && (hasBackendStructure || hasDeepBackend || has_database))
-        || hasBackendStructure || hasDeepBackend;
+        || (hasBackendDep && (hasApiRoutes || hasServerEntrypoint || hasEnvConfig))
+        || hasBackendStructure || hasDeepBackend
+        || (hasServerEntrypoint && (has_database || hasApiRoutes || hasReadmeKeyword(['backend', 'api', 'rest api', 'graphql'])));
 
     // ── has_tests ────────────────────────────────────────────────
     const test_file_count = metrics?.test_file_count || 0;
@@ -128,8 +162,9 @@ export function deriveSignals(metrics: RawMetrics): StructuralSignals {
     const has_documentation = markup.md > 5 || hasReadme || hasDocsFolder;
 
     // ── is_short_timeline ────────────────────────────────────────
-    const commit_span_days = metrics?.commit_span_days || 0;
-    const is_short_timeline = commit_span_days < 7;
+    const has_git_history = metrics?.commit_sha != null || (metrics?.commit_count ?? 0) > 0;
+    const commit_span_days = metrics?.commit_span_days;
+    const is_short_timeline = has_git_history && typeof commit_span_days === 'number' && commit_span_days >= 0 && commit_span_days < 7;
 
     // ── has_heavy_framework ──────────────────────────────────────
     const has_heavy_framework = hasDependency(['next', '@nestjs/core', 'angular', 'django', 'spring', 'nuxt', 'gatsby']);
@@ -186,7 +221,19 @@ export function deriveSignals(metrics: RawMetrics): StructuralSignals {
 
     // ── is_library_package ───────────────────────────────────────
     // R2-3: is_library_package 
-    const is_library_package = (!hasAppEntrypoint && rawIsLibrary);
+    const hasLibraryDocs = hasReadmeKeyword(['library', 'package', 'sdk', 'module', 'plugin', 'npm']);
+    const hasLibraryExports = metrics?.has_main_export === true ||
+        files.some(f =>
+            /(^|\/)(index|main)\.(ts|js|mjs|cjs)$/i.test(f) ||
+            /(^|\/)__init__\.py$/i.test(f) ||
+            /^src\/index\.(ts|js)$/i.test(f)
+        ) ||
+        hasLibraryDocs;
+    const is_library_package = (
+        !hasAppEntrypoint &&
+        !has_backend &&
+        (rawIsLibrary || hasLibraryExports)
+    );
     // ── is_cli_tool (Fix 2: new signal, expanded for Phase 1.5) ──
     // Detect CLI-specific patterns across multiple dimensions
     const cliDeps = hasDependency([
@@ -204,10 +251,10 @@ export function deriveSignals(metrics: RawMetrics): StructuralSignals {
             f === 'cli.py' || f === 'cli.ts' || f === 'cli.js' ||
             f.endsWith('/cli.py') || f.endsWith('/cli.ts') || f.endsWith('/cli.js') ||
             f === '__main__.py' || f.endsWith('/__main__.py') ||
-            f === 'main.py' || f === 'app.py'
+            /^bin\//.test(f)
         );
     });
-    const is_cli_tool = cliDeps || hasBinField || hasConsoleScripts || usesArgparse || hasCliEntrypoint;
+    const is_cli_tool = cliDeps || hasBinField || hasConsoleScripts || usesArgparse || hasCliEntrypoint || hasReadmeKeyword(['cli', 'command line', 'command-line', 'terminal']);
 
     // ── is_cli_entrypoint (positive CLI discriminator) ────────────
     const CLI_DEPS_JS  = ['commander', 'yargs', 'meow', 'minimist', 'inquirer', 'oclif', 'caporal', 'vorpal'];
@@ -219,12 +266,15 @@ export function deriveSignals(metrics: RawMetrics): StructuralSignals {
     const hasMainPy      = files.some(f => /__main__\.py$/.test(f));
     const hasBinFile     = files.some(f => /^bin\//.test(f) || /\/(bin|cli)\.(js|ts|py)$/.test(f));
     const hasCliEntry    = files.some(f => /^cli\.(js|ts|py)$/.test(f));
-
-    const is_cli_entrypoint = hasMainPy || hasBinFile || hasCliEntry || hasCliDepPY || hasCliDepJS;
+    const is_cli_entrypoint = hasMainPy || hasBinFile || hasCliEntry || hasBinField || hasConsoleScripts || (usesArgparse && hasCliEntrypoint) || hasCliDepPY || hasCliDepJS;
+    const has_academic_markers = hasReadmeKeyword(['assignment', 'homework', 'course', 'tutorial', 'student', 'university', 'college', 'academic']);
 
     return {
         has_frontend,
+        has_static_frontend: hasStaticFrontend,
         has_backend,
+        has_api_routes: hasApiRoutes,
+        has_server_entrypoint: hasServerEntrypoint,
         has_database,
         has_tests,
         has_ci,
@@ -238,6 +288,9 @@ export function deriveSignals(metrics: RawMetrics): StructuralSignals {
         has_notebooks,
         is_minimal,
         is_library_package,
+        has_library_exports: hasLibraryExports,
+        has_academic_markers,
+        has_git_history,
         is_cli_tool,
         is_cli_entrypoint
     };

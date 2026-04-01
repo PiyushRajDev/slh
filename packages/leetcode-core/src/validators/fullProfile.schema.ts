@@ -5,6 +5,7 @@ export const fullProfileSchema = z.object({
     username: z.string(),
     profile: z.object({
       realName: z.string().nullable(),
+      aboutMe: z.string().nullable().optional(),
       ranking: z.number().nullable(),
       reputation: z.number().nullable(),
     }),

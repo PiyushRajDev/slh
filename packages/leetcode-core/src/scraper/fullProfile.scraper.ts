@@ -13,16 +13,16 @@ export class FullProfileScraper {
   constructor(private client: IGraphQLClient) {}
 
  async fetch(username: string) {
-  const profile = await this.client.request(profileQuery, { username });
-  const contest = await this.client.request(contestQuery, { username });
-  const history = await this.client.request(contestHistoryQuery, { username });
-  const submissions = await this.client.request(submissionsQuery, { username });
+  const profile = await this.client.request<Record<string, unknown>>(profileQuery, { username });
+  const contest = await this.client.request<Record<string, unknown>>(contestQuery, { username });
+  const history = await this.client.request<Record<string, unknown>>(contestHistoryQuery, { username });
+  const submissions = await this.client.request<Record<string, unknown>>(submissionsQuery, { username });
 
   const merged = {
-    ...profile,
-    ...contest,
-    ...history,
-    ...submissions,
+    ...(profile ?? {}),
+    ...(contest ?? {}),
+    ...(history ?? {}),
+    ...(submissions ?? {}),
   };
 
   const validated = fullProfileSchema.parse(merged);

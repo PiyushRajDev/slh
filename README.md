@@ -127,7 +127,7 @@ ACCESS_TOKEN_SECRET=your_random_32_character_string_here
 REFRESH_TOKEN_SECRET=your_random_32_character_string_here
 
 # Frontend Application URL
-FRONTEND_URL=http://localhost:5173
+FRONTEND_URL=http://localhost:3001
 
 # Database & Cache Connection Strings
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/slh_dev
@@ -238,7 +238,6 @@ Issues and discussions are welcome
 Architectural changes require design discussion
 
 Evaluation logic changes must update specs
-
 
 
 

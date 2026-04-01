@@ -236,8 +236,48 @@ export function calculateScore(metrics: RawMetrics, profileId: ProfileId, authen
         10 * weights.devops
     ))));
 
-    // Fix 5: Academic profile score ceiling — simple projects shouldn't score 70+
-    let cappedScore = profileId === 'academic' ? Math.min(65, overallScore) : overallScore;
+    // Conservative profile-specific ceilings for low-evidence repos.
+    let cappedScore = overallScore;
+
+    if (profileId === 'academic') {
+        const lowEvidenceAcademic =
+            commitCount < 20 &&
+            !metrics.ci_config_present &&
+            testFileCount < 2;
+        cappedScore = Math.min(lowEvidenceAcademic ? 45 : 55, cappedScore);
+    }
+
+    if (profileId === 'backend_api') {
+        const lightweightBackend =
+            commitCount < 20 &&
+            testFileCount === 0 &&
+            !metrics.ci_config_present &&
+            !metrics.deploy_config_present;
+        if (lightweightBackend) {
+            cappedScore = Math.min(48, cappedScore);
+        }
+    }
+
+    if (profileId === 'production_web_app') {
+        const lightweightFullstack =
+            commitCount < 20 &&
+            testFileCount === 0 &&
+            !metrics.ci_config_present &&
+            !metrics.deploy_config_present;
+        if (lightweightFullstack) {
+            cappedScore = Math.min(52, cappedScore);
+        }
+    }
+
+    if (profileId === 'library') {
+        const lightweightLibrary =
+            testFileCount === 0 &&
+            !metrics.ci_config_present &&
+            safeNum(metrics.file_count) < 25;
+        if (lightweightLibrary) {
+            cappedScore = Math.min(42, cappedScore);
+        }
+    }
 
     // Entry point validity: soft penalty instead of hard cap
     // repos without a valid entry point lose up to 10 points, but aren't crushed

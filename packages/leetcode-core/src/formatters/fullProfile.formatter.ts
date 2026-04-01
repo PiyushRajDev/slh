@@ -26,6 +26,7 @@ export function formatFullProfile(data: FullProfileRaw) {
     profile: {
       username: user.username,
       realName: user.profile.realName,
+      aboutMe: user.profile.aboutMe,
       ranking: user.profile.ranking,
       reputation: user.profile.reputation
     },

@@ -6593,6 +6593,8 @@ export namespace Prisma {
     lastFetchedAt: Date | null
     fetchStatus: $Enums.FetchStatus | null
     errorMessage: string | null
+    isVerified: boolean | null
+    verifiedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -6611,6 +6613,8 @@ export namespace Prisma {
     lastFetchedAt: Date | null
     fetchStatus: $Enums.FetchStatus | null
     errorMessage: string | null
+    isVerified: boolean | null
+    verifiedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -6629,6 +6633,8 @@ export namespace Prisma {
     lastFetchedAt: number
     fetchStatus: number
     errorMessage: number
+    isVerified: number
+    verifiedAt: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -6665,6 +6671,8 @@ export namespace Prisma {
     lastFetchedAt?: true
     fetchStatus?: true
     errorMessage?: true
+    isVerified?: true
+    verifiedAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6683,6 +6691,8 @@ export namespace Prisma {
     lastFetchedAt?: true
     fetchStatus?: true
     errorMessage?: true
+    isVerified?: true
+    verifiedAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6701,6 +6711,8 @@ export namespace Prisma {
     lastFetchedAt?: true
     fetchStatus?: true
     errorMessage?: true
+    isVerified?: true
+    verifiedAt?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -6806,6 +6818,8 @@ export namespace Prisma {
     lastFetchedAt: Date | null
     fetchStatus: $Enums.FetchStatus
     errorMessage: string | null
+    isVerified: boolean
+    verifiedAt: Date | null
     createdAt: Date
     updatedAt: Date
     _count: DSAProfileCountAggregateOutputType | null
@@ -6843,6 +6857,8 @@ export namespace Prisma {
     lastFetchedAt?: boolean
     fetchStatus?: boolean
     errorMessage?: boolean
+    isVerified?: boolean
+    verifiedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -6862,6 +6878,8 @@ export namespace Prisma {
     lastFetchedAt?: boolean
     fetchStatus?: boolean
     errorMessage?: boolean
+    isVerified?: boolean
+    verifiedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -6881,6 +6899,8 @@ export namespace Prisma {
     lastFetchedAt?: boolean
     fetchStatus?: boolean
     errorMessage?: boolean
+    isVerified?: boolean
+    verifiedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     student?: boolean | StudentDefaultArgs<ExtArgs>
@@ -6900,11 +6920,13 @@ export namespace Prisma {
     lastFetchedAt?: boolean
     fetchStatus?: boolean
     errorMessage?: boolean
+    isVerified?: boolean
+    verifiedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type DSAProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "platform" | "username" | "profileUrl" | "totalSolved" | "easySolved" | "mediumSolved" | "hardSolved" | "rating" | "lastFetchedAt" | "fetchStatus" | "errorMessage" | "createdAt" | "updatedAt", ExtArgs["result"]["dSAProfile"]>
+  export type DSAProfileOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "platform" | "username" | "profileUrl" | "totalSolved" | "easySolved" | "mediumSolved" | "hardSolved" | "rating" | "lastFetchedAt" | "fetchStatus" | "errorMessage" | "isVerified" | "verifiedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["dSAProfile"]>
   export type DSAProfileInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | StudentDefaultArgs<ExtArgs>
   }
@@ -6934,6 +6956,8 @@ export namespace Prisma {
       lastFetchedAt: Date | null
       fetchStatus: $Enums.FetchStatus
       errorMessage: string | null
+      isVerified: boolean
+      verifiedAt: Date | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["dSAProfile"]>
@@ -7373,6 +7397,8 @@ export namespace Prisma {
     readonly lastFetchedAt: FieldRef<"DSAProfile", 'DateTime'>
     readonly fetchStatus: FieldRef<"DSAProfile", 'FetchStatus'>
     readonly errorMessage: FieldRef<"DSAProfile", 'String'>
+    readonly isVerified: FieldRef<"DSAProfile", 'Boolean'>
+    readonly verifiedAt: FieldRef<"DSAProfile", 'DateTime'>
     readonly createdAt: FieldRef<"DSAProfile", 'DateTime'>
     readonly updatedAt: FieldRef<"DSAProfile", 'DateTime'>
   }
@@ -10309,6 +10335,8 @@ export namespace Prisma {
     lastFetchedAt: 'lastFetchedAt',
     fetchStatus: 'fetchStatus',
     errorMessage: 'errorMessage',
+    isVerified: 'isVerified',
+    verifiedAt: 'verifiedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -10981,6 +11009,8 @@ export namespace Prisma {
     lastFetchedAt?: DateTimeNullableFilter<"DSAProfile"> | Date | string | null
     fetchStatus?: EnumFetchStatusFilter<"DSAProfile"> | $Enums.FetchStatus
     errorMessage?: StringNullableFilter<"DSAProfile"> | string | null
+    isVerified?: BoolFilter<"DSAProfile"> | boolean
+    verifiedAt?: DateTimeNullableFilter<"DSAProfile"> | Date | string | null
     createdAt?: DateTimeFilter<"DSAProfile"> | Date | string
     updatedAt?: DateTimeFilter<"DSAProfile"> | Date | string
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
@@ -11000,6 +11030,8 @@ export namespace Prisma {
     lastFetchedAt?: SortOrderInput | SortOrder
     fetchStatus?: SortOrder
     errorMessage?: SortOrderInput | SortOrder
+    isVerified?: SortOrder
+    verifiedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     student?: StudentOrderByWithRelationInput
@@ -11023,6 +11055,8 @@ export namespace Prisma {
     lastFetchedAt?: DateTimeNullableFilter<"DSAProfile"> | Date | string | null
     fetchStatus?: EnumFetchStatusFilter<"DSAProfile"> | $Enums.FetchStatus
     errorMessage?: StringNullableFilter<"DSAProfile"> | string | null
+    isVerified?: BoolFilter<"DSAProfile"> | boolean
+    verifiedAt?: DateTimeNullableFilter<"DSAProfile"> | Date | string | null
     createdAt?: DateTimeFilter<"DSAProfile"> | Date | string
     updatedAt?: DateTimeFilter<"DSAProfile"> | Date | string
     student?: XOR<StudentScalarRelationFilter, StudentWhereInput>
@@ -11042,6 +11076,8 @@ export namespace Prisma {
     lastFetchedAt?: SortOrderInput | SortOrder
     fetchStatus?: SortOrder
     errorMessage?: SortOrderInput | SortOrder
+    isVerified?: SortOrder
+    verifiedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: DSAProfileCountOrderByAggregateInput
@@ -11068,6 +11104,8 @@ export namespace Prisma {
     lastFetchedAt?: DateTimeNullableWithAggregatesFilter<"DSAProfile"> | Date | string | null
     fetchStatus?: EnumFetchStatusWithAggregatesFilter<"DSAProfile"> | $Enums.FetchStatus
     errorMessage?: StringNullableWithAggregatesFilter<"DSAProfile"> | string | null
+    isVerified?: BoolWithAggregatesFilter<"DSAProfile"> | boolean
+    verifiedAt?: DateTimeNullableWithAggregatesFilter<"DSAProfile"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"DSAProfile"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"DSAProfile"> | Date | string
   }
@@ -11777,6 +11815,8 @@ export namespace Prisma {
     lastFetchedAt?: Date | string | null
     fetchStatus?: $Enums.FetchStatus
     errorMessage?: string | null
+    isVerified?: boolean
+    verifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     student: StudentCreateNestedOneWithoutDsaProfilesInput
@@ -11796,6 +11836,8 @@ export namespace Prisma {
     lastFetchedAt?: Date | string | null
     fetchStatus?: $Enums.FetchStatus
     errorMessage?: string | null
+    isVerified?: boolean
+    verifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -11813,6 +11855,8 @@ export namespace Prisma {
     lastFetchedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fetchStatus?: EnumFetchStatusFieldUpdateOperationsInput | $Enums.FetchStatus
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     student?: StudentUpdateOneRequiredWithoutDsaProfilesNestedInput
@@ -11832,6 +11876,8 @@ export namespace Prisma {
     lastFetchedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fetchStatus?: EnumFetchStatusFieldUpdateOperationsInput | $Enums.FetchStatus
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11850,6 +11896,8 @@ export namespace Prisma {
     lastFetchedAt?: Date | string | null
     fetchStatus?: $Enums.FetchStatus
     errorMessage?: string | null
+    isVerified?: boolean
+    verifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -11867,6 +11915,8 @@ export namespace Prisma {
     lastFetchedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fetchStatus?: EnumFetchStatusFieldUpdateOperationsInput | $Enums.FetchStatus
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11885,6 +11935,8 @@ export namespace Prisma {
     lastFetchedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fetchStatus?: EnumFetchStatusFieldUpdateOperationsInput | $Enums.FetchStatus
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12785,6 +12837,8 @@ export namespace Prisma {
     lastFetchedAt?: SortOrder
     fetchStatus?: SortOrder
     errorMessage?: SortOrder
+    isVerified?: SortOrder
+    verifiedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -12811,6 +12865,8 @@ export namespace Prisma {
     lastFetchedAt?: SortOrder
     fetchStatus?: SortOrder
     errorMessage?: SortOrder
+    isVerified?: SortOrder
+    verifiedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -12829,6 +12885,8 @@ export namespace Prisma {
     lastFetchedAt?: SortOrder
     fetchStatus?: SortOrder
     errorMessage?: SortOrder
+    isVerified?: SortOrder
+    verifiedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -14283,6 +14341,8 @@ export namespace Prisma {
     lastFetchedAt?: Date | string | null
     fetchStatus?: $Enums.FetchStatus
     errorMessage?: string | null
+    isVerified?: boolean
+    verifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14300,6 +14360,8 @@ export namespace Prisma {
     lastFetchedAt?: Date | string | null
     fetchStatus?: $Enums.FetchStatus
     errorMessage?: string | null
+    isVerified?: boolean
+    verifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14548,6 +14610,8 @@ export namespace Prisma {
     lastFetchedAt?: DateTimeNullableFilter<"DSAProfile"> | Date | string | null
     fetchStatus?: EnumFetchStatusFilter<"DSAProfile"> | $Enums.FetchStatus
     errorMessage?: StringNullableFilter<"DSAProfile"> | string | null
+    isVerified?: BoolFilter<"DSAProfile"> | boolean
+    verifiedAt?: DateTimeNullableFilter<"DSAProfile"> | Date | string | null
     createdAt?: DateTimeFilter<"DSAProfile"> | Date | string
     updatedAt?: DateTimeFilter<"DSAProfile"> | Date | string
   }
@@ -15278,6 +15342,8 @@ export namespace Prisma {
     lastFetchedAt?: Date | string | null
     fetchStatus?: $Enums.FetchStatus
     errorMessage?: string | null
+    isVerified?: boolean
+    verifiedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15326,6 +15392,8 @@ export namespace Prisma {
     lastFetchedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fetchStatus?: EnumFetchStatusFieldUpdateOperationsInput | $Enums.FetchStatus
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15343,6 +15411,8 @@ export namespace Prisma {
     lastFetchedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fetchStatus?: EnumFetchStatusFieldUpdateOperationsInput | $Enums.FetchStatus
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15360,6 +15430,8 @@ export namespace Prisma {
     lastFetchedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     fetchStatus?: EnumFetchStatusFieldUpdateOperationsInput | $Enums.FetchStatus
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

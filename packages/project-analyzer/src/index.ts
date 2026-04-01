@@ -8,3 +8,4 @@ export * from "./selection/selection";
 export * from "./confidence/confidence";
 export * from "./report/report";
 export * from "./pipeline/pipeline";
+export * from "./insights/insights";

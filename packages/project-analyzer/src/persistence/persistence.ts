@@ -38,6 +38,7 @@ const AnalysisReportSchema = z.object({
             flagCount: z.number().int().min(0),
             flags: z.array(z.any())
         }).passthrough(),
+        selection: z.object({}).passthrough().optional(),
         signals: z.object({}).passthrough(),
         metrics: z.object({
             commit_sha: z.string()

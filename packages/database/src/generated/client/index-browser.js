@@ -201,6 +201,8 @@ exports.Prisma.DSAProfileScalarFieldEnum = {
   lastFetchedAt: 'lastFetchedAt',
   fetchStatus: 'fetchStatus',
   errorMessage: 'errorMessage',
+  isVerified: 'isVerified',
+  verifiedAt: 'verifiedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };

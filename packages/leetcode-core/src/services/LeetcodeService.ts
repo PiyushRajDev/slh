@@ -14,6 +14,25 @@ export class UserService {
     private scraper: IUserScraper
   ) {}
 
+  /**
+   * Verification method to ensure the requesting user actually owns the LeetCode profile
+   */
+  async verify(username: string, token: string): Promise<boolean> {
+    try {
+      const fresh = await this.scraper.fetch(username);
+      const realName = fresh.profile.realName;
+      const aboutMe = fresh.profile.aboutMe;
+      
+      if (realName && realName.includes(token)) return true;
+      if (aboutMe && aboutMe.includes(token)) return true;
+      
+      return false;
+    } catch (err) {
+      console.error("Verification failed for username:", username, err);
+      return false;
+    }
+  }
+
   async getUser(username: string) {
     const key = this.buildKey(username);
 

@@ -23,11 +23,11 @@ function generateTokens(user: {
         collegeId: user.collegeId,
     };
 
-    const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET!, {
+    const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET!, {
         expiresIn: "15m",
     });
 
-    const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET!, {
+    const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET!, {
         expiresIn: "7d",
     });
 
@@ -77,21 +77,18 @@ router.post("/register", async (req: AuthRequest, res: Response) => {
                 email,
                 passwordHash: hashedPassword,
                 collegeId: collegeId ?? null,
-                ...(true
-                    ? {
-                        student: {
-                            create: {
-                                firstName,
-                                lastName,
-                                rollNumber: rollNumber ?? "N/A",
-                                email,
-                                department: department ?? "N/A",
-                                semester: semester ?? 1,
-                                batch: batch ?? "N/A",
-                            },
-                        },
-                    }
-                    : {}),
+                student: {
+                    create: {
+                        firstName,
+                        lastName,
+                        rollNumber: rollNumber ?? "N/A",
+                        email,
+                        department: department ?? "N/A",
+                        semester: semester ?? 1,
+                        batch: batch ?? "N/A",
+                        collegeId: collegeId ?? null,
+                    },
+                },
             },
             include: { student: true },
         });
@@ -173,7 +170,7 @@ router.post("/refresh", async (req: AuthRequest, res: Response) => {
 
         const decoded = jwt.verify(
             refreshToken,
-            process.env.REFRESH_TOKEN_SECRET!
+            process.env.JWT_REFRESH_SECRET!
         ) as { userId: string };
 
         const user = await prisma.user.findUnique({
@@ -230,6 +227,7 @@ router.get("/me", authenticate, async (req: AuthRequest, res: Response) => {
                             lastName: user.student.lastName,
                             department: user.student.department,
                             githubUsername: user.student.githubUsername,
+                            id: user.student.id,
                         }
                         : null,
                 },

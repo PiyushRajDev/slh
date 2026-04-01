@@ -96,7 +96,16 @@ interface PipelineOutput {
     rawMetrics?: Record<string, any>;
     detectedSignals?: Record<string, boolean>;
     dimensions?: Record<string, { score: number; max: number }>;
-    allProfiles?: Array<{ profileId: string; fitnessScore: number; status: string }>;
+    allProfiles?: Array<{
+        profileId: string;
+        fitnessScore: number;
+        rawScore?: number;
+        defensibleScore?: number;
+        reliabilityLevel?: string;
+        isActive?: boolean;
+    }>;
+    selectionNotes?: string[];
+    missingGitMetrics?: boolean;
 }
 
 interface EvalResult {
@@ -360,6 +369,16 @@ async function runPipelineOnRepo(repo: RepoMeta): Promise<PipelineOutput> {
                 git: dims?.git,
                 devops: dims?.devops,
             },
+            allProfiles: ((r.details as any)?.selection?.topCandidates ?? []).map((candidate: any) => ({
+                profileId: candidate.profileId,
+                fitnessScore: candidate.fitnessScore,
+                rawScore: candidate.rawScore,
+                defensibleScore: candidate.defensibleScore,
+                reliabilityLevel: candidate.reliabilityLevel,
+                isActive: candidate.isActive,
+            })),
+            selectionNotes: (r.details as any)?.selection?.selectionNotes ?? [],
+            missingGitMetrics: (r.details as any)?.selection?.missingGitMetrics ?? false,
         };
     } catch (e: any) {
         return { success: false, error: e?.message ?? String(e), durationMs: Date.now() - start };
@@ -519,12 +538,40 @@ function printResult(r: EvalResult) {
     // Signals
     if (r.pipeline.detectedSignals && r.detail) {
         const s = r.pipeline.detectedSignals;
-        const sigKeys = ['has_frontend', 'has_backend', 'has_database', 'has_tests', 'has_ci', 'has_docker',
-            'has_documentation', 'has_ml_components', 'has_notebooks', 'is_minimal', 'is_short_timeline'];
+        const sigKeys = [
+            'has_frontend', 'has_static_frontend', 'has_backend', 'has_api_routes', 'has_server_entrypoint',
+            'has_database', 'has_tests', 'has_ci', 'has_docker', 'has_documentation', 'has_ml_components',
+            'has_notebooks', 'is_library_package', 'has_library_exports', 'has_academic_markers',
+            'is_minimal', 'is_short_timeline', 'is_cli_entrypoint'
+        ];
         const pipelineSigs = sigKeys.filter(k => s[k]).join(', ') || 'none';
         console.log('');
         console.log(`   ── Signal comparison ──`);
+        console.log(`   Ground-truth signals : ${r.groundTruth.signals.join(', ') || 'none'}`);
         console.log(`   Pipeline signals   : ${pipelineSigs}`);
+    }
+
+    if (r.pipeline.allProfiles?.length) {
+        const topCandidates = r.pipeline.allProfiles
+            .slice(0, 3)
+            .map(candidate =>
+                `${candidate.profileId}(fit=${candidate.fitnessScore.toFixed(2)}, def=${candidate.defensibleScore?.toFixed(1) ?? 'n/a'})`
+            )
+            .join(', ');
+        console.log('');
+        console.log(`   ── Candidate ranking ──`);
+        console.log(`   ${topCandidates}`);
+    }
+
+    if (r.pipeline.selectionNotes?.length || r.pipeline.missingGitMetrics) {
+        console.log('');
+        console.log(`   ── Selection notes ──`);
+        if (r.pipeline.missingGitMetrics) {
+            console.log(`   Missing git metrics : true`);
+        }
+        for (const note of r.pipeline.selectionNotes ?? []) {
+            console.log(`   - ${note}`);
+        }
     }
 
     // Dimensions
@@ -673,6 +720,63 @@ function printSummary(results: EvalResult[]) {
     console.log(`${'═'.repeat(72)}\n`);
 }
 
+function buildSummaryPayload(results: EvalResult[]) {
+    const counts = { CORRECT: 0, ACCEPTABLE: 0, MISCALIBRATED: 0, WRONG: 0, PIPELINE_FAILED: 0 };
+    const confusions: Record<string, number> = {};
+    const repeatedWrongPatterns: Record<string, number> = {};
+    const byGroundTruth: Record<string, { total: number; correctOrAcceptable: number; wrong: number }> = {};
+
+    for (const result of results) {
+        counts[result.accuracy.verdict]++;
+
+        const gt = result.groundTruth.profile;
+        if (!byGroundTruth[gt]) {
+            byGroundTruth[gt] = { total: 0, correctOrAcceptable: 0, wrong: 0 };
+        }
+        byGroundTruth[gt].total++;
+        if (result.accuracy.verdict === 'CORRECT' || result.accuracy.verdict === 'ACCEPTABLE') {
+            byGroundTruth[gt].correctOrAcceptable++;
+        } else if (result.accuracy.verdict === 'WRONG') {
+            byGroundTruth[gt].wrong++;
+        }
+
+        if (!result.accuracy.profileMatch && result.pipeline.profile) {
+            const confusionKey = `${result.groundTruth.profile} -> ${result.pipeline.profile}`;
+            confusions[confusionKey] = (confusions[confusionKey] ?? 0) + 1;
+        }
+
+        if (result.accuracy.verdict === 'WRONG' && result.pipeline.profile) {
+            const patternKey = `${result.groundTruth.profile} -> ${result.pipeline.profile}`;
+            repeatedWrongPatterns[patternKey] = (repeatedWrongPatterns[patternKey] ?? 0) + 1;
+        }
+    }
+
+    const total = results.length;
+    const exactAccuracy = total === 0 ? 0 : Number(((counts.CORRECT / total) * 100).toFixed(1));
+    const defensibleAccuracy = total === 0 ? 0 : Number((((counts.CORRECT + counts.ACCEPTABLE) / total) * 100).toFixed(1));
+    const profileMatchRate = total === 0 ? 0 : Number(((results.filter(r => r.accuracy.profileMatch).length / total) * 100).toFixed(1));
+    const inRangeRate = total === 0 ? 0 : Number(((results.filter(r => r.accuracy.scoreInRange).length / total) * 100).toFixed(1));
+
+    return {
+        generatedAt: new Date().toISOString(),
+        totalRepos: total,
+        counts,
+        exactAccuracy,
+        defensibleAccuracy,
+        profileMatchRate,
+        inRangeRate,
+        topConfusions: Object.entries(confusions)
+            .sort((left, right) => right[1] - left[1])
+            .slice(0, 12)
+            .map(([pattern, count]) => ({ pattern, count })),
+        repeatedWrongPatterns: Object.entries(repeatedWrongPatterns)
+            .sort((left, right) => right[1] - left[1])
+            .slice(0, 20)
+            .map(([pattern, count]) => ({ pattern, count })),
+        byGroundTruth,
+    };
+}
+
 function sleep(ms: number) { return new Promise(r => setTimeout(r, ms)); }
 
 // ─── Repo Loader from student-results.json ────────────────────────────────────
@@ -811,8 +915,17 @@ async function main() {
         uid: r.repo.studentUid,
         repo: `${r.repo.owner}/${r.repo.name}`,
         verdict: r.accuracy.verdict,
+        profileMatch: r.accuracy.profileMatch,
+        scoreInRange: r.accuracy.scoreInRange,
         groundTruthProfile: r.groundTruth.profile,
+        groundTruthSignals: r.groundTruth.signals,
         pipelineProfile: r.pipeline.profile ?? null,
+        pipelineSignals: Object.entries(r.pipeline.detectedSignals ?? {})
+            .filter(([, value]) => Boolean(value))
+            .map(([key]) => key),
+        pipelineTopCandidates: (r.pipeline.allProfiles ?? []).slice(0, 3),
+        missingGitMetrics: r.pipeline.missingGitMetrics ?? false,
+        selectionNotes: r.pipeline.selectionNotes ?? [],
         groundTruthScoreRange: r.groundTruth.scoreRange,
         pipelineScore: r.pipeline.score ?? null,
         previousScore: r.repo.previousScore ?? null,
@@ -823,6 +936,10 @@ async function main() {
     }));
     fs.writeFileSync(outPath, JSON.stringify(summary, null, 2));
     console.log(`📄 Results saved to ${outPath}`);
+
+    const summaryOutPath = path.resolve('results/student-accuracy-summary.json');
+    fs.writeFileSync(summaryOutPath, JSON.stringify(buildSummaryPayload(results), null, 2));
+    console.log(`📄 Summary saved to ${summaryOutPath}`);
 }
 
 main().catch(e => {

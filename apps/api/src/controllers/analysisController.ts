@@ -2,24 +2,29 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.middleware';
 import prisma from '../db';
 import { analysisService } from '../services/analysisService';
+import { AnalysisRequestError } from '../lib/analysis-errors';
 
 async function getStudentIdForUser(userId: string, role: string, overrideStudentId?: string): Promise<string> {
-    if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
-        if (!overrideStudentId) {
-            throw new Error('Admin must provide studentId query parameter');
-        }
+    // If an admin explicitly provides a studentId, use it (Viewing another student)
+    if ((role === 'ADMIN' || role === 'SUPER_ADMIN') && overrideStudentId) {
         return overrideStudentId;
     }
 
+    // Try to find if this user (Admin or Student) has an associated Student record
     const student = await prisma.student.findUnique({
         where: { userId }
     });
 
-    if (!student) {
-        throw new Error('Student record not found for user');
+    if (student) {
+        return student.id;
     }
 
-    return student.id;
+    // If no student record found AND it's an admin trying to view without an override
+    if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
+        throw new Error('Admin must provide studentId query parameter');
+    }
+
+    throw new Error('Student record not found for user');
 }
 
 export const analysisController = {
@@ -40,22 +45,14 @@ export const analysisController = {
 
             const result = await analysisService.queueAnalysis(studentId, repoUrl);
 
-            if (result.alreadyQueued === false && result.existingAnalysisId) {
-                res.status(200).json({
-                    message: 'Analysis already completed',
-                    analysisId: result.existingAnalysisId
-                });
-                return;
-            }
-
             res.status(202).json({
                 message: 'Analysis queued',
                 jobId: result.jobId,
                 repoUrl: result.repoUrl
             });
         } catch (error: any) {
-            if (error.message === 'Invalid GitHub repository URL') {
-                res.status(400).json({ error: error.message });
+            if (error instanceof AnalysisRequestError) {
+                res.status(error.status).json({ error: error.message, code: error.code });
             } else if (error.message === 'Student record not found for user') {
                 res.status(403).json({ error: error.message });
             } else {

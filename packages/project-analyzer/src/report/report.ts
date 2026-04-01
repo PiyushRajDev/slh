@@ -22,6 +22,16 @@ export interface AnalysisReport {
         dimensions: FinalScoreReport;
         confidence: ConfidenceReport;
         antiGaming: AntiGamingReport;
+        selection: {
+            fitnessScore: number;
+            isAmbiguous: boolean;
+            runnerUpProfileId: string | null;
+            secondaryProfile: string | null;
+            tierOverride: boolean;
+            missingGitMetrics?: boolean;
+            selectionNotes?: string[];
+            topCandidates?: SelectionResult['topCandidates'];
+        };
         signals: StructuralSignals;
         metrics: RawMetrics;
     };
@@ -120,6 +130,16 @@ export function formatReport(
             dimensions: scoreReport,
             confidence,
             antiGaming,
+            selection: {
+                fitnessScore: selection.fitnessScore,
+                isAmbiguous: selection.isAmbiguous,
+                runnerUpProfileId: selection.runnerUpProfileId,
+                secondaryProfile: selection.secondaryProfile,
+                tierOverride: selection.tierOverride,
+                missingGitMetrics: selection.missingGitMetrics,
+                selectionNotes: selection.selectionNotes,
+                topCandidates: selection.topCandidates,
+            },
             signals,
             metrics,
         }

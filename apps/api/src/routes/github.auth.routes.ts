@@ -7,6 +7,30 @@ import { encryptToken } from "../utils/crypto";
 
 const router = Router();
 
+function resolveFrontendRedirect(pathname: string): string {
+    const fallback = new URL("http://localhost:3001");
+    const raw = process.env.FRONTEND_URL?.trim();
+
+    if (!raw) {
+        return new URL(pathname, fallback).toString();
+    }
+
+    try {
+        const url = new URL(raw);
+
+        if (
+            (url.hostname === "localhost" || url.hostname === "127.0.0.1") &&
+            (!url.port || url.port === "3000")
+        ) {
+            url.port = "3001";
+        }
+
+        return new URL(pathname, url).toString();
+    } catch {
+        return new URL(pathname, fallback).toString();
+    }
+}
+
 // ---------------------------------------------------------------------------
 // GET /auth/github — initiate OAuth (protected)
 // ---------------------------------------------------------------------------
@@ -96,7 +120,7 @@ router.get(
                 }
             );
 
-            const githubUsername = userResponse.data.login;
+            const githubUsername = userResponse.data.login.toLowerCase();
 
             // Encrypt access token before storing
             const encryptedToken = encryptToken(accessToken);
@@ -111,6 +135,26 @@ router.get(
                 return;
             }
 
+            const conflictingStudent = await prisma.student.findFirst({
+                where: {
+                    githubUsername,
+                    NOT: {
+                        userId,
+                    },
+                },
+                select: {
+                    id: true,
+                },
+            });
+
+            if (conflictingStudent) {
+                res.status(409).json({
+                    error: "This GitHub account is already connected to another SLH profile.",
+                    code: "GITHUB_USERNAME_TAKEN",
+                });
+                return;
+            }
+
             // Update student with GitHub info — silently overwrites on re-connect
             await prisma.student.update({
                 where: { userId },
@@ -121,7 +165,7 @@ router.get(
                 },
             });
 
-            res.redirect(`${process.env.FRONTEND_URL}/github-connected?success=true`);
+            res.redirect(resolveFrontendRedirect("/github-connected?success=true"));
         } catch (err: unknown) {
             const message =
                 err instanceof Error ? err.message : "GitHub OAuth failed";

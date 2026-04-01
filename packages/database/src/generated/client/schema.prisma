@@ -127,6 +127,8 @@ model DSAProfile {
   lastFetchedAt DateTime?
   fetchStatus   FetchStatus @default(PENDING)
   errorMessage  String?
+  isVerified    Boolean     @default(false)
+  verifiedAt    DateTime?
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 

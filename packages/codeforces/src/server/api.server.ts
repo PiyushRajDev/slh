@@ -3,6 +3,7 @@ import helmet from "helmet"
 import rateLimit from "express-rate-limit"
 import { redis, pingRedis } from "../cache/redis.client"
 import { enqueueProfileRefresh } from "../queue/cf.queue"
+import { cfClient } from "../client/cf.client"
 import { isValidHandle } from "../utils/validate"
 import { log } from "../utils/logger"
 import type { CFErrorSnapshot } from "../contracts/types"
@@ -34,6 +35,34 @@ app.get("/health", async (_req: Request, res: Response) => {
   const ok = await pingRedis()
   res.status(ok ? 200 : 503).json({ ok, ts: Date.now() })
 })
+
+app.get("/cf/:handle/verify", async (req: Request, res: Response) => {
+  const { handle } = req.params;
+  const token = req.query.token as string;
+
+  if (!isValidHandle(handle)) {
+    return res.status(400).json({ error: "Invalid handle format." });
+  }
+
+  if (!token) {
+    return res.status(400).json({ error: "Verification token is required." });
+  }
+
+  try {
+    const [profile] = await cfClient.getUserInfo(handle);
+    const textToCheck = `${profile.firstName || ""} ${profile.lastName || ""} ${profile.organization || ""}`;
+    
+    if (textToCheck.includes(token)) {
+      return res.json({ verified: true });
+    }
+
+    return res.json({ verified: false });
+  } catch (err: any) {
+    log.error("API error for verification:", handle, err?.message || err);
+    if (err?.statusCode === 400) return res.status(400).json({ error: "Bad request - invalid handle?" });
+    return res.status(500).json({ error: "Internal server error." });
+  }
+});
 
 app.get("/cf/:handle", async (req: Request, res: Response) => {
   const { handle } = req.params

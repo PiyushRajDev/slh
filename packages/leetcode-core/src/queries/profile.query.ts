@@ -4,6 +4,7 @@ query getProfile($username: String!) {
     username
     profile {
       realName
+      aboutMe
       ranking
       reputation
     }

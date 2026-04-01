@@ -70,6 +70,7 @@ export interface RawMetrics {
     has_console_scripts: boolean; // Python console_scripts in setup.cfg/pyproject.toml
     uses_argparse: boolean;       // Python argparse/sys.argv/click usage in source
     markup_loc: { md: number; html: number; css: number }; // LOC for markup files excluded from language detection
+    readme_keywords?: string[];   // extracted README/doc keywords for lightweight profile hints
     is_fork: boolean;
     contributor_count: number | null;
     top_contributor_percent: number | null;
@@ -79,6 +80,9 @@ export interface RawMetrics {
     extraction_timestamp: string;
     extraction_version: string;
     commit_sha: string | null;
+
+    // Confidence scaling
+    confidence_scores: Record<string, number>;
 }
 
 export async function extractRawMetrics(localPath: string, repoUrl: string, token?: string): Promise<RawMetrics> {
@@ -211,7 +215,12 @@ async function _extractRawMetricsInternal(localPath: string, repoUrl: string, to
         commit_sha: resGit.commit_sha,
         commit_messages: resGit.commit_messages,
         extraction_timestamp,
-        extraction_version
+        extraction_version,
+        confidence_scores: {
+            ast_complexity: resAST.complexity_avg !== null ? 1.0 : 0.0,
+            git_history: resGit.commit_count !== null ? 1.0 : 0.0,
+            test_parsing: resTest.coverage_config_present ? 0.8 : 0.4
+        }
     };
 }
 
@@ -345,6 +354,8 @@ async function analyzePythonAST(cwd: string, pythonSourceFiles: string[]) {
 
     for (const f of pythonSourceFiles) {
         try {
+            const stat = await fs.stat(path.join(cwd, f));
+            if (stat.size > 1048576) continue;
             const content = await fs.readFile(path.join(cwd, f), 'utf-8');
             const lines = content.split('\n');
 
@@ -473,6 +484,8 @@ async function analyzeArchitecture(cwd: string, allFiles: string[], sourceFiles:
         const dir = path.posix.dirname(f);
 
         try {
+            const stat = await fs.stat(path.join(cwd, f));
+            if (stat.size > 1048576) continue;
             const content = await fs.readFile(path.join(cwd, f), 'utf-8');
 
             // JS/TS: import ... from './foo' | require('./foo') | export ... from './foo'
@@ -600,6 +613,8 @@ async function analyzeArchitecture(cwd: string, allFiles: string[], sourceFiles:
     let couplingTotal = 0;
     for (const f of sourceFiles) {
         try {
+            const stat = await fs.stat(path.join(cwd, f));
+            if (stat.size > 1048576) continue;
             const content = await fs.readFile(path.join(cwd, f), 'utf-8');
             const jsImports = content.match(/^(?:import|export)\s+.*\s+from\s+['"].*['"];?|require\(['"].*['"]\)/gm);
             const pythonImports = content.match(/^(?:import|from)\s+[\w.]+/gm);
@@ -629,6 +644,8 @@ async function analyzeTesting(cwd: string, testFiles: string[], sourceFiles: str
 
     for (const f of testFiles) {
         try {
+            const stat = await fs.stat(path.join(cwd, f));
+            if (stat.size > 1048576) continue;
             const content = await fs.readFile(path.join(cwd, f), 'utf-8');
             test_loc += content.split('\n').length;
 
@@ -646,8 +663,13 @@ async function analyzeTesting(cwd: string, testFiles: string[], sourceFiles: str
     let source_loc = 0;
     for (const f of sourceFiles) {
         try {
+            const stat = await fs.stat(path.join(cwd, f));
+            if (stat.size > 1048576) continue;
             const content = await fs.readFile(path.join(cwd, f), 'utf-8');
-            source_loc += content.split('\n').length;
+            source_loc += content.split('\n').filter(l => {
+                const t = l.trim();
+                return t.length > 0 && !t.startsWith('//') && !t.startsWith('#');
+            }).length;
         } catch { }
     }
 
@@ -710,6 +732,7 @@ async function analyzeMetadata(cwd: string, allFiles: string[], sourceFiles: str
     let source_loc = 0;
     const languages: Record<string, number> = {};
     const markup_loc = { md: 0, html: 0, css: 0 };
+    const readmeKeywords = new Set<string>();
 
     const binaryExts = new Set(['.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.pdf', '.zip', '.tar', '.gz', '.wasm', '.map', '.mp4', '.mp3', '.woff', '.woff2', '.ttf', '.eot']);
 
@@ -721,6 +744,16 @@ async function analyzeMetadata(cwd: string, allFiles: string[], sourceFiles: str
         '.map', '.min.js', '.svg', '.html', '.css', '.scss', '.sass', '.less'
     ]);
 
+    const keywordCatalog = [
+        'assignment', 'homework', 'course', 'tutorial', 'student', 'university', 'college', 'academic',
+        'frontend', 'portfolio', 'landing page', 'ui', 'static site',
+        'backend', 'api', 'rest api', 'graphql', 'express', 'fastapi', 'flask', 'django', 'nestjs',
+        'fullstack', 'full stack', 'monorepo',
+        'library', 'package', 'sdk', 'module', 'plugin', 'npm',
+        'cli', 'command line', 'command-line', 'terminal', 'utility',
+        'machine learning', 'deep learning', 'nlp', 'computer vision',
+    ];
+
     for (const f of allFiles) {
         try {
             const ext = path.extname(f).toLowerCase();
@@ -729,8 +762,14 @@ async function analyzeMetadata(cwd: string, allFiles: string[], sourceFiles: str
 
             let loc = 0;
             if (!binaryExts.has(ext)) {
+                const stat = await fs.stat(path.join(cwd, f));
+                if (stat.size > 1048576) continue;
                 const content = await fs.readFile(path.join(cwd, f), 'utf-8');
-                loc = content.split('\n').length;
+                const lines = content.split('\n');
+                loc = lines.filter(l => {
+                    const t = l.trim();
+                    return t.length > 0 && !t.startsWith('//') && !t.startsWith('#');
+                }).length;
                 total_loc += loc;
             }
 
@@ -743,6 +782,20 @@ async function analyzeMetadata(cwd: string, allFiles: string[], sourceFiles: str
             if (ext === '.md' || ext === '.mdx') markup_loc.md += loc;
             if (ext === '.html' || ext === '.htm') markup_loc.html += loc;
             if (ext === '.css' || ext === '.scss' || ext === '.sass' || ext === '.less') markup_loc.css += loc;
+
+            const baseName = path.basename(f).toLowerCase();
+            const isDocFile =
+                /^readme/i.test(baseName) ||
+                /^contributing/i.test(baseName) ||
+                /^docs?/i.test(baseName) ||
+                /^about/i.test(baseName);
+            if (isDocFile && (ext === '.md' || ext === '.mdx' || ext === '.txt')) {
+                const docContent = await fs.readFile(path.join(cwd, f), 'utf-8');
+                const lower = docContent.toLowerCase().slice(0, 6000);
+                for (const keyword of keywordCatalog) {
+                    if (lower.includes(keyword)) readmeKeywords.add(keyword);
+                }
+            }
 
             if (sourceFiles.includes(f)) {
                 source_loc += loc;
@@ -966,7 +1019,8 @@ async function analyzeMetadata(cwd: string, allFiles: string[], sourceFiles: str
         has_bin_field,
         has_console_scripts,
         uses_argparse,
-        markup_loc
+        markup_loc,
+        readme_keywords: Array.from(readmeKeywords)
     };
 }
 

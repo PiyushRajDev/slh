@@ -16,6 +16,17 @@ export interface SelectionResult {
     runnerUpProfileId: string | null;
     secondaryProfile: string | null;
     tierOverride: boolean;
+    topCandidates?: Array<{
+        profileId: string;
+        rawScore: number;
+        reliabilityScore: number;
+        reliabilityLevel: 'HIGH' | 'MEDIUM' | 'LOW';
+        defensibleScore: number;
+        fitnessScore: number;
+        isActive: boolean;
+    }>;
+    missingGitMetrics?: boolean;
+    selectionNotes?: string[];
 }
 
 export interface AnalysisCandidate {
@@ -74,7 +85,7 @@ function applyTierOverride(
     }
 
     // Tier 3: CLI — structurally distinctive, above backend/frontend
-    if (signals.is_cli_tool && canOverride('cli_tool')) {
+    if (signals.is_cli_entrypoint && canOverride('cli_tool')) {
         return { overrideId: 'cli_tool' };
     }
 
@@ -132,6 +143,9 @@ export function selectBestProfile(
         };
     });
 
+    const selectionNotes: string[] = [];
+    const missingGitMetrics = metrics?.commit_sha == null && (metrics?.commit_count == null || metrics.commit_count === 0);
+
     // Step 1: Filter by Fitness Threshold
     let activeCandidates = calculatedCandidates.filter(c => c.isActive);
     if (activeCandidates.length === 0) {
@@ -161,9 +175,56 @@ export function selectBestProfile(
                 const [override] = activeCandidates.splice(idx, 1);
                 activeCandidates.unshift(override);
                 tierOverride = true;
+                selectionNotes.push(`Tier override promoted ${override.profileId}.`);
             }
         }
     }
+
+    const strongConcreteSignals = !!signals && (
+        signals.has_frontend ||
+        signals.has_static_frontend ||
+        signals.has_backend ||
+        signals.has_api_routes ||
+        signals.has_server_entrypoint ||
+        signals.has_database ||
+        signals.has_library_exports ||
+        signals.is_library_package ||
+        signals.is_cli_entrypoint ||
+        signals.has_ml_components
+    );
+
+    const promoteCandidate = (predicate: (candidate: CalculatedCandidate, winner: CalculatedCandidate) => boolean, note: string) => {
+        const currentWinner = activeCandidates[0];
+        const alternativeIdx = activeCandidates.findIndex((candidate, index) =>
+            index > 0 && predicate(candidate, currentWinner)
+        );
+
+        if (alternativeIdx > 0) {
+            const [alternative] = activeCandidates.splice(alternativeIdx, 1);
+            activeCandidates.unshift(alternative);
+            selectionNotes.push(note.replace('{profile}', alternative.profileId));
+        }
+    };
+
+    promoteCandidate(
+        (candidate, winner) =>
+            winner.profileId === 'generic' &&
+            candidate.profileId !== 'generic' &&
+            candidate.fitnessScore >= 0.30 &&
+            (candidate.defensibleScore >= winner.defensibleScore * 0.80 || strongConcreteSignals),
+        'Generic fallback suppressed in favor of {profile}.'
+    );
+
+    promoteCandidate(
+        (candidate, winner) =>
+            winner.profileId === 'academic' &&
+            missingGitMetrics &&
+            candidate.profileId !== 'academic' &&
+            candidate.profileId !== 'generic' &&
+            candidate.fitnessScore >= Math.max(0.30, winner.fitnessScore - 0.20) &&
+            candidate.defensibleScore >= winner.defensibleScore * 0.75,
+        'Academic fallback suppressed due to missing git metrics; promoted {profile}.'
+    );
 
     const winner = activeCandidates[0];
 
@@ -179,6 +240,12 @@ export function selectBestProfile(
         }
     }
 
+    if ((winner.profileId === 'academic' || winner.profileId === 'generic') && missingGitMetrics) {
+        isAmbiguous = true;
+        runnerUpProfileId = runnerUpProfileId ?? activeCandidates[1]?.profileId ?? null;
+        selectionNotes.push(`${winner.profileId} selected with missing git metrics; confidence should stay conservative.`);
+    }
+
     const secondaryProfile = activeCandidates.length > 1 ? activeCandidates[1].profileId : null;
 
     return {
@@ -192,6 +259,17 @@ export function selectBestProfile(
         isAmbiguous,
         runnerUpProfileId,
         secondaryProfile,
-        tierOverride
+        tierOverride,
+        topCandidates: activeCandidates.slice(0, 3).map(candidate => ({
+            profileId: candidate.profileId,
+            rawScore: candidate.rawScore,
+            reliabilityScore: candidate.reliabilityScore,
+            reliabilityLevel: candidate.reliabilityLevel,
+            defensibleScore: candidate.defensibleScore,
+            fitnessScore: candidate.fitnessScore,
+            isActive: candidate.isActive
+        })),
+        missingGitMetrics,
+        selectionNotes
     };
 }

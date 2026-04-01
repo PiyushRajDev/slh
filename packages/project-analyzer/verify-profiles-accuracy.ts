@@ -1,6 +1,8 @@
 import { deriveSignals } from './src/signals/signals';
 import { evaluateProfiles } from './src/profiles/profiles';
 import { calculateScore } from './src/scoring/scoring';
+import { selectBestProfile } from './src/selection/selection';
+import { detectGaming } from './src/anti-gaming/anti-gaming';
 import { RawMetrics } from './src/metrics/metrics';
 
 type TestCase = {
@@ -8,7 +10,12 @@ type TestCase = {
     metrics: Partial<RawMetrics>;
     deps: string[];
     expectedTop: string;       // expected profile id
-    assertions?: (res: ReturnType<typeof evaluateProfiles>, score: ReturnType<typeof calculateScore>) => { pass: boolean; reason: string }[];
+    assertions?: (
+        profiles: ReturnType<typeof evaluateProfiles>,
+        score: ReturnType<typeof calculateScore>,
+        signals: ReturnType<typeof deriveSignals>,
+        selection: ReturnType<typeof selectBestProfile>
+    ) => { pass: boolean; reason: string }[];
 };
 
 function buildMetrics(partial: Partial<RawMetrics>, deps: string[]): RawMetrics {
@@ -27,9 +34,14 @@ function buildMetrics(partial: Partial<RawMetrics>, deps: string[]): RawMetrics 
         languages: { '.py': 3000 }, primary_language: 'py',
         dependency_count: deps.length, dependencies: deps,
         files: [], has_main_export: false, has_bin_field: false,
+        has_console_scripts: false, uses_argparse: false,
         markup_loc: { md: 50, html: 0, css: 0 },  // default: assume a basic README exists
+        readme_keywords: [],
         is_fork: false, contributor_count: 1, top_contributor_percent: 100,
+        function_lengths: [], max_nesting_depth: 0, avg_nesting_depth: 0,
+        avg_fan_out: 0, max_fan_in: 0, max_fan_out: 0, orphan_module_count: 0,
         extraction_timestamp: new Date().toISOString(), extraction_version: '1.1.0', commit_sha: null,
+        commit_messages: [],
         ...partial
     } as RawMetrics;
 }
@@ -59,14 +71,57 @@ const TESTS: TestCase[] = [
         expectedTop: 'cli_tool',
     },
     {
+        name: '🧾 Missing git history does not trigger short timeline',
+        metrics: {
+            commit_count: null, commit_span_days: null, commit_sha: null,
+            files: ['README.md'], readme_keywords: []
+        },
+        deps: [],
+        expectedTop: 'generic',
+        assertions: (_, __, signals, selection) => [
+            {
+                pass: signals.is_short_timeline === false,
+                reason: `is_short_timeline should be false when git history is missing, got ${signals.is_short_timeline}`
+            }
+        ]
+    },
+    {
+        name: '📚 Documentation-only repo should not become academic',
+        metrics: {
+            files: ['README.md'],
+            commit_count: null, commit_span_days: null, commit_sha: null,
+            markup_loc: { md: 220, html: 0, css: 0 },
+            readme_keywords: [],
+        },
+        deps: [],
+        expectedTop: 'generic',
+    },
+    {
         name: '🌐 Full-stack web app (React + Express + Prisma)',
         metrics: {
             folder_structure: ['src', 'public', 'api'],
             ci_config_present: true, deploy_config_present: true, deploy_config_types: ['Docker'],
-            test_file_count: 5, assertion_count: 30
+            test_file_count: 5, assertion_count: 30,
+            files: ['src/App.tsx', 'src/components/Nav.tsx', 'src/server.ts', 'src/routes/orders.ts', 'public/index.html'],
         },
         deps: ['react', 'express', 'prisma'],
         expectedTop: 'production_web_app',
+    },
+    {
+        name: '🪄 Static portfolio should count as frontend',
+        metrics: {
+            languages: { '.js': 400, '.html': 300, '.css': 220 },
+            primary_language: 'js',
+            files: ['index.html', 'assets/app.js', 'assets/styles.css', 'README.md'],
+            markup_loc: { md: 40, html: 300, css: 220 },
+            readme_keywords: ['portfolio', 'frontend'],
+            deploy_config_present: true,
+            commit_count: 12,
+            commit_span_days: 45,
+            commit_sha: 'abc123',
+        },
+        deps: [],
+        expectedTop: 'frontend_app',
     },
     {
         name: '🔌 Backend API (Express + PostgreSQL)',
@@ -78,8 +133,29 @@ const TESTS: TestCase[] = [
         expectedTop: 'backend_api',
     },
     {
+        name: '🛠️ Lightweight API with server entrypoint should stay backend',
+        metrics: {
+            primary_language: 'ts',
+            languages: { '.ts': 2200 },
+            files: ['src/server.ts', 'src/routes/users.ts', '.env.example', 'README.md'],
+            folder_structure: ['src', 'routes'],
+            readme_keywords: ['backend', 'api', 'rest api'],
+            commit_count: 14,
+            commit_span_days: 25,
+            commit_sha: 'def456',
+            total_loc: 2400,
+        },
+        deps: ['express'],
+        expectedTop: 'backend_api',
+    },
+    {
         name: '🖼️ Frontend React app (no backend)',
-        metrics: { file_count: 40, total_loc: 8000, deploy_config_types: [] },
+        metrics: {
+            file_count: 40,
+            total_loc: 8000,
+            deploy_config_types: [],
+            files: ['src/App.tsx', 'src/components/Card.tsx', 'src/pages/Home.tsx', 'public/index.html']
+        },
         deps: ['react', 'redux', 'jest'],
         expectedTop: 'frontend_app',
     },
@@ -97,13 +173,52 @@ const TESTS: TestCase[] = [
         expectedTop: 'library',
     },
     {
+        name: '📦 Reusable TS package with exports should stay library',
+        metrics: {
+            primary_language: 'ts',
+            languages: { '.ts': 4500, '.md': 120 },
+            files: ['package.json', 'src/index.ts', 'src/client.ts', 'README.md'],
+            has_main_export: true,
+            readme_keywords: ['library', 'package', 'sdk'],
+            commit_count: 22,
+            commit_span_days: 90,
+            commit_sha: 'ghi789',
+        },
+        deps: [],
+        expectedTop: 'library',
+    },
+    {
         name: '🎓 Academic project (short timeline, readme)',
         metrics: {
-            commit_span_days: 3, languages: { '.py': 500, '.md': 300 },
-            file_count: 8, total_loc: 1200
+            commit_count: 6, commit_span_days: 3, commit_sha: 'jkl012',
+            languages: { '.py': 500, '.md': 300 },
+            file_count: 8, total_loc: 1200,
+            readme_keywords: ['assignment', 'student']
         },
         deps: [],
         expectedTop: 'academic',
+    },
+    {
+        name: '🐍 main.py alone should not trigger CLI override',
+        metrics: {
+            files: ['main.py', 'README.md'],
+            commit_count: 12,
+            commit_span_days: 40,
+            commit_sha: 'mno345',
+            readme_keywords: [],
+        },
+        deps: [],
+        expectedTop: 'generic',
+        assertions: (_, __, signals, selection) => [
+            {
+                pass: signals.is_cli_entrypoint === false,
+                reason: `main.py without CLI evidence should not activate CLI entrypoint, got ${signals.is_cli_entrypoint}`
+            },
+            {
+                pass: selection.profileId !== 'cli_tool',
+                reason: `main.py without CLI evidence should not select cli_tool, got ${selection.profileId}`
+            }
+        ]
     },
     {
         name: '🔲 Empty project — must be generic at score 0.0 (not 0.30)',
@@ -114,12 +229,18 @@ const TESTS: TestCase[] = [
         },
         deps: [],
         expectedTop: 'generic',
-        assertions: (profiles) => {
+        assertions: (profiles, _, __, selection) => {
             const generic = profiles.find(p => p.profileId === 'generic');
-            return [{
-                pass: generic?.fitnessScore === 0.0,
-                reason: `generic fitnessScore should be 0.0, got ${generic?.fitnessScore}`
-            }];
+            return [
+                {
+                    pass: generic?.fitnessScore === 0.0,
+                    reason: `generic fitnessScore should be 0.0, got ${generic?.fitnessScore}`
+                },
+                {
+                    pass: selection.profileId === 'generic',
+                    reason: `generic should win when no other profile has meaningful fitness, got ${selection.profileId}`
+                }
+            ];
         }
     },
     {
@@ -142,29 +263,34 @@ async function run() {
         const metrics = buildMetrics(test.metrics, test.deps);
         const signals = deriveSignals(metrics);
         const profiles = evaluateProfiles(signals);
-        const topProfile = profiles.find(p => p.status === 'active') ?? profiles[0];
-        const score = calculateScore(metrics, topProfile.profileId);
+        const candidates = profiles.map(profile => ({
+            profile,
+            score: calculateScore(metrics, profile.profileId),
+            antiGaming: detectGaming(metrics, signals, profile.profileId),
+        }));
+        const selection = selectBestProfile(candidates, signals, metrics);
+        const score = calculateScore(metrics, selection.profileId as any);
 
-        let ok = topProfile.profileId === test.expectedTop;
+        let ok = selection.profileId === test.expectedTop;
         const reasons: string[] = [];
 
-        if (!ok) reasons.push(`Expected ${test.expectedTop}, got ${topProfile.profileId} (fitness: ${topProfile.fitnessScore.toFixed(2)})`);
+        if (!ok) reasons.push(`Expected ${test.expectedTop}, got ${selection.profileId} (fitness: ${selection.fitnessScore.toFixed(2)})`);
 
         if (test.assertions) {
-            for (const result of test.assertions(profiles, score)) {
+            for (const result of test.assertions(profiles, score, signals, selection)) {
                 if (!result.pass) { ok = false; reasons.push(result.reason); }
             }
         }
 
         if (ok) {
             console.log(`✅ ${test.name}`);
-            console.log(`   Profile: ${topProfile.profileId} | Score: ${score.overallScore}/100 | Fitness: ${topProfile.fitnessScore.toFixed(2)}`);
+            console.log(`   Profile: ${selection.profileId} | Score: ${score.overallScore}/100 | Fitness: ${selection.fitnessScore.toFixed(2)}`);
             passed++;
         } else {
             console.log(`❌ ${test.name}`);
             reasons.forEach(r => console.log(`   ⚠ ${r}`));
-            console.log(`   Signals: ml=${signals.has_ml_components}, nb=${signals.has_notebooks}, min=${signals.is_minimal}, fe=${signals.has_frontend}, be=${signals.has_backend}`);
-            console.log(`   Top 3 profiles: ${profiles.slice(0, 3).map(p => `${p.profileId}(${p.fitnessScore.toFixed(2)})`).join(', ')}`);
+            console.log(`   Signals: ml=${signals.has_ml_components}, nb=${signals.has_notebooks}, min=${signals.is_minimal}, fe=${signals.has_frontend}, be=${signals.has_backend}, static=${signals.has_static_frontend}, api=${signals.has_api_routes}`);
+            console.log(`   Top 3 profiles: ${(selection.topCandidates ?? []).map(p => `${p.profileId}(${p.fitnessScore.toFixed(2)})`).join(', ')}`);
         }
         console.log('');
     }

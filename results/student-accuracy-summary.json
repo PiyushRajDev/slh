@@ -1,0 +1,189 @@
+{
+  "generatedAt": "2026-03-29T18:55:58.016Z",
+  "totalRepos": 505,
+  "counts": {
+    "CORRECT": 89,
+    "ACCEPTABLE": 276,
+    "MISCALIBRATED": 0,
+    "WRONG": 139,
+    "PIPELINE_FAILED": 1
+  },
+  "exactAccuracy": 17.6,
+  "defensibleAccuracy": 72.3,
+  "profileMatchRate": 22.8,
+  "inRangeRate": 94.5,
+  "topConfusions": [
+    {
+      "pattern": "academic -> generic",
+      "count": 145
+    },
+    {
+      "pattern": "backend_api -> production_web_app",
+      "count": 65
+    },
+    {
+      "pattern": "academic -> frontend_app",
+      "count": 39
+    },
+    {
+      "pattern": "backend_api -> generic",
+      "count": 24
+    },
+    {
+      "pattern": "academic -> library",
+      "count": 16
+    },
+    {
+      "pattern": "frontend_app -> library",
+      "count": 12
+    },
+    {
+      "pattern": "cli_tool -> generic",
+      "count": 11
+    },
+    {
+      "pattern": "cli_tool -> library",
+      "count": 9
+    },
+    {
+      "pattern": "backend_api -> library",
+      "count": 7
+    },
+    {
+      "pattern": "library -> frontend_app",
+      "count": 6
+    },
+    {
+      "pattern": "backend_api -> frontend_app",
+      "count": 5
+    },
+    {
+      "pattern": "production_web_app -> frontend_app",
+      "count": 5
+    }
+  ],
+  "repeatedWrongPatterns": [
+    {
+      "pattern": "academic -> frontend_app",
+      "count": 39
+    },
+    {
+      "pattern": "backend_api -> generic",
+      "count": 24
+    },
+    {
+      "pattern": "academic -> library",
+      "count": 16
+    },
+    {
+      "pattern": "frontend_app -> library",
+      "count": 12
+    },
+    {
+      "pattern": "library -> frontend_app",
+      "count": 6
+    },
+    {
+      "pattern": "backend_api -> frontend_app",
+      "count": 5
+    },
+    {
+      "pattern": "generic -> library",
+      "count": 5
+    },
+    {
+      "pattern": "cli_tool -> frontend_app",
+      "count": 4
+    },
+    {
+      "pattern": "backend_api -> academic",
+      "count": 3
+    },
+    {
+      "pattern": "ml_pipeline -> generic",
+      "count": 3
+    },
+    {
+      "pattern": "production_web_app -> generic",
+      "count": 3
+    },
+    {
+      "pattern": "generic -> frontend_app",
+      "count": 3
+    },
+    {
+      "pattern": "academic -> backend_api",
+      "count": 3
+    },
+    {
+      "pattern": "academic -> production_web_app",
+      "count": 3
+    },
+    {
+      "pattern": "frontend_app -> generic",
+      "count": 2
+    },
+    {
+      "pattern": "library -> production_web_app",
+      "count": 2
+    },
+    {
+      "pattern": "production_web_app -> library",
+      "count": 2
+    },
+    {
+      "pattern": "cli_tool -> production_web_app",
+      "count": 1
+    },
+    {
+      "pattern": "ml_pipeline -> frontend_app",
+      "count": 1
+    },
+    {
+      "pattern": "backend_api -> ml_pipeline",
+      "count": 1
+    }
+  ],
+  "byGroundTruth": {
+    "frontend_app": {
+      "total": 42,
+      "correctOrAcceptable": 28,
+      "wrong": 14
+    },
+    "academic": {
+      "total": 214,
+      "correctOrAcceptable": 153,
+      "wrong": 61
+    },
+    "library": {
+      "total": 19,
+      "correctOrAcceptable": 11,
+      "wrong": 8
+    },
+    "production_web_app": {
+      "total": 32,
+      "correctOrAcceptable": 26,
+      "wrong": 6
+    },
+    "backend_api": {
+      "total": 118,
+      "correctOrAcceptable": 85,
+      "wrong": 33
+    },
+    "cli_tool": {
+      "total": 26,
+      "correctOrAcceptable": 20,
+      "wrong": 5
+    },
+    "generic": {
+      "total": 38,
+      "correctOrAcceptable": 30,
+      "wrong": 8
+    },
+    "ml_pipeline": {
+      "total": 16,
+      "correctOrAcceptable": 12,
+      "wrong": 4
+    }
+  }
+}

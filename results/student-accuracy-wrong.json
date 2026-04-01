@@ -1,0 +1,2433 @@
+[
+  {
+    "student": "Yubin",
+    "uid": "22bcs16626",
+    "repo": "Yubin935/Portfolio",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      50
+    ],
+    "pipelineScore": 50,
+    "previousScore": 50,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Yubin",
+    "uid": "22bcs16626",
+    "repo": "Yubin935/health-tracking-",
+    "verdict": "WRONG",
+    "groundTruthProfile": "academic",
+    "pipelineProfile": "frontend_app",
+    "groundTruthScoreRange": [
+      10,
+      35
+    ],
+    "pipelineScore": 33,
+    "previousScore": 33,
+    "previousProfile": "frontend_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Yubin",
+    "uid": "22bcs16626",
+    "repo": "Yubin935/git-lul-302",
+    "verdict": "WRONG",
+    "groundTruthProfile": "library",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 20,
+    "previousScore": 20,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Vivek Tiwari",
+    "uid": "22BCS14790",
+    "repo": "viveksharma9080/face-detection-project",
+    "verdict": "WRONG",
+    "groundTruthProfile": "library",
+    "pipelineProfile": "ml_pipeline",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 31,
+    "previousScore": 31,
+    "previousProfile": "ml_pipeline",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Tribidh Bhagat",
+    "uid": "22BCS16996",
+    "repo": "tribidhb/bajaj",
+    "verdict": "WRONG",
+    "groundTruthProfile": "library",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      35
+    ],
+    "pipelineScore": 45,
+    "previousScore": 45,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Sumit kumar ",
+    "uid": "22bcs12284 ",
+    "repo": "flux-cod-er/frontend-sweet-shop",
+    "verdict": "WRONG",
+    "groundTruthProfile": "production_web_app",
+    "pipelineProfile": "cli_tool",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 50,
+    "previousScore": 50,
+    "previousProfile": "cli_tool",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Sumit kumar ",
+    "uid": "22bcs12284 ",
+    "repo": "flux-cod-er/backend-sweet-shop-",
+    "verdict": "WRONG",
+    "groundTruthProfile": "production_web_app",
+    "pipelineProfile": "cli_tool",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 72,
+    "previousScore": 72,
+    "previousProfile": "cli_tool",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Sumit kumar ",
+    "uid": "22bcs12284 ",
+    "repo": "flux-cod-er/frontend",
+    "verdict": "WRONG",
+    "groundTruthProfile": "production_web_app",
+    "pipelineProfile": "cli_tool",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 47,
+    "previousScore": 47,
+    "previousProfile": "cli_tool",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Sumit kumar ",
+    "uid": "22bcs12284 ",
+    "repo": "flux-cod-er/portfolio",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      30,
+      80
+    ],
+    "pipelineScore": 55,
+    "previousScore": 55,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Sumit kumar ",
+    "uid": "22bcs12284 ",
+    "repo": "flux-cod-er/wanderlust",
+    "verdict": "MISCALIBRATED",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "backend_api",
+    "groundTruthScoreRange": [
+      10,
+      35
+    ],
+    "pipelineScore": 56,
+    "previousScore": 56,
+    "previousProfile": "backend_api",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Sailish Thakur",
+    "uid": "23BCS80082",
+    "repo": "Eddy777-bit/Social-Media-Scheduler",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 50,
+    "previousScore": 50,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Ronit",
+    "uid": "22bcs16417",
+    "repo": "Ronit9999/Cognifyz",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      35
+    ],
+    "pipelineScore": 49,
+    "previousScore": 49,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Ronit",
+    "uid": "22bcs16417",
+    "repo": "Ronit9999/ecommerce",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 55,
+    "previousScore": 55,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Nivedita Tiwari ",
+    "uid": "22BCS13031",
+    "repo": "nivedita371/incuByte-SweetShop",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 55,
+    "previousScore": 55,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Nivedita Tiwari ",
+    "uid": "22BCS13031",
+    "repo": "nivedita371/incuByte-SweetShop",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 55,
+    "previousScore": 55,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Nivedita Tiwari ",
+    "uid": "22BCS13031",
+    "repo": "nivedita371/incuByte-SweetShop",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 55,
+    "previousScore": 55,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Nitish kumar jha",
+    "uid": "22BCS11660",
+    "repo": "Nitishjha628/sweet-shop",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      30,
+      80
+    ],
+    "pipelineScore": 50,
+    "previousScore": 50,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Nitish kumar jha",
+    "uid": "22BCS11660",
+    "repo": "Nitishjha628/BT-Batch6-Project",
+    "verdict": "WRONG",
+    "groundTruthProfile": "production_web_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      30,
+      80
+    ],
+    "pipelineScore": 48,
+    "previousScore": 48,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Anubhav Kumar",
+    "uid": "22BCS11434",
+    "repo": "anubhavkumar1209/anubhavkumar1209",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 26,
+    "previousScore": 26,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Anubhav Kumar",
+    "uid": "22BCS11434",
+    "repo": "anubhavkumar1209/yt-upload-frontend",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      50
+    ],
+    "pipelineScore": 50,
+    "previousScore": 50,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Naman Kumar ",
+    "uid": "22BCS16373",
+    "repo": "namansingh31/my-project1",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 51,
+    "previousScore": 51,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Naman Kumar ",
+    "uid": "22BCS16373",
+    "repo": "namansingh31/doctor_appointment_system",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 51,
+    "previousScore": 51,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Nikhil kumar ",
+    "uid": "22BCS50090",
+    "repo": "nikhilkumar2004/nikhilkumar2004",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 20,
+    "previousScore": 20,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Gaurav Singh",
+    "uid": "22BCS17105",
+    "repo": "ihimanshu07/portfolio_new",
+    "verdict": "WRONG",
+    "groundTruthProfile": "cli_tool",
+    "pipelineProfile": "production_web_app",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 40,
+    "previousScore": 40,
+    "previousProfile": "production_web_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Gaurav Singh",
+    "uid": "22BCS17105",
+    "repo": "ihimanshu07/KAKA_SHOP",
+    "verdict": "WRONG",
+    "groundTruthProfile": "library",
+    "pipelineProfile": "production_web_app",
+    "groundTruthScoreRange": [
+      10,
+      50
+    ],
+    "pipelineScore": 44,
+    "previousScore": 44,
+    "previousProfile": "production_web_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Gaurav Singh",
+    "uid": "22BCS17105",
+    "repo": "ihimanshu07/portfoliomain",
+    "verdict": "WRONG",
+    "groundTruthProfile": "library",
+    "pipelineProfile": "frontend_app",
+    "groundTruthScoreRange": [
+      10,
+      50
+    ],
+    "pipelineScore": 40,
+    "previousScore": 40,
+    "previousProfile": "frontend_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Gaurav Singh",
+    "uid": "22BCS17105",
+    "repo": "ihimanshu07/Task-manager",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 49,
+    "previousScore": 49,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Annu",
+    "uid": "22BCS10069",
+    "repo": "Annu1603/annu-portfolio",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 55,
+    "previousScore": 55,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Annu",
+    "uid": "22BCS10069",
+    "repo": "Annu1603/AnuChauhan",
+    "verdict": "WRONG",
+    "groundTruthProfile": "library",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 27,
+    "previousScore": 27,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Danish goyal ",
+    "uid": "22bcs15395 ",
+    "repo": "Danish374/DSA",
+    "verdict": "WRONG",
+    "groundTruthProfile": "production_web_app",
+    "pipelineProfile": "generic",
+    "groundTruthScoreRange": [
+      25,
+      75
+    ],
+    "pipelineScore": 45,
+    "previousScore": 45,
+    "previousProfile": "generic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Danish goyal ",
+    "uid": "22bcs15395 ",
+    "repo": "Danish374/Task_Scheduler",
+    "verdict": "WRONG",
+    "groundTruthProfile": "library",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      30,
+      80
+    ],
+    "pipelineScore": 53,
+    "previousScore": 53,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Akash Tiwary",
+    "uid": "22bcs12103",
+    "repo": "theakashtiwary/landing-page",
+    "verdict": "WRONG",
+    "groundTruthProfile": "academic",
+    "pipelineProfile": "frontend_app",
+    "groundTruthScoreRange": [
+      10,
+      55
+    ],
+    "pipelineScore": 61,
+    "previousScore": 61,
+    "previousProfile": "frontend_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Suhani",
+    "uid": "22bcs16653",
+    "repo": "Suhanii7/personal-finance-manager",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      20,
+      70
+    ],
+    "pipelineScore": 53,
+    "previousScore": 53,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Suhani",
+    "uid": "22bcs16653",
+    "repo": "Suhanii7/NLP_CHATBOT",
+    "verdict": "WRONG",
+    "groundTruthProfile": "ml_pipeline",
+    "pipelineProfile": "generic",
+    "groundTruthScoreRange": [
+      10,
+      60
+    ],
+    "pipelineScore": 36,
+    "previousScore": 36,
+    "previousProfile": "generic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Suhani",
+    "uid": "22bcs16653",
+    "repo": "Suhanii7/Traffic-Management-System-TMS-",
+    "verdict": "WRONG",
+    "groundTruthProfile": "library",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 47,
+    "previousScore": 47,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Suhani",
+    "uid": "22bcs16653",
+    "repo": "Suhanii7/suhani-career-hub",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 53,
+    "previousScore": 53,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Namnish Dogra",
+    "uid": "22BCS16019",
+    "repo": "22BCS16019/fullstackjava",
+    "verdict": "WRONG",
+    "groundTruthProfile": "production_web_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 24,
+    "previousScore": 24,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Vivek kumar",
+    "uid": "22BCS17036",
+    "repo": "VivekKumar036/sweet-shop-management-system",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      20,
+      70
+    ],
+    "pipelineScore": 55,
+    "previousScore": 55,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Vivek kumar",
+    "uid": "22BCS17036",
+    "repo": "VivekKumar036/FitTrack",
+    "verdict": "WRONG",
+    "groundTruthProfile": "production_web_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      30,
+      80
+    ],
+    "pipelineScore": 52,
+    "previousScore": 52,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Paras Verma",
+    "uid": "",
+    "repo": "ParasVerma23/html-css-js-porfolio",
+    "verdict": "WRONG",
+    "groundTruthProfile": "generic",
+    "pipelineProfile": "frontend_app",
+    "groundTruthScoreRange": [
+      10,
+      60
+    ],
+    "pipelineScore": 34,
+    "previousScore": 34,
+    "previousProfile": "frontend_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Lavisha",
+    "uid": "22BCS17135",
+    "repo": "Lavisha13/drone-disaster-simu",
+    "verdict": "WRONG",
+    "groundTruthProfile": "library",
+    "pipelineProfile": "ml_pipeline",
+    "groundTruthScoreRange": [
+      35,
+      85
+    ],
+    "pipelineScore": 39,
+    "previousScore": 39,
+    "previousProfile": "ml_pipeline",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Saurabh Mishra",
+    "uid": "22BCS17013",
+    "repo": "MishraSaurabh/Carbon-Footprint-tracker-and-reducer",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 20,
+    "previousScore": 20,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Saurabh Mishra",
+    "uid": "22BCS17013",
+    "repo": "MishraSaurabh/Tripify-Travel-Hub",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 43,
+    "previousScore": 43,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Dheeraj kumar",
+    "uid": "22BCS17304",
+    "repo": "rajdheeraj/portfolio",
+    "verdict": "WRONG",
+    "groundTruthProfile": "academic",
+    "pipelineProfile": "frontend_app",
+    "groundTruthScoreRange": [
+      10,
+      35
+    ],
+    "pipelineScore": 43,
+    "previousScore": 43,
+    "previousProfile": "frontend_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "yash kumar gupta",
+    "uid": "22bcs16252",
+    "repo": "yashk9844/personal-portfolioo",
+    "verdict": "WRONG",
+    "groundTruthProfile": "academic",
+    "pipelineProfile": "frontend_app",
+    "groundTruthScoreRange": [
+      10,
+      35
+    ],
+    "pipelineScore": 33,
+    "previousScore": 33,
+    "previousProfile": "frontend_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Hanish Garg",
+    "uid": "22BCS15386 ",
+    "repo": "hanish75/Wikipedia_Fetcher",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 20,
+    "previousScore": 20,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Vishal ",
+    "uid": "22bcs14496 ",
+    "repo": "Uvissh/bmw-web",
+    "verdict": "WRONG",
+    "groundTruthProfile": "library",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 48,
+    "previousScore": 48,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Ashish Kumar Gaur",
+    "uid": "22bcs10111",
+    "repo": "ashish170800/ashishwwc2024",
+    "verdict": "MISCALIBRATED",
+    "groundTruthProfile": "academic",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      35
+    ],
+    "pipelineScore": 53,
+    "previousScore": 53,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Palak Saini",
+    "uid": "22BCS16281",
+    "repo": "PalakSaini27/Zomato-Clone",
+    "verdict": "WRONG",
+    "groundTruthProfile": "academic",
+    "pipelineProfile": "frontend_app",
+    "groundTruthScoreRange": [
+      10,
+      35
+    ],
+    "pipelineScore": 31,
+    "previousScore": 31,
+    "previousProfile": "frontend_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "AMARJEET RAJ",
+    "uid": "22BCS17104",
+    "repo": "AMARJEET6202/bajaj-finserv-backend4",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 33,
+    "previousScore": 33,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Nitish kumar jha",
+    "uid": "22bcs11660",
+    "repo": "Nitishjha628/sweet-shop",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      30,
+      80
+    ],
+    "pipelineScore": 50,
+    "previousScore": 50,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Nitish kumar jha",
+    "uid": "22bcs11660",
+    "repo": "Nitishjha628/BT-Batch6-Project",
+    "verdict": "WRONG",
+    "groundTruthProfile": "production_web_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      30,
+      80
+    ],
+    "pipelineScore": 48,
+    "previousScore": 48,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Asha Ravesh",
+    "uid": "23BCS10657",
+    "repo": "asharavesh/Hashing-Techniques",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      30,
+      80
+    ],
+    "pipelineScore": 47,
+    "previousScore": 47,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Vanshaj",
+    "uid": "23BCS13894",
+    "repo": "Vanshaj16/Birthday",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 47,
+    "previousScore": 47,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Vanshaj",
+    "uid": "23BCS13894",
+    "repo": "Vanshaj16/FindIt-Platform-Lost-Found-App-",
+    "verdict": "WRONG",
+    "groundTruthProfile": "academic",
+    "pipelineProfile": "frontend_app",
+    "groundTruthScoreRange": [
+      10,
+      55
+    ],
+    "pipelineScore": 35,
+    "previousScore": 35,
+    "previousProfile": "frontend_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Harsh Saini",
+    "uid": "23BCS11240",
+    "repo": "Harsh-Saini-1/Harsh-Saini-1",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 26,
+    "previousScore": 26,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Harsh Saini",
+    "uid": "23BCS11240",
+    "repo": "Harsh-Saini-1/Winter_Arc",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "frontend_app",
+    "groundTruthScoreRange": [
+      10,
+      55
+    ],
+    "pipelineScore": 40,
+    "previousScore": 40,
+    "previousProfile": "frontend_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Harsh Saini",
+    "uid": "23BCS11240",
+    "repo": "Harsh-Saini-1/experiment_3.2",
+    "verdict": "WRONG",
+    "groundTruthProfile": "library",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      20,
+      70
+    ],
+    "pipelineScore": 55,
+    "previousScore": 55,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Ayush Sinha",
+    "uid": "23BCS10970",
+    "repo": "Cypts/3rd_year_java_project",
+    "verdict": "MISCALIBRATED",
+    "groundTruthProfile": "academic",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      35
+    ],
+    "pipelineScore": 51,
+    "previousScore": 51,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Ayush Sinha",
+    "uid": "23BCS10970",
+    "repo": "Cypts/java_3rd_year_exp",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 50,
+    "previousScore": 50,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Lakshay Narula",
+    "uid": "23BCS11666",
+    "repo": "lakshay909/Local_lens",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "generic",
+    "groundTruthScoreRange": [
+      35,
+      85
+    ],
+    "pipelineScore": 40,
+    "previousScore": 40,
+    "previousProfile": "generic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Lakshay Narula",
+    "uid": "23BCS11666",
+    "repo": "lakshay909/portfolio_backend",
+    "verdict": "MISCALIBRATED",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "backend_api",
+    "groundTruthScoreRange": [
+      10,
+      35
+    ],
+    "pipelineScore": 56,
+    "previousScore": 56,
+    "previousProfile": "backend_api",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Happy Sharma",
+    "uid": "23BCS10596",
+    "repo": "MrAech/solvestuff",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      60
+    ],
+    "pipelineScore": 55,
+    "previousScore": 55,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Happy Sharma",
+    "uid": "23BCS10596",
+    "repo": "MrAech/taskflow",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 55,
+    "previousScore": 55,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Happy Sharma",
+    "uid": "23BCS10596",
+    "repo": "MrAech/dynamic-programming-visualizer",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      50
+    ],
+    "pipelineScore": 53,
+    "previousScore": 53,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Braj Yadav",
+    "uid": "23BCS12783",
+    "repo": "Brajyadav7/Suraj-Garden-Website",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 51,
+    "previousScore": 51,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Braj Yadav",
+    "uid": "23BCS12783",
+    "repo": "Brajyadav7/ONLINE-VOTING-JAVA",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 50,
+    "previousScore": 50,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Kushleen Kaur",
+    "uid": "23BCS11781",
+    "repo": "KushleenKaur/Quiz-application",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 51,
+    "previousScore": 51,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Kushleen Kaur",
+    "uid": "23BCS11781",
+    "repo": "KushleenKaur/Role_Based_Access_Control",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 31,
+    "previousScore": 31,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Kushleen Kaur",
+    "uid": "23BCS11781",
+    "repo": "KushleenKaur/Login_Form_React",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 28,
+    "previousScore": 28,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Kushleen Kaur",
+    "uid": "23BCS11781",
+    "repo": "KushleenKaur/CI-CD-Pipeline",
+    "verdict": "WRONG",
+    "groundTruthProfile": "library",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 39,
+    "previousScore": 39,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Avisekh Sabi",
+    "uid": "23BCS10121",
+    "repo": "avisekh3110/cloud_dep3",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      50
+    ],
+    "pipelineScore": 62,
+    "previousScore": 62,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Avisekh Sabi",
+    "uid": "23BCS10121",
+    "repo": "avisekh3110/cloud_dep1",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      50
+    ],
+    "pipelineScore": 62,
+    "previousScore": 62,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Shubham Shekhawat",
+    "uid": "23BCS11427",
+    "repo": "ShubhamShekhawat/instant-project-view1",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 55,
+    "previousScore": 55,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "ASEEM PHUTELA",
+    "uid": "23BCS10920",
+    "repo": "ASEEMPHUTELA/my-project",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      30,
+      80
+    ],
+    "pipelineScore": 65,
+    "previousScore": 65,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "ASEEM PHUTELA",
+    "uid": "23BCS10920",
+    "repo": "ASEEMPHUTELA/JDBC-LEARNING-IN-JAV",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 49,
+    "previousScore": 49,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Nitin Joshi",
+    "uid": "23BCS13137",
+    "repo": "Nitin1234567898/Task-Management-tool",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 50,
+    "previousScore": 50,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Arush Maurya",
+    "uid": "23bcs11299",
+    "repo": "Arush1901/Full-Stack-project",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      35,
+      85
+    ],
+    "pipelineScore": 56,
+    "previousScore": 56,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Mankaran Singh Tandon",
+    "uid": "23BCS10204",
+    "repo": "MankaranSingh21/RekSystem",
+    "verdict": "WRONG",
+    "groundTruthProfile": "production_web_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      40
+    ],
+    "pipelineScore": 54,
+    "previousScore": 54,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Mankaran Singh Tandon",
+    "uid": "23BCS10204",
+    "repo": "MankaranSingh21/event-management-fullstack",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      55
+    ],
+    "pipelineScore": 51,
+    "previousScore": 51,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Vedant Thakur",
+    "uid": "23BCS10844",
+    "repo": "23BCS10844/Full-Stack-final-project",
+    "verdict": "WRONG",
+    "groundTruthProfile": "production_web_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 53,
+    "previousScore": 53,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Vedant Thakur",
+    "uid": "23BCS10844",
+    "repo": "23BCS10844/Java-_ByteXL-Experiment_7",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      35
+    ],
+    "pipelineScore": 33,
+    "previousScore": 33,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Tajinder Singh",
+    "uid": "23BCS13722",
+    "repo": "tajinder102005/fintrack_mern_final",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 52,
+    "previousScore": 52,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Tajinder Singh",
+    "uid": "23BCS13722",
+    "repo": "tajinder102005/job_app_monolithic",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "generic",
+    "groundTruthScoreRange": [
+      10,
+      60
+    ],
+    "pipelineScore": 40,
+    "previousScore": 40,
+    "previousProfile": "generic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Tajinder Singh",
+    "uid": "23BCS13722",
+    "repo": "tajinder102005/job_application_system",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "generic",
+    "groundTruthScoreRange": [
+      10,
+      60
+    ],
+    "pipelineScore": 40,
+    "previousScore": 40,
+    "previousProfile": "generic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Amit Kumar",
+    "uid": "23BCS13770",
+    "repo": "Amitkumar582/Blog-Website",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      50
+    ],
+    "pipelineScore": 33,
+    "previousScore": 33,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Amit Kumar",
+    "uid": "23BCS13770",
+    "repo": "Amitkumar582/Fake-News-Detector",
+    "verdict": "WRONG",
+    "groundTruthProfile": "ml_pipeline",
+    "pipelineProfile": "generic",
+    "groundTruthScoreRange": [
+      10,
+      35
+    ],
+    "pipelineScore": 32,
+    "previousScore": 32,
+    "previousProfile": "generic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Amit Kumar",
+    "uid": "23BCS13770",
+    "repo": "Amitkumar582/Resume-Builder",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 47,
+    "previousScore": 47,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Arsh Jaiswal",
+    "uid": "23BCS11682",
+    "repo": "JaiswalArsh/Full-Stack-WWC",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "generic",
+    "groundTruthScoreRange": [
+      10,
+      55
+    ],
+    "pipelineScore": 42,
+    "previousScore": 42,
+    "previousProfile": "generic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Arsh Jaiswal",
+    "uid": "23BCS11682",
+    "repo": "JaiswalArsh/Full-Stack",
+    "verdict": "WRONG",
+    "groundTruthProfile": "generic",
+    "pipelineProfile": "frontend_app",
+    "groundTruthScoreRange": [
+      25,
+      75
+    ],
+    "pipelineScore": 49,
+    "previousScore": 49,
+    "previousProfile": "frontend_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Aryan Prakash Srivastav ",
+    "uid": "23bcs10135",
+    "repo": "Kvothe045/Portfolio_Aryan",
+    "verdict": "WRONG",
+    "groundTruthProfile": "cli_tool",
+    "pipelineProfile": "frontend_app",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 41,
+    "previousScore": 41,
+    "previousProfile": "frontend_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Aryan Prakash Srivastav ",
+    "uid": "23bcs10135",
+    "repo": "Kvothe045/Voca_Electrothon",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "ml_pipeline",
+    "groundTruthScoreRange": [
+      40,
+      90
+    ],
+    "pipelineScore": 42,
+    "previousScore": 42,
+    "previousProfile": "ml_pipeline",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Tapin Arya",
+    "uid": "23BCS11451",
+    "repo": "tapinattri1424/Complete-MERN-AI-Chatbot",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      50
+    ],
+    "pipelineScore": 39,
+    "previousScore": 39,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Tanik",
+    "uid": "23BCS12531",
+    "repo": "taniksehrawat/sunsettle-backend",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "generic",
+    "groundTruthScoreRange": [
+      30,
+      80
+    ],
+    "pipelineScore": 43,
+    "previousScore": 43,
+    "previousProfile": "generic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Tanik",
+    "uid": "23BCS12531",
+    "repo": "taniksehrawat/taniksehrawat",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 22,
+    "previousScore": 22,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Tanik",
+    "uid": "23BCS12531",
+    "repo": "taniksehrawat/sunsettle-frontend",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 55,
+    "previousScore": 55,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Geetansh Garg",
+    "uid": "23bcs10285",
+    "repo": "Geetanshgarg/Movie_Backend",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      55
+    ],
+    "pipelineScore": 49,
+    "previousScore": 49,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Rudransh Tanmay",
+    "uid": "23BCS13415",
+    "repo": "Ru-dransh/FS_AWS",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 31,
+    "previousScore": 31,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Rudransh Tanmay",
+    "uid": "23BCS13415",
+    "repo": "Ru-dransh/FS-U3-P1",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 28,
+    "previousScore": 28,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Rudransh Tanmay",
+    "uid": "23BCS13415",
+    "repo": "Ru-dransh/Servlets-and-JSP",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 49,
+    "previousScore": 49,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Harsahibjit Singh",
+    "uid": "23BCS10530",
+    "repo": "Harsahibjit-Singh/flightmanagement",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 55,
+    "previousScore": 55,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Kamakshi Bali",
+    "uid": "23BCS10639",
+    "repo": "K06B/mongodb2",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 63,
+    "previousScore": 63,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Kamakshi Bali",
+    "uid": "23BCS10639",
+    "repo": "K06B/mongodb1",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 59,
+    "previousScore": 59,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Shivam Kumar Tiwari",
+    "uid": "23BCS12755",
+    "repo": "BuiltByShivam/FS_23BCS12755_CSE-KRG2B",
+    "verdict": "WRONG",
+    "groundTruthProfile": "academic",
+    "pipelineProfile": "production_web_app",
+    "groundTruthScoreRange": [
+      35,
+      85
+    ],
+    "pipelineScore": 40,
+    "previousScore": 40,
+    "previousProfile": "production_web_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Shivam Kaushik",
+    "uid": "23ICS10005",
+    "repo": "Shiv-in/Java_src",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      35
+    ],
+    "pipelineScore": 41,
+    "previousScore": 41,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Shivam Kaushik",
+    "uid": "23ICS10005",
+    "repo": "Shiv-in/ecommerce-graphql",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 54,
+    "previousScore": 54,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Shivam Kaushik",
+    "uid": "23ICS10005",
+    "repo": "Shiv-in/FULLSTACK",
+    "verdict": "WRONG",
+    "groundTruthProfile": "production_web_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 45,
+    "previousScore": 45,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Shivam Kaushik",
+    "uid": "23ICS10005",
+    "repo": "Shiv-in/Experiment-7-",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      35
+    ],
+    "pipelineScore": 44,
+    "previousScore": 44,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Manthan Sharma",
+    "uid": "23BCS11533",
+    "repo": "Manthan077/Manthan077",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "generic",
+    "groundTruthScoreRange": [
+      10,
+      55
+    ],
+    "pipelineScore": 16,
+    "previousScore": 16,
+    "previousProfile": "generic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Shorya Kumar",
+    "uid": "23BCS11739",
+    "repo": "ShoryaCodes/FS_EXP-9",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      20,
+      70
+    ],
+    "pipelineScore": 55,
+    "previousScore": 55,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Sarthak",
+    "uid": "23BCS11978",
+    "repo": "Sarthakgupta1608/Full_Stack_23BCS11978_KRG2A",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "frontend_app",
+    "groundTruthScoreRange": [
+      35,
+      85
+    ],
+    "pipelineScore": 37,
+    "previousScore": 37,
+    "previousProfile": "frontend_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Sarthak",
+    "uid": "23BCS11978",
+    "repo": "Sarthakgupta1608/E-Commerce_Website",
+    "verdict": "WRONG",
+    "groundTruthProfile": "production_web_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 51,
+    "previousScore": 51,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Kumar Subham Raj",
+    "uid": "23BCS13045",
+    "repo": "subh9m/subh9m",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 20,
+    "previousScore": 20,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Kumar Subham Raj",
+    "uid": "23BCS13045",
+    "repo": "subh9m/WWC_4",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "generic",
+    "groundTruthScoreRange": [
+      10,
+      55
+    ],
+    "pipelineScore": 45,
+    "previousScore": 45,
+    "previousProfile": "generic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Rajat",
+    "uid": "23BCS10078",
+    "repo": "SilverMan1101/PyProject",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "ml_pipeline",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 40,
+    "previousScore": 40,
+    "previousProfile": "ml_pipeline",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Rajat",
+    "uid": "23BCS10078",
+    "repo": "SilverMan1101/OpenGL",
+    "verdict": "WRONG",
+    "groundTruthProfile": "generic",
+    "pipelineProfile": "frontend_app",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 36,
+    "previousScore": 36,
+    "previousProfile": "frontend_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Vansh Garg",
+    "uid": "23bcs12022",
+    "repo": "Vansh-91/Real_Time_Collaborative_CodeEditor",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 54,
+    "previousScore": 54,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Vansh Garg",
+    "uid": "23bcs12022",
+    "repo": "Vansh-91/DAA_23bcs12022_KRG1A",
+    "verdict": "WRONG",
+    "groundTruthProfile": "production_web_app",
+    "pipelineProfile": "ml_pipeline",
+    "groundTruthScoreRange": [
+      30,
+      80
+    ],
+    "pipelineScore": 31,
+    "previousScore": 31,
+    "previousProfile": "ml_pipeline",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Rachit Kumar",
+    "uid": "23BCS11597",
+    "repo": "rachitk2312004/Inteli01",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 45,
+    "previousScore": 45,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Rachit Kumar",
+    "uid": "23BCS11597",
+    "repo": "rachitk2312004/srs",
+    "verdict": "WRONG",
+    "groundTruthProfile": "cli_tool",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 62,
+    "previousScore": 62,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Ishan",
+    "uid": "23BCS12656",
+    "repo": "ishanpadwal/Spring-boot-project",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      55
+    ],
+    "pipelineScore": 49,
+    "previousScore": 49,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Ishan",
+    "uid": "23BCS12656",
+    "repo": "ishanpadwal/FS_23BCS12656_KRG_2B",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "frontend_app",
+    "groundTruthScoreRange": [
+      50,
+      95
+    ],
+    "pipelineScore": 47,
+    "previousScore": 47,
+    "previousProfile": "frontend_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Ishan",
+    "uid": "23BCS12656",
+    "repo": "ishanpadwal/Java_23BCS12656_KRG2B",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "frontend_app",
+    "groundTruthScoreRange": [
+      50,
+      95
+    ],
+    "pipelineScore": 35,
+    "previousScore": 35,
+    "previousProfile": "frontend_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Aditya Bhatia",
+    "uid": "23BCS10267",
+    "repo": "IamQuantum/BudgetTracker",
+    "verdict": "WRONG",
+    "groundTruthProfile": "library",
+    "pipelineProfile": "production_web_app",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 38,
+    "previousScore": 38,
+    "previousProfile": "production_web_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Tanya Verma",
+    "uid": "23BCS10495",
+    "repo": "tan20704/Full-Stack",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 55,
+    "previousScore": 55,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Sumit",
+    "uid": "23BCS11314 ",
+    "repo": "Sumit-2312/React-basics",
+    "verdict": "WRONG",
+    "groundTruthProfile": "frontend_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 50,
+    "previousScore": 50,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Supriya Dutta",
+    "uid": "23bcs13291",
+    "repo": "SupriyaDutta167/WWC_23BCS13291_SUPRIYA_DUTTA",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "generic",
+    "groundTruthScoreRange": [
+      10,
+      55
+    ],
+    "pipelineScore": 40,
+    "previousScore": 40,
+    "previousProfile": "generic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Supriya Dutta",
+    "uid": "23bcs13291",
+    "repo": "SupriyaDutta167/To-Do-App",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "frontend_app",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 41,
+    "previousScore": 41,
+    "previousProfile": "frontend_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Diya Goyal",
+    "uid": "23BCS10231",
+    "repo": "DiyaG5/Weatherly-WebApp",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 49,
+    "previousScore": 49,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Diya Goyal",
+    "uid": "23BCS10231",
+    "repo": "DiyaG5/Weatherly-Autoscaled",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 51,
+    "previousScore": 51,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Diya Goyal",
+    "uid": "23BCS10231",
+    "repo": "DiyaG5/Weatherly",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 49,
+    "previousScore": 49,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Abhay Mall",
+    "uid": "23BCS13972",
+    "repo": "AbhayMall/WWC_G2_Abhay_Mall_23BCS13972",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "generic",
+    "groundTruthScoreRange": [
+      10,
+      55
+    ],
+    "pipelineScore": 45,
+    "previousScore": 45,
+    "previousProfile": "generic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Abhay Mall",
+    "uid": "23BCS13972",
+    "repo": "AbhayMall/Auto-Scaling-Tester",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      55
+    ],
+    "pipelineScore": 51,
+    "previousScore": 51,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Abhay Mall",
+    "uid": "23BCS13972",
+    "repo": "AbhayMall/DAA_23BCS13972_KRG_2A",
+    "verdict": "WRONG",
+    "groundTruthProfile": "generic",
+    "pipelineProfile": "frontend_app",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 38,
+    "previousScore": 38,
+    "previousProfile": "frontend_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Ankit Kumar",
+    "uid": "23BCS11005",
+    "repo": "subhrajankit/OrionBlog-AI-Powered-Blogging-Platform",
+    "verdict": "WRONG",
+    "groundTruthProfile": "production_web_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      20,
+      70
+    ],
+    "pipelineScore": 55,
+    "previousScore": 55,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Suraj Kumar Dev",
+    "uid": "23BCS10980",
+    "repo": "surajkumardev/Portfolio-website",
+    "verdict": "WRONG",
+    "groundTruthProfile": "generic",
+    "pipelineProfile": "frontend_app",
+    "groundTruthScoreRange": [
+      10,
+      60
+    ],
+    "pipelineScore": 43,
+    "previousScore": 43,
+    "previousProfile": "frontend_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Shshank Singla",
+    "uid": "23BCS13224",
+    "repo": "ShshankSingla/05passwordGenerator",
+    "verdict": "WRONG",
+    "groundTruthProfile": "library",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 52,
+    "previousScore": 52,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Shshank Singla",
+    "uid": "23BCS13224",
+    "repo": "ShshankSingla/04bgChanger",
+    "verdict": "WRONG",
+    "groundTruthProfile": "library",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 50,
+    "previousScore": 50,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Shshank Singla",
+    "uid": "23BCS13224",
+    "repo": "ShshankSingla/23BCS13224_CloudDeployment_Practice3",
+    "verdict": "WRONG",
+    "groundTruthProfile": "production_web_app",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 30,
+    "previousScore": 30,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Shshank Singla",
+    "uid": "23BCS13224",
+    "repo": "ShshankSingla/23BCS13224_CloudDeployment_Practice1",
+    "verdict": "WRONG",
+    "groundTruthProfile": "library",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      50
+    ],
+    "pipelineScore": 37,
+    "previousScore": 37,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Aryan Ranjan",
+    "uid": "23BCS13909",
+    "repo": "VIbe0512/full-stack_project",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      15,
+      65
+    ],
+    "pipelineScore": 50,
+    "previousScore": 50,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Aryan Ranjan",
+    "uid": "23BCS13909",
+    "repo": "VIbe0512/FS-Experiment-8",
+    "verdict": "WRONG",
+    "groundTruthProfile": "backend_api",
+    "pipelineProfile": "academic",
+    "groundTruthScoreRange": [
+      10,
+      45
+    ],
+    "pipelineScore": 41,
+    "previousScore": 41,
+    "previousProfile": "academic",
+    "scoreDelta": 0,
+    "profileDrift": false
+  },
+  {
+    "student": "Pratyush Prakash Jha",
+    "uid": "23BCS11846",
+    "repo": "Pratyush-xxvi/G5_FS",
+    "verdict": "WRONG",
+    "groundTruthProfile": "academic",
+    "pipelineProfile": "frontend_app",
+    "groundTruthScoreRange": [
+      30,
+      80
+    ],
+    "pipelineScore": 40,
+    "previousScore": 40,
+    "previousProfile": "frontend_app",
+    "scoreDelta": 0,
+    "profileDrift": false
+  }
+]

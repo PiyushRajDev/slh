@@ -7,6 +7,9 @@ export interface CFUserInfo {
   contribution?: number
   registrationTimeSeconds?: number
   avatar?: string
+  firstName?: string
+  lastName?: string
+  organization?: string
 }
 
 export interface CFRatingChange {

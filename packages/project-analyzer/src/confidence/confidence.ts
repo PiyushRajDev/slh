@@ -39,7 +39,7 @@ export function calculateConfidence(metrics: RawMetrics, selection: SelectionRes
     if ((metrics.commit_count || 0) >= 20) dataCompleteness += 0.1;
     if ((metrics.test_file_count || 0) > 0) dataCompleteness += 0.1;
     if (metrics.ci_config_present) dataCompleteness += 0.05;
-    if (metrics.languages?.['.md']) dataCompleteness += 0.05; // has some docs
+    if ((metrics.markup_loc?.md || 0) > 0) dataCompleteness += 0.05; // has some docs
     if (Object.keys(metrics.languages || {}).length > 1) dataCompleteness += 0.05;
     if ((metrics.commit_span_days || 0) > 30) dataCompleteness += 0.1;
     dataCompleteness = Math.min(1.0, dataCompleteness);
@@ -56,6 +56,13 @@ export function calculateConfidence(metrics: RawMetrics, selection: SelectionRes
     // Calculate overall confidence using doc weights
     let overallConfidenceRaw = (metricQuality * 0.35) + (profileMatch * 0.25) + (reliability * 0.25) + (dataCompleteness * 0.15);
     let overallConfidence = Math.max(0.0, Math.min(1.0, overallConfidenceRaw));
+
+    if (selection.missingGitMetrics) {
+        overallConfidence = Math.min(overallConfidence, 0.68);
+    }
+    if (selection.isAmbiguous && (selection.profileId === 'academic' || selection.profileId === 'generic')) {
+        overallConfidence = Math.min(overallConfidence, 0.64);
+    }
 
     // Mathematical Caps
     if ((metrics.commit_span_days || 0) < 5 || (metrics.commit_count || 0) < 5) {

@@ -1,5 +1,6 @@
 import { StructuralSignals } from '../signals/signals';
 import { RawMetrics } from '../metrics/metrics';
+import { AuthenticityMetrics } from '../authenticity/authenticity';
 
 export type ProfileId = 'production_web_app' | 'backend_api' | 'frontend_app' | 'ml_pipeline' | 'cli_tool' | 'library' | 'academic' | 'generic';
 
@@ -11,6 +12,12 @@ export interface ProfileResult {
     matchedSignals: string[];
     missingSignals: string[];
 }
+
+export interface CapabilityConfidence {
+    value: number;
+    confidence: number;
+}
+export type CapabilityVector = Record<ProfileId, CapabilityConfidence>;
 
 export interface ProfileScoringWeights {
     codeQuality: number;
@@ -34,12 +41,13 @@ const PROFILES: ProfileConfig[] = [
         displayName: 'Full-Stack Web Application',
         fitnessThreshold: 0.60,
         expectedSignals: {
-            has_frontend: 25,
+            has_frontend: 20,
             has_backend: 25,
-            has_database: 20,
-            has_tests: 15,
-            has_ci: 10,
-            has_deployment_config: 5
+            has_api_routes: 15,
+            has_database: 15,
+            has_tests: 10,
+            has_ci: 5,
+            has_deployment_config: 10
         },
         scoringWeights: {
             codeQuality: 0.25,
@@ -54,10 +62,12 @@ const PROFILES: ProfileConfig[] = [
         displayName: 'Backend API Service',
         fitnessThreshold: 0.55,
         expectedSignals: {
-            has_backend: 40,
-            has_database: 25,
-            has_tests: 20,
-            has_deployment_config: 15
+            has_backend: 30,
+            has_server_entrypoint: 25,
+            has_api_routes: 20,
+            has_database: 15,
+            has_tests: 5,
+            has_deployment_config: 5
         },
         scoringWeights: {
             codeQuality: 0.30,
@@ -72,9 +82,11 @@ const PROFILES: ProfileConfig[] = [
         displayName: 'Frontend Web Application',
         fitnessThreshold: 0.50,
         expectedSignals: {
-            has_frontend: 60,
-            has_tests: 20,
-            has_ci: 20
+            has_frontend: 40,
+            has_static_frontend: 20,
+            has_tests: 15,
+            has_ci: 10,
+            has_deployment_config: 15
         },
         scoringWeights: {
             codeQuality: 0.25,
@@ -124,10 +136,10 @@ const PROFILES: ProfileConfig[] = [
         displayName: 'Reusable Library / Package',
         fitnessThreshold: 0.50,
         expectedSignals: {
-            has_tests: 40,
-            is_library_package: 35,
-            has_documentation: 30,
-            is_minimal: 10
+            has_library_exports: 35,
+            is_library_package: 30,
+            has_tests: 20,
+            has_documentation: 15
         },
         scoringWeights: {
             codeQuality: 0.35,
@@ -140,10 +152,11 @@ const PROFILES: ProfileConfig[] = [
     {
         id: 'academic',
         displayName: 'Academic Project',
-        fitnessThreshold: 0.50,
+        fitnessThreshold: 0.60,
         expectedSignals: {
-            is_short_timeline: 25,
-            has_documentation: 25
+            has_academic_markers: 45,
+            is_short_timeline: 35,
+            has_documentation: 20
         },
         scoringWeights: {
             codeQuality: 0.30,
@@ -212,15 +225,15 @@ export function evaluateProfiles(signals: StructuralSignals, metrics?: Partial<R
             const commitCount = metrics?.commit_count ?? 0;
             const commitSpanDays = metrics?.commit_span_days ?? 0;
             const contributorCount = metrics?.contributor_count ?? 1;
+            const hasVerifiedLowActivity = signals.has_git_history && commitCount > 0 && commitCount < 20 && commitSpanDays >= 0 && commitSpanDays < 30;
 
             // Pre-score suppression: mature repos are NOT academic
             if (commitCount > 150 || commitSpanDays > 365 || contributorCount > 2) {
                 fitnessScore = Math.max(0, fitnessScore - 0.50);
             }
 
-            // Academic REQUIRES positive evidence — not just absence of infra
-            // No evidence → zero out completely
-            const hasAcademicEvidence = signals.is_short_timeline;
+            // Academic REQUIRES positive evidence — documentation alone must not activate it.
+            const hasAcademicEvidence = signals.has_academic_markers || hasVerifiedLowActivity;
             if (!hasAcademicEvidence) {
                 fitnessScore = 0;
             }
@@ -228,6 +241,22 @@ export function evaluateProfiles(signals: StructuralSignals, metrics?: Partial<R
             // ML suppresses academic
             if (signals.has_ml_components) {
                 fitnessScore = Math.max(0, fitnessScore - 0.20);
+            }
+
+            if (signals.has_frontend || signals.has_static_frontend) {
+                fitnessScore = Math.max(0, fitnessScore - 0.35);
+            }
+            if (signals.has_backend || signals.has_api_routes || signals.has_server_entrypoint) {
+                fitnessScore = Math.max(0, fitnessScore - 0.40);
+            }
+            if (signals.has_database) {
+                fitnessScore = Math.max(0, fitnessScore - 0.15);
+            }
+            if (signals.is_library_package || signals.has_library_exports) {
+                fitnessScore = Math.max(0, fitnessScore - 0.35);
+            }
+            if (signals.is_cli_entrypoint) {
+                fitnessScore = Math.max(0, fitnessScore - 0.35);
             }
 
             // Safety: academic must never win for high-activity repos
@@ -242,6 +271,9 @@ export function evaluateProfiles(signals: StructuralSignals, metrics?: Partial<R
             if (signals.has_backend) {
                 fitnessScore = Math.max(0, fitnessScore - 0.35);
             }
+            if (signals.has_server_entrypoint || signals.has_api_routes) {
+                fitnessScore = Math.max(0, fitnessScore - 0.20);
+            }
             if (signals.has_backend && signals.has_database) {
                 fitnessScore = Math.max(0, fitnessScore - 0.10); // additional on top of -0.35
             }
@@ -253,12 +285,24 @@ export function evaluateProfiles(signals: StructuralSignals, metrics?: Partial<R
             if (signals.has_backend && commitCount > 100) {
                 fitnessScore = Math.max(0, fitnessScore - 0.20);
             }
+            if (signals.has_library_exports) {
+                fitnessScore = Math.min(1.0, fitnessScore + 0.20);
+            }
         }
 
         // Boost backend when server signals are present
         if (profile.id === 'backend_api') {
             if (signals.has_docker) {
                 fitnessScore = Math.min(1.0, fitnessScore + 0.10);
+            }
+            if (signals.has_server_entrypoint) {
+                fitnessScore = Math.min(1.0, fitnessScore + 0.20);
+            }
+            if (signals.has_api_routes) {
+                fitnessScore = Math.min(1.0, fitnessScore + 0.15);
+            }
+            if (signals.has_database) {
+                fitnessScore = Math.min(1.0, fitnessScore + 0.05);
             }
         }
 
@@ -270,6 +314,9 @@ export function evaluateProfiles(signals: StructuralSignals, metrics?: Partial<R
             }
             if (signals.has_frontend) {
                 fitnessScore = Math.max(0, fitnessScore - 0.25);
+            }
+            if (!signals.is_cli_entrypoint) {
+                fitnessScore = Math.max(0, fitnessScore - 0.20);
             }
         }
         if (signals.is_cli_tool) {
@@ -301,6 +348,10 @@ export function evaluateProfiles(signals: StructuralSignals, metrics?: Partial<R
             }
         }
 
+        if (profile.id === 'frontend_app' && signals.has_static_frontend) {
+            fitnessScore = Math.min(1.0, fitnessScore + 0.15);
+        }
+
         // ── Rule 5: Monorepo → production_web_app boost ──────────────
         // Fix 6: Well-structured monorepos should not fall to generic
         if (signals.is_monorepo && profile.id === 'production_web_app') {
@@ -330,4 +381,38 @@ export function evaluateProfiles(signals: StructuralSignals, metrics?: Partial<R
     });
 
     return results.sort((a, b) => b.fitnessScore - a.fitnessScore);
+}
+
+export function computeCapabilityVector(
+    profiles: ProfileResult[],
+    metrics: Partial<RawMetrics>,
+    confidenceScores: Record<string, number> = {},
+    authenticity?: AuthenticityMetrics
+): CapabilityVector {
+    const vector: Partial<CapabilityVector> = {};
+    for (const p of profiles) {
+        let confidence = 1.0;
+
+        // Apply Usage Validation Layer safeguards preventing structural spoofing
+        const usageRatio = authenticity?.dependency_usage_ratio ?? 1.0;
+
+        if (p.profileId === 'backend_api' && (metrics.total_loc || 0) < 100) confidence = 0.5;
+        if (p.profileId === 'frontend_app' || p.profileId === 'production_web_app') {
+            const markup = (metrics.markup_loc?.html || 0) + (metrics.markup_loc?.css || 0);
+            if (markup === 0) confidence = 0.3;
+            if (usageRatio < 0.3) confidence *= 0.5; // Has frontend dependencies but usage ratio is critically low
+        }
+        if (p.profileId === 'ml_pipeline' && (confidenceScores.ast_complexity || 1.0) < 0.8) {
+             confidence = 0.4;
+        }
+        if (p.profileId === 'cli_tool' && !metrics.has_bin_field) {
+             confidence = 0.6;
+        }
+
+        vector[p.profileId] = {
+            value: Math.max(0, p.fitnessScore),
+            confidence
+        };
+    }
+    return vector as CapabilityVector;
 }
