@@ -1,8 +1,8 @@
 import { Job } from 'bullmq';
-import { runPipeline } from '../../../../packages/project-analyzer/src/pipeline/pipeline.ts';
-import { buildPersistencePayload } from '../../../../packages/project-analyzer/src/persistence/persistence.ts';
-import { decryptToken } from '../../../api/src/utils/crypto.ts';
-import prisma from '../../../api/src/db.ts';
+import { runPipeline } from '../../../../packages/project-analyzer/src/pipeline/pipeline';
+import { buildPersistencePayload } from '../../../../packages/project-analyzer/src/persistence/persistence';
+import { decryptToken } from '../../../api/src/utils/crypto';
+import prisma from '../../../api/src/db';
 
 export interface AnalyzeProjectPayload {
     studentId: string;

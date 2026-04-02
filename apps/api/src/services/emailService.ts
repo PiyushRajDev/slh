@@ -53,7 +53,7 @@ async function log(opts: {
             errorMessage: opts.result.error,
             studentId: opts.studentId,
             collegeId: opts.collegeId,
-            metadata: opts.metadata,
+            metadata: opts.metadata as any,
             sentAt: opts.result.status === EmailStatus.SENT ? new Date() : null,
         },
     });

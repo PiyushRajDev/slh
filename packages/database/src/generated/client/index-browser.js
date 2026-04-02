@@ -132,6 +132,29 @@ exports.Prisma.UserScalarFieldEnum = {
   lastLoginAt: 'lastLoginAt'
 };
 
+exports.Prisma.SessionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  tokenHash: 'tokenHash',
+  expiresAt: 'expiresAt',
+  revokedAt: 'revokedAt',
+  replacedBy: 'replacedBy',
+  deviceId: 'deviceId',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.AuditLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  action: 'action',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.CollegeScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -240,6 +263,173 @@ exports.Prisma.ProjectAnalysisScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.JobClusterScalarFieldEnum = {
+  id: 'id',
+  clusterKey: 'clusterKey',
+  roleSlug: 'roleSlug',
+  roleTitle: 'roleTitle',
+  seniority: 'seniority',
+  location: 'location',
+  employmentType: 'employmentType',
+  workMode: 'workMode',
+  sampleSize: 'sampleSize',
+  marketSignals: 'marketSignals',
+  lastIngestedAt: 'lastIngestedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.JobListingScalarFieldEnum = {
+  id: 'id',
+  clusterId: 'clusterId',
+  source: 'source',
+  externalId: 'externalId',
+  sourceUrl: 'sourceUrl',
+  companyName: 'companyName',
+  title: 'title',
+  location: 'location',
+  employmentType: 'employmentType',
+  workMode: 'workMode',
+  descriptionRaw: 'descriptionRaw',
+  descriptionNormalized: 'descriptionNormalized',
+  sourceHash: 'sourceHash',
+  normalizedHash: 'normalizedHash',
+  postedAt: 'postedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.CapabilityScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  category: 'category',
+  description: 'description',
+  synonyms: 'synonyms',
+  recommendation: 'recommendation',
+  projectSuggestion: 'projectSuggestion',
+  parentId: 'parentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.JobCapabilityMapScalarFieldEnum = {
+  id: 'id',
+  clusterId: 'clusterId',
+  jobListingId: 'jobListingId',
+  capabilityId: 'capabilityId',
+  demandScore: 'demandScore',
+  importance: 'importance',
+  confidence: 'confidence',
+  evidence: 'evidence',
+  extractionVersion: 'extractionVersion',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SignalMappingScalarFieldEnum = {
+  id: 'id',
+  sourceType: 'sourceType',
+  matcherType: 'matcherType',
+  matcherKey: 'matcherKey',
+  matcherValue: 'matcherValue',
+  targetCapabilitySlug: 'targetCapabilitySlug',
+  baseScore: 'baseScore',
+  scoreMultiplier: 'scoreMultiplier',
+  confidence: 'confidence',
+  minThreshold: 'minThreshold',
+  profileIds: 'profileIds',
+  evidenceTemplate: 'evidenceTemplate',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MarketFitConfigScalarFieldEnum = {
+  key: 'key',
+  valueNumber: 'valueNumber',
+  valueString: 'valueString',
+  valueJson: 'valueJson',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserCapabilityProfileScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  snapshotHash: 'snapshotHash',
+  sourceSummary: 'sourceSummary',
+  evidenceWindowDays: 'evidenceWindowDays',
+  computedAt: 'computedAt',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.UserCapabilityEvidenceScalarFieldEnum = {
+  id: 'id',
+  profileId: 'profileId',
+  capabilityId: 'capabilityId',
+  sourceType: 'sourceType',
+  score: 'score',
+  confidence: 'confidence',
+  evidence: 'evidence',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SkillGapReportScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  clusterId: 'clusterId',
+  userCapabilityProfileId: 'userCapabilityProfileId',
+  requestedByUserId: 'requestedByUserId',
+  backgroundJobId: 'backgroundJobId',
+  status: 'status',
+  roleSlug: 'roleSlug',
+  roleTitle: 'roleTitle',
+  seniority: 'seniority',
+  location: 'location',
+  readinessScore: 'readinessScore',
+  verdict: 'verdict',
+  summary: 'summary',
+  reportPayload: 'reportPayload',
+  actionPlan: 'actionPlan',
+  jobCount: 'jobCount',
+  errorMessage: 'errorMessage',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SkillGapReportCapabilityScalarFieldEnum = {
+  id: 'id',
+  reportId: 'reportId',
+  capabilityId: 'capabilityId',
+  matchStatus: 'matchStatus',
+  demandScore: 'demandScore',
+  userScore: 'userScore',
+  gapScore: 'gapScore',
+  evidence: 'evidence',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.EmailLogScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  recipientEmail: 'recipientEmail',
+  subject: 'subject',
+  status: 'status',
+  messageId: 'messageId',
+  errorMessage: 'errorMessage',
+  studentId: 'studentId',
+  collegeId: 'collegeId',
+  metadata: 'metadata',
+  sentAt: 'sentAt',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -296,14 +486,72 @@ exports.AnalysisStatus = exports.$Enums.AnalysisStatus = {
   FAILED: 'FAILED'
 };
 
+exports.SignalMappingSourceType = exports.$Enums.SignalMappingSourceType = {
+  PROJECT_PROFILE: 'PROJECT_PROFILE',
+  PROJECT_SIGNAL: 'PROJECT_SIGNAL',
+  PROJECT_DIMENSION: 'PROJECT_DIMENSION',
+  PROJECT_TERM: 'PROJECT_TERM',
+  GITHUB_TERM: 'GITHUB_TERM',
+  DSA_PROFILE: 'DSA_PROFILE',
+  JRI_PROFILE: 'JRI_PROFILE'
+};
+
+exports.SignalMappingMatcherType = exports.$Enums.SignalMappingMatcherType = {
+  EXACT: 'EXACT',
+  CONTAINS: 'CONTAINS',
+  BOOLEAN_TRUE: 'BOOLEAN_TRUE',
+  THRESHOLD: 'THRESHOLD'
+};
+
+exports.CapabilitySourceType = exports.$Enums.CapabilitySourceType = {
+  JOB_LISTING: 'JOB_LISTING',
+  PROJECT_ANALYSIS: 'PROJECT_ANALYSIS',
+  GITHUB_PROFILE: 'GITHUB_PROFILE',
+  DSA_PROFILE: 'DSA_PROFILE',
+  JRI_PROFILE: 'JRI_PROFILE'
+};
+
+exports.CapabilityMatchStatus = exports.$Enums.CapabilityMatchStatus = {
+  MATCHED: 'MATCHED',
+  PARTIAL: 'PARTIAL',
+  MISSING: 'MISSING'
+};
+
+exports.EmailType = exports.$Enums.EmailType = {
+  COLLEGE_WELCOME: 'COLLEGE_WELCOME',
+  STUDENT_WELCOME: 'STUDENT_WELCOME',
+  WEEKLY_REPORT: 'WEEKLY_REPORT',
+  ANALYSIS_COMPLETE: 'ANALYSIS_COMPLETE',
+  PASSWORD_RESET: 'PASSWORD_RESET'
+};
+
+exports.EmailStatus = exports.$Enums.EmailStatus = {
+  SENT: 'SENT',
+  FAILED: 'FAILED',
+  PENDING: 'PENDING'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
+  Session: 'Session',
+  AuditLog: 'AuditLog',
   College: 'College',
   Student: 'Student',
   GitHubProfile: 'GitHubProfile',
   DSAProfile: 'DSAProfile',
   JRICalculation: 'JRICalculation',
-  ProjectAnalysis: 'ProjectAnalysis'
+  ProjectAnalysis: 'ProjectAnalysis',
+  JobCluster: 'JobCluster',
+  JobListing: 'JobListing',
+  Capability: 'Capability',
+  JobCapabilityMap: 'JobCapabilityMap',
+  SignalMapping: 'SignalMapping',
+  MarketFitConfig: 'MarketFitConfig',
+  UserCapabilityProfile: 'UserCapabilityProfile',
+  UserCapabilityEvidence: 'UserCapabilityEvidence',
+  SkillGapReport: 'SkillGapReport',
+  SkillGapReportCapability: 'SkillGapReportCapability',
+  EmailLog: 'EmailLog'
 };
 
 /**

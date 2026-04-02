@@ -1,16 +1,18 @@
 import { Response } from 'express';
-import { AuthRequest } from '../middleware/auth.middleware';
+import {
+    AuthRequest,
+    type AuthRole,
+    isElevatedRole
+} from '../middleware/auth.middleware';
 import prisma from '../db';
 import { analysisService } from '../services/analysisService';
 import { AnalysisRequestError } from '../lib/analysis-errors';
 
-async function getStudentIdForUser(userId: string, role: string, overrideStudentId?: string): Promise<string> {
-    // If an admin explicitly provides a studentId, use it (Viewing another student)
-    if ((role === 'ADMIN' || role === 'SUPER_ADMIN') && overrideStudentId) {
+async function getStudentIdForUser(userId: string, role: AuthRole, overrideStudentId?: string): Promise<string> {
+    if (isElevatedRole(role) && overrideStudentId) {
         return overrideStudentId;
     }
 
-    // Try to find if this user (Admin or Student) has an associated Student record
     const student = await prisma.student.findUnique({
         where: { userId }
     });
@@ -19,8 +21,7 @@ async function getStudentIdForUser(userId: string, role: string, overrideStudent
         return student.id;
     }
 
-    // If no student record found AND it's an admin trying to view without an override
-    if (role === 'ADMIN' || role === 'SUPER_ADMIN') {
+    if (isElevatedRole(role)) {
         throw new Error('Admin must provide studentId query parameter');
     }
 
@@ -36,12 +37,13 @@ export const analysisController = {
                 return;
             }
 
-            if (!req.user) {
+            const principal = req.auth?.principal;
+            if (!principal) {
                 res.status(401).json({ error: 'Unauthorized' });
                 return;
             }
 
-            const studentId = await getStudentIdForUser(req.user.userId, req.user.role);
+            const studentId = await getStudentIdForUser(principal.userId, principal.role);
 
             const result = await analysisService.queueAnalysis(studentId, repoUrl);
 
@@ -64,7 +66,8 @@ export const analysisController = {
 
     async getAnalyses(req: AuthRequest, res: Response): Promise<void> {
         try {
-            if (!req.user) {
+            const principal = req.auth?.principal;
+            if (!principal) {
                 res.status(401).json({ error: 'Unauthorized' });
                 return;
             }
@@ -76,7 +79,7 @@ export const analysisController = {
             const offset = isNaN(reqOffset) ? 0 : reqOffset;
 
             const queryStudentId = typeof req.query.studentId === 'string' ? req.query.studentId : undefined;
-            const studentId = await getStudentIdForUser(req.user.userId, req.user.role, queryStudentId);
+            const studentId = await getStudentIdForUser(principal.userId, principal.role, queryStudentId);
 
             const result = await analysisService.getAnalyses(studentId, limit, offset);
 
@@ -93,17 +96,18 @@ export const analysisController = {
 
     async getAnalysisById(req: AuthRequest, res: Response): Promise<void> {
         try {
-            if (!req.user) {
+            const principal = req.auth?.principal;
+            if (!principal) {
                 res.status(401).json({ error: 'Unauthorized' });
                 return;
             }
 
             const analysisId = req.params.id as string;
-            const isAdmin = req.user.role === 'ADMIN' || req.user.role === 'SUPER_ADMIN';
+            const isAdmin = isElevatedRole(principal.role);
 
             let studentIdForOwnershipCheck: string | undefined;
             if (!isAdmin) {
-                studentIdForOwnershipCheck = await getStudentIdForUser(req.user.userId, req.user.role);
+                studentIdForOwnershipCheck = await getStudentIdForUser(principal.userId, principal.role);
             }
 
             const analysis = await analysisService.getAnalysisById(analysisId, studentIdForOwnershipCheck);
@@ -126,17 +130,18 @@ export const analysisController = {
 
     async verifyAnalysisIntegrity(req: AuthRequest, res: Response): Promise<void> {
         try {
-            if (!req.user) {
+            const principal = req.auth?.principal;
+            if (!principal) {
                 res.status(401).json({ error: 'Unauthorized' });
                 return;
             }
 
             const analysisId = req.params.id as string;
-            const isAdmin = req.user.role === 'ADMIN' || req.user.role === 'SUPER_ADMIN';
+            const isAdmin = isElevatedRole(principal.role);
 
             let studentIdForOwnershipCheck: string | undefined;
             if (!isAdmin) {
-                studentIdForOwnershipCheck = await getStudentIdForUser(req.user.userId, req.user.role);
+                studentIdForOwnershipCheck = await getStudentIdForUser(principal.userId, principal.role);
             }
 
             const verification = await analysisService.verifyAnalysisIntegrity(analysisId, studentIdForOwnershipCheck);
@@ -159,14 +164,15 @@ export const analysisController = {
 
     async getLatestAnalysis(req: AuthRequest, res: Response): Promise<void> {
         try {
-            if (!req.user) {
+            const principal = req.auth?.principal;
+            if (!principal) {
                 res.status(401).json({ error: 'Unauthorized' });
                 return;
             }
 
-            const isAdmin = req.user.role === 'ADMIN' || req.user.role === 'SUPER_ADMIN';
+            const isAdmin = isElevatedRole(principal.role);
             const queryStudentId = typeof req.query.studentId === 'string' ? req.query.studentId : undefined;
-            const studentId = await getStudentIdForUser(req.user.userId, req.user.role, isAdmin ? queryStudentId : undefined);
+            const studentId = await getStudentIdForUser(principal.userId, principal.role, isAdmin ? queryStudentId : undefined);
 
             const latestAnalysis = await analysisService.getLatestAnalysis(studentId);
 

@@ -117,6 +117,7 @@ export interface AuthMeResponse {
       id: string;
       email: string;
       role: string;
+      collegeId: string | null;
       student: {
         id: string;
         firstName: string;

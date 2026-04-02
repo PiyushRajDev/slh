@@ -1,0 +1,16 @@
+{
+    "name": "@slh/jri-engine",
+    "version": "1.0.0",
+    "description": "Deterministic JRI (Job Readiness Index) calculation engine",
+    "main": "src/index.ts",
+    "types": "src/index.ts",
+    "private": true,
+    "scripts": {
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "typecheck": "tsc --noEmit"
+    },
+    "devDependencies": {
+        "typescript": "^5.8.3"
+    }
+}

@@ -1,0 +1,186 @@
+<h2>Admin Landing Page — Layout Options</h2>
+<p class="subtitle">Which layout structure feels right for the admin's home view?<br>
+All options use SLH's existing design language (PageShell, shadcn cards, dark theme).</p>
+
+<div class="cards" style="display:grid;grid-template-columns:1fr;gap:24px;margin-top:24px;">
+
+  <!-- Option A: Command Center -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)" style="cursor:pointer;">
+    <div class="card-body">
+      <h3 style="margin-bottom:8px;">A — Command Center Hub</h3>
+      <p style="color:#999;margin-bottom:16px;">Overview metrics up top, then a 3-column grid of "module cards" linking to Analytics, Leaderboard, and Alerts. Each module card shows a mini preview (top 3 students, alert count, etc.) so admins can assess without clicking.</p>
+      <div style="background:#1a1a2e;border-radius:12px;padding:20px;font-family:monospace;font-size:11px;color:#8888aa;">
+        <div style="border-bottom:1px solid #333;padding-bottom:8px;margin-bottom:12px;color:#6366f1;font-weight:bold;font-size:10px;letter-spacing:2px;">COLLEGE ADMIN &bull; WELCOME BACK</div>
+        <div style="font-size:18px;color:#e2e8f0;font-weight:bold;margin-bottom:4px;">College Dashboard</div>
+        <div style="color:#666;font-size:10px;margin-bottom:16px;">Your college's engineering readiness at a glance</div>
+
+        <!-- Summary strip -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;">
+          <div style="background:#111;border:1px solid #333;border-radius:8px;padding:10px;">
+            <div style="color:#666;font-size:8px;text-transform:uppercase;letter-spacing:1px;">Students</div>
+            <div style="color:#e2e8f0;font-size:20px;font-weight:900;">248</div>
+          </div>
+          <div style="background:#111;border:1px solid #333;border-radius:8px;padding:10px;">
+            <div style="color:#666;font-size:8px;text-transform:uppercase;letter-spacing:1px;">Avg JRI</div>
+            <div style="color:#10b981;font-size:20px;font-weight:900;">47.2</div>
+          </div>
+          <div style="background:#111;border:1px solid #333;border-radius:8px;padding:10px;">
+            <div style="color:#666;font-size:8px;text-transform:uppercase;letter-spacing:1px;">Placement Ready</div>
+            <div style="color:#3b82f6;font-size:20px;font-weight:900;">34%</div>
+          </div>
+          <div style="background:#111;border:1px solid #333;border-radius:8px;padding:10px;">
+            <div style="color:#666;font-size:8px;text-transform:uppercase;letter-spacing:1px;">Critical Alerts</div>
+            <div style="color:#ef4444;font-size:20px;font-weight:900;">12</div>
+          </div>
+        </div>
+
+        <!-- Module cards -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+          <div style="background:#111;border:1px solid #333;border-radius:8px;padding:12px;">
+            <div style="color:#6366f1;font-size:9px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">📊 Batch Analytics</div>
+            <div style="color:#888;font-size:9px;">Tier Distribution</div>
+            <div style="display:flex;gap:2px;margin:6px 0;">
+              <div style="flex:1;height:4px;background:#f59e0b;border-radius:2px;"></div>
+              <div style="flex:2;height:4px;background:#8b5cf6;border-radius:2px;"></div>
+              <div style="flex:3;height:4px;background:#3b82f6;border-radius:2px;"></div>
+              <div style="flex:4;height:4px;background:#10b981;border-radius:2px;"></div>
+            </div>
+            <div style="color:#6366f1;font-size:9px;margin-top:8px;">View analytics →</div>
+          </div>
+          <div style="background:#111;border:1px solid #333;border-radius:8px;padding:12px;">
+            <div style="color:#f59e0b;font-size:9px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">🏆 Leaderboard</div>
+            <div style="color:#888;font-size:9px;">Top Performers</div>
+            <div style="margin:6px 0;">
+              <div style="display:flex;justify-content:space-between;font-size:9px;padding:2px 0;"><span style="color:#ccc;">1. Arjun K.</span><span style="color:#6366f1;font-weight:bold;">89</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:9px;padding:2px 0;"><span style="color:#ccc;">2. Priya S.</span><span style="color:#6366f1;font-weight:bold;">84</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:9px;padding:2px 0;"><span style="color:#ccc;">3. Rahul M.</span><span style="color:#6366f1;font-weight:bold;">81</span></div>
+            </div>
+            <div style="color:#f59e0b;font-size:9px;margin-top:4px;">Full rankings →</div>
+          </div>
+          <div style="background:#111;border:1px solid #333;border-radius:8px;padding:12px;">
+            <div style="color:#ef4444;font-size:9px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">🔔 Alerts</div>
+            <div style="color:#888;font-size:9px;">Active Warnings</div>
+            <div style="margin:6px 0;">
+              <div style="font-size:9px;padding:2px 0;color:#ef4444;">● 5 critical</div>
+              <div style="font-size:9px;padding:2px 0;color:#f59e0b;">● 7 high risk</div>
+              <div style="font-size:9px;padding:2px 0;color:#3b82f6;">● 3 moderate</div>
+            </div>
+            <div style="color:#ef4444;font-size:9px;margin-top:4px;">View alerts →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Option B: Metrics-Heavy Dashboard -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)" style="cursor:pointer;">
+    <div class="card-body">
+      <h3 style="margin-bottom:8px;">B — Metrics-Heavy Dashboard</h3>
+      <p style="color:#999;margin-bottom:16px;">Full analytics dashboard as the landing page. Shows charts, department breakdown, and recent alerts inline — essentially merging the analytics page into the landing. Admins see everything without navigating.</p>
+      <div style="background:#1a1a2e;border-radius:12px;padding:20px;font-family:monospace;font-size:11px;color:#8888aa;">
+        <div style="border-bottom:1px solid #333;padding-bottom:8px;margin-bottom:12px;color:#6366f1;font-weight:bold;font-size:10px;letter-spacing:2px;">COLLEGE ADMIN</div>
+        <div style="font-size:18px;color:#e2e8f0;font-weight:bold;margin-bottom:16px;">Ecosystem Analytics</div>
+
+        <!-- 4 metric cards -->
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;">
+          <div style="background:#111;border:1px solid #333;border-radius:8px;padding:10px;">
+            <div style="color:#666;font-size:8px;text-transform:uppercase;">Students</div>
+            <div style="color:#e2e8f0;font-size:20px;font-weight:900;">248</div>
+          </div>
+          <div style="background:#111;border:1px solid #333;border-radius:8px;padding:10px;">
+            <div style="color:#666;font-size:8px;text-transform:uppercase;">Avg JRI</div>
+            <div style="color:#10b981;font-size:20px;font-weight:900;">47.2</div>
+          </div>
+          <div style="background:#111;border:1px solid #333;border-radius:8px;padding:10px;">
+            <div style="color:#666;font-size:8px;text-transform:uppercase;">Ready</div>
+            <div style="color:#3b82f6;font-size:20px;font-weight:900;">34%</div>
+          </div>
+          <div style="background:#111;border:1px solid #333;border-radius:8px;padding:10px;">
+            <div style="color:#666;font-size:8px;text-transform:uppercase;">Alerts</div>
+            <div style="color:#ef4444;font-size:20px;font-weight:900;">12</div>
+          </div>
+        </div>
+
+        <!-- 2-col: chart + department table -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+          <div style="background:#111;border:1px solid #333;border-radius:8px;padding:12px;">
+            <div style="color:#ccc;font-size:10px;font-weight:bold;margin-bottom:8px;">Tier Distribution</div>
+            <div style="display:flex;align-items:end;gap:4px;height:60px;">
+              <div style="flex:1;background:#6366f1;border-radius:3px 3px 0 0;height:20%;"></div>
+              <div style="flex:1;background:#8b5cf6;border-radius:3px 3px 0 0;height:35%;"></div>
+              <div style="flex:1;background:#3b82f6;border-radius:3px 3px 0 0;height:55%;"></div>
+              <div style="flex:1;background:#10b981;border-radius:3px 3px 0 0;height:80%;"></div>
+              <div style="flex:1;background:#f59e0b;border-radius:3px 3px 0 0;height:45%;"></div>
+              <div style="flex:1;background:#64748b;border-radius:3px 3px 0 0;height:100%;"></div>
+            </div>
+          </div>
+          <div style="background:#111;border:1px solid #333;border-radius:8px;padding:12px;">
+            <div style="color:#ccc;font-size:10px;font-weight:bold;margin-bottom:8px;">Department Breakdown</div>
+            <div style="font-size:9px;">
+              <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #222;"><span style="color:#aaa;">CSE</span><span style="color:#10b981;">52.1 avg</span></div>
+              <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #222;"><span style="color:#aaa;">IT</span><span style="color:#3b82f6;">44.8 avg</span></div>
+              <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid #222;"><span style="color:#aaa;">ECE</span><span style="color:#f59e0b;">38.2 avg</span></div>
+              <div style="display:flex;justify-content:space-between;padding:3px 0;"><span style="color:#aaa;">MECH</span><span style="color:#ef4444;">29.7 avg</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent alerts strip -->
+        <div style="background:#111;border:1px solid #333;border-radius:8px;padding:12px;">
+          <div style="color:#ccc;font-size:10px;font-weight:bold;margin-bottom:6px;">Recent Alerts</div>
+          <div style="font-size:9px;color:#ef4444;padding:2px 0;">● Ravi K — JRI declining (3 consecutive drops)</div>
+          <div style="font-size:9px;color:#f59e0b;padding:2px 0;">● Sneha P — Low project score (12/100)</div>
+          <div style="font-size:9px;color:#3b82f6;padding:2px 0;">● Amit R — Stale DSA data (45 days)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Option C: Quick-Action Grid -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)" style="cursor:pointer;">
+    <div class="card-body">
+      <h3 style="margin-bottom:8px;">C — Welcome + Quick-Action Grid</h3>
+      <p style="color:#999;margin-bottom:16px;">Minimal landing with a welcome banner, 4 headline stats, and large action cards for each admin function. Focuses on navigation rather than inline data. Clean, fast, no data-loading delay.</p>
+      <div style="background:#1a1a2e;border-radius:12px;padding:20px;font-family:monospace;font-size:11px;color:#8888aa;">
+        <div style="border-bottom:1px solid #333;padding-bottom:8px;margin-bottom:12px;color:#6366f1;font-weight:bold;font-size:10px;letter-spacing:2px;">COLLEGE ADMIN</div>
+
+        <!-- Welcome banner -->
+        <div style="background:linear-gradient(135deg,#1e1b4b,#312e81);border:1px solid #4338ca;border-radius:10px;padding:16px;margin-bottom:16px;">
+          <div style="color:#e2e8f0;font-size:16px;font-weight:bold;">Welcome back, Prof. Kumar</div>
+          <div style="color:#818cf8;font-size:10px;margin-top:4px;">IIIT Bangalore — Batch 2025 Overview</div>
+          <div style="display:flex;gap:20px;margin-top:12px;">
+            <div><div style="color:#a5b4fc;font-size:8px;text-transform:uppercase;">Students</div><div style="color:#fff;font-size:18px;font-weight:900;">248</div></div>
+            <div><div style="color:#a5b4fc;font-size:8px;text-transform:uppercase;">Avg JRI</div><div style="color:#10b981;font-size:18px;font-weight:900;">47.2</div></div>
+            <div><div style="color:#a5b4fc;font-size:8px;text-transform:uppercase;">Placed</div><div style="color:#3b82f6;font-size:18px;font-weight:900;">34%</div></div>
+            <div><div style="color:#a5b4fc;font-size:8px;text-transform:uppercase;">Alerts</div><div style="color:#ef4444;font-size:18px;font-weight:900;">12</div></div>
+          </div>
+        </div>
+
+        <!-- Action cards -->
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
+          <div style="background:#111;border:1px solid #333;border-radius:8px;padding:14px;cursor:pointer;">
+            <div style="font-size:18px;margin-bottom:6px;">📊</div>
+            <div style="color:#e2e8f0;font-size:12px;font-weight:bold;">Batch Analytics</div>
+            <div style="color:#666;font-size:9px;margin-top:4px;">Deep-dive into JRI trends, risk heatmaps, and department performance</div>
+          </div>
+          <div style="background:#111;border:1px solid #333;border-radius:8px;padding:14px;cursor:pointer;">
+            <div style="font-size:18px;margin-bottom:6px;">🏆</div>
+            <div style="color:#e2e8f0;font-size:12px;font-weight:bold;">JRI Leaderboard</div>
+            <div style="color:#666;font-size:9px;margin-top:4px;">Ranked student performance with search, filter, and CSV export</div>
+          </div>
+          <div style="background:#111;border:1px solid #333;border-radius:8px;padding:14px;cursor:pointer;">
+            <div style="font-size:18px;margin-bottom:6px;">🔔</div>
+            <div style="color:#e2e8f0;font-size:12px;font-weight:bold;">Early Warnings</div>
+            <div style="color:#666;font-size:9px;margin-top:4px;">At-risk students flagged by score stagnation and activity gaps</div>
+          </div>
+          <div style="background:#111;border:1px solid #333;border-radius:8px;padding:14px;cursor:pointer;">
+            <div style="font-size:18px;margin-bottom:6px;">📥</div>
+            <div style="color:#e2e8f0;font-size:12px;font-weight:bold;">Export & Reports</div>
+            <div style="color:#666;font-size:9px;margin-top:4px;">Download batch data as CSV for placement cells and review boards</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

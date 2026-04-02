@@ -1,7 +1,13 @@
 import { Router, Response } from "express";
 import { Job } from "bullmq";
 import prisma from "../db";
-import { authenticate, AuthRequest } from "../middleware/auth.middleware";
+import {
+    authenticate,
+    AuthRequest,
+    Permission,
+    hasRequestPermission,
+    requireAnyPermission
+} from "../middleware/auth.middleware";
 import { analysisQueue, analysisQueueEvents } from "../lib/queue";
 import { classifyAnalysisFailure } from "../lib/analysis-errors";
 
@@ -53,16 +59,17 @@ function writeSseEvent(res: Response, event: string, data: Record<string, unknow
 }
 
 async function canAccessJob(req: AuthRequest, job: Job): Promise<boolean> {
-    if (!req.user) {
+    const principal = req.auth?.principal;
+    if (!principal) {
         return false;
     }
 
-    if (req.user.role === "ADMIN" || req.user.role === "SUPER_ADMIN") {
+    if (hasRequestPermission(req, Permission.ANALYSIS_STREAM_ANY)) {
         return true;
     }
 
     const student = await prisma.student.findUnique({
-        where: { userId: req.user.userId },
+        where: { userId: principal.userId },
         select: { id: true }
     });
 
@@ -73,7 +80,11 @@ async function canAccessJob(req: AuthRequest, job: Job): Promise<boolean> {
     return job.data?.studentId === student.id;
 }
 
-router.get("/analyses/:jobId/events", authenticate, async (req: AuthRequest, res: Response) => {
+router.get(
+    "/analyses/:jobId/events",
+    authenticate,
+    requireAnyPermission(Permission.ANALYSIS_STREAM_SELF, Permission.ANALYSIS_STREAM_ANY),
+    async (req: AuthRequest, res: Response) => {
     const jobIdParam = req.params.jobId;
     const jobId = Array.isArray(jobIdParam) ? jobIdParam[0] : jobIdParam;
 

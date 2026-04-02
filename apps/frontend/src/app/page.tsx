@@ -1,21 +1,14 @@
-"use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { hasSessionToken } from "@/lib/auth";
-
+/**
+ * Root Home Page (Server Component): 
+ * Minimal entry point that provides deterministic role-based steering.
+ * No UI flickering, no client-side logic.
+ */
+/**
+ * Root Home Page:
+ * Redirection is handled by middleware for performance and determinism.
+ * This component acts as a no-op fallback.
+ */
 export default function HomePage() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.replace(hasSessionToken() ? "/dashboard" : "/login");
-  }, [router]);
-
-  return (
-    <div className="flex min-h-screen items-center justify-center px-4">
-      <div className="rounded-2xl border border-border/70 bg-card/70 px-5 py-4 text-sm text-muted-foreground">
-        Loading SLH...
-      </div>
-    </div>
-  );
+  return null;
 }

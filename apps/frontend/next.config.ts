@@ -11,6 +11,10 @@ const nextConfig: NextConfig = {
         destination: `${apiBaseUrl}/api/:path*`,
       },
       {
+        source: "/market-fit/:path*",
+        destination: `${apiBaseUrl}/market-fit/:path*`,
+      },
+      {
         source: "/auth/:path*",
         destination: `${apiBaseUrl}/auth/:path*`,
       },

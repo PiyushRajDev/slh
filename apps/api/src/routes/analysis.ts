@@ -1,26 +1,58 @@
 import { Router } from 'express';
-import { authenticate } from '../middleware/auth.middleware';
+import {
+  authenticate,
+  Permission,
+  requireAnyPermission
+} from '../middleware/auth.middleware';
 import { analysisController } from '../controllers/analysisController';
 
 const router = Router();
 
-// Apply authentication middleware to all routes in this router
 router.use(authenticate);
 
-// POST   /api/projects/analyze
-router.post('/analyze', analysisController.analyze);
+router.post(
+  '/analyze',
+  requireAnyPermission(
+    Permission.ANALYSIS_SUBMIT_SELF,
+    Permission.ANALYSIS_SUBMIT_ANY
+  ),
+  analysisController.analyze
+);
 
-// GET    /api/projects/analyses
-router.get('/analyses', analysisController.getAnalyses);
+router.get(
+  '/analyses',
+  requireAnyPermission(
+    Permission.ANALYSIS_READ_SELF,
+    Permission.ANALYSIS_READ_ANY
+  ),
+  analysisController.getAnalyses
+);
 
-// GET    /api/projects/analyses/latest
-// MUST mount before /:id to prevent "latest" being evaluated as an ID
-router.get('/analyses/latest', analysisController.getLatestAnalysis);
+router.get(
+  '/analyses/latest',
+  requireAnyPermission(
+    Permission.ANALYSIS_READ_SELF,
+    Permission.ANALYSIS_READ_ANY
+  ),
+  analysisController.getLatestAnalysis
+);
 
-// GET    /api/projects/analyses/:id
-router.get('/analyses/:id', analysisController.getAnalysisById);
+router.get(
+  '/analyses/:id',
+  requireAnyPermission(
+    Permission.ANALYSIS_READ_SELF,
+    Permission.ANALYSIS_READ_ANY
+  ),
+  analysisController.getAnalysisById
+);
 
-// GET    /api/projects/analyses/:id/verify
-router.get('/analyses/:id/verify', analysisController.verifyAnalysisIntegrity);
+router.get(
+  '/analyses/:id/verify',
+  requireAnyPermission(
+    Permission.ANALYSIS_READ_SELF,
+    Permission.ANALYSIS_READ_ANY
+  ),
+  analysisController.verifyAnalysisIntegrity
+);
 
 export default router;

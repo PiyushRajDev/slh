@@ -1,12 +1,17 @@
 import { Router, Response } from "express";
 import prisma from "../db";
-import { authenticate, AuthRequest } from "../middleware/auth.middleware";
+import {
+    authenticate,
+    AuthRequest,
+    Permission,
+    requirePermission
+} from "../middleware/auth.middleware";
+import { getScopedPrismaClient } from "../scoped-db";
 import { computeTier, computeArchetype, tierColor } from "../utils/jri-logic";
 
 const router = Router();
 
-// All admin routes require authentication
-router.use(authenticate);
+router.use(authenticate, requirePermission(Permission.ADMIN_DASHBOARD_READ));
 
 // ───────────────────────────────────────────────────────────────────
 // GET /api/admin/analytics/batch
@@ -16,10 +21,13 @@ router.use(authenticate);
 
 router.get("/analytics/batch", async (req: AuthRequest, res: Response) => {
     try {
-        if (!req.user || (req.user.role !== "ADMIN" && req.user.role !== "SUPER_ADMIN")) {
-            res.status(403).json({ error: "Admin access required" });
+        const principal = req.auth?.principal;
+        if (!principal) {
+            res.status(401).json({ error: "Unauthorized" });
             return;
         }
+
+        const scopedDb = getScopedPrismaClient(principal) as any;
 
         const batch = req.query.batch as string | undefined;
         const department = req.query.department as string | undefined;
@@ -27,13 +35,9 @@ router.get("/analytics/batch", async (req: AuthRequest, res: Response) => {
         const where: any = {};
         if (batch) where.batch = batch;
         if (department) where.department = department;
-        // College-scoped: ADMIN can only see students in their college
-        if (req.user.role === "ADMIN" && req.user.collegeId) {
-            where.collegeId = req.user.collegeId;
-        }
 
         // Fetch all students with their latest JRI and analyses
-        const students = await prisma.student.findMany({
+        const students = await scopedDb.student.findMany({
             where,
             select: {
                 id: true,
@@ -81,18 +85,18 @@ router.get("/analytics/batch", async (req: AuthRequest, res: Response) => {
         });
 
         // Process each student into a summary row
-        const studentSummaries = students.map((s) => {
+        const studentSummaries = students.map((s: any) => {
             const latestJri = s.jriCalculations[0];
             const jriScore = latestJri?.jriScore ?? 0;
             const dsaScore = latestJri?.dsaScore ?? 0;
             const projectScore = latestJri?.githubScore ?? 0;
 
-            const leetcode = s.dsaProfiles.find((p) => p.platform === "LEETCODE");
-            const codeforces = s.dsaProfiles.find((p) => p.platform === "CODEFORCES");
+            const leetcode = s.dsaProfiles.find((p: any) => p.platform === "LEETCODE");
+            const codeforces = s.dsaProfiles.find((p: any) => p.platform === "CODEFORCES");
 
-            const projectScores = s.projectAnalyses.map((a) => a.overallScore ?? 0);
+            const projectScores = s.projectAnalyses.map((a: any) => a.overallScore ?? 0);
             const avgProjectScore = projectScores.length > 0
-                ? projectScores.reduce((sum, v) => sum + v, 0) / projectScores.length
+                ? projectScores.reduce((sum: any, v: any) => sum + v, 0) / projectScores.length
                 : 0;
             const bestProjectScore = projectScores.length > 0 ? Math.max(...projectScores) : 0;
 
@@ -131,12 +135,12 @@ router.get("/analytics/batch", async (req: AuthRequest, res: Response) => {
         });
 
         // Compute batch-level aggregates
-        const withJri = studentSummaries.filter((s) => s.jriScore > 0);
+        const withJri = studentSummaries.filter((s: any) => s.jriScore > 0);
         const totalStudents = studentSummaries.length;
         const avgJri = withJri.length > 0
-            ? withJri.reduce((sum, s) => sum + s.jriScore, 0) / withJri.length
+            ? withJri.reduce((sum: any, s: any) => sum + s.jriScore, 0) / withJri.length
             : 0;
-        const placementReady = withJri.filter((s) => s.jriScore >= 70).length;
+        const placementReady = withJri.filter((s: any) => s.jriScore >= 70).length;
         const placementReadyPercent = withJri.length > 0
             ? Math.round((placementReady / withJri.length) * 100)
             : 0;
@@ -145,11 +149,11 @@ router.get("/analytics/batch", async (req: AuthRequest, res: Response) => {
         const tierDistribution: Record<string, number> = {
             Legend: 0, Elite: 0, Pro: 0, Rising: 0, Challenger: 0, Rookie: 0,
         };
-        withJri.forEach((s) => { tierDistribution[s.tier] = (tierDistribution[s.tier] || 0) + 1; });
+        withJri.forEach((s: any) => { tierDistribution[s.tier] = (tierDistribution[s.tier] || 0) + 1; });
 
         // Department breakdown
         const departmentMap = new Map<string, { count: number; jriSum: number; placementReady: number }>();
-        studentSummaries.forEach((s) => {
+        studentSummaries.forEach((s: any) => {
             const dept = s.department || "Unknown";
             const entry = departmentMap.get(dept) || { count: 0, jriSum: 0, placementReady: 0 };
             entry.count++;
@@ -157,19 +161,19 @@ router.get("/analytics/batch", async (req: AuthRequest, res: Response) => {
             if (s.jriScore >= 70) entry.placementReady++;
             departmentMap.set(dept, entry);
         });
-        const departments = [...departmentMap.entries()].map(([name, data]) => ({
+        const departments = [...departmentMap.entries()].map(([name, data]: [string, any]) => ({
             name,
             count: data.count,
-            avgJri: Math.round((data.jriSum / data.count) * 10) / 10,
-            placementReadyPercent: Math.round((data.placementReady / data.count) * 100),
+            avgJri: data.count > 0 ? Math.round((data.jriSum / data.count) * 10) / 10 : 0,
+            placementReadyPercent: data.count > 0 ? Math.round((data.placementReady / data.count) * 100) : 0,
         }));
 
         // Risk analysis
-        const withLeetcode = studentSummaries.filter((s) => s.leetcode?.status === "SUCCESS");
-        const lowDsaCount = withLeetcode.filter((s) => (s.leetcode?.totalSolved ?? 0) < 50).length;
-        const lowProjectCount = studentSummaries.filter((s) => s.projects.count > 0 && s.projects.avgScore < 30).length;
-        const noProjectCount = studentSummaries.filter((s) => s.projects.count === 0).length;
-
+        const withLeetcode = studentSummaries.filter((s: any) => s.leetcode?.status === "SUCCESS");
+        const lowDsaCount = withLeetcode.filter((s: any) => (s.leetcode?.totalSolved ?? 0) < 50).length;
+        const lowProjectCount = studentSummaries.filter((s: any) => s.projects.count > 0 && s.projects.avgScore < 30).length;
+        const noProjectCount = studentSummaries.filter((s: any) => s.projects.count === 0).length;
+ 
         const risks = [
             {
                 label: "Low DSA practice",
@@ -181,9 +185,9 @@ router.get("/analytics/batch", async (req: AuthRequest, res: Response) => {
             {
                 label: "Weak project quality",
                 count: lowProjectCount,
-                total: studentSummaries.filter((s) => s.projects.count > 0).length,
-                percent: studentSummaries.filter((s) => s.projects.count > 0).length > 0
-                    ? Math.round((lowProjectCount / studentSummaries.filter((s) => s.projects.count > 0).length) * 100) : 0,
+                total: studentSummaries.filter((s: any) => s.projects.count > 0).length,
+                percent: studentSummaries.filter((s: any) => s.projects.count > 0).length > 0
+                    ? Math.round((lowProjectCount / studentSummaries.filter((s: any) => s.projects.count > 0).length) * 100) : 0,
                 description: `${lowProjectCount} students have an average project score below 30`,
             },
             {
@@ -206,7 +210,7 @@ router.get("/analytics/batch", async (req: AuthRequest, res: Response) => {
             },
             departments,
             risks,
-            students: studentSummaries.sort((a, b) => b.jriScore - a.jriScore),
+            students: studentSummaries.sort((a: any, b: any) => b.jriScore - a.jriScore),
         });
     } catch (error: unknown) {
         const message = error instanceof Error ? error.message : "Failed to fetch batch analytics";
@@ -221,10 +225,13 @@ router.get("/analytics/batch", async (req: AuthRequest, res: Response) => {
 
 router.get("/analytics/alerts", async (req: AuthRequest, res: Response) => {
     try {
-        if (!req.user || (req.user.role !== "ADMIN" && req.user.role !== "SUPER_ADMIN")) {
-            res.status(403).json({ error: "Admin access required" });
+        const principal = req.auth?.principal;
+        if (!principal) {
+            res.status(401).json({ error: "Unauthorized" });
             return;
         }
+
+        const scopedDb = getScopedPrismaClient(principal);
 
         const alerts: Array<{
             studentId: string;
@@ -235,14 +242,8 @@ router.get("/analytics/alerts", async (req: AuthRequest, res: Response) => {
             message: string;
         }> = [];
 
-        // Find students — scoped to admin's college
-        const studentWhere: any = {};
-        if (req.user.role === "ADMIN" && req.user.collegeId) {
-            studentWhere.collegeId = req.user.collegeId;
-        }
-
-        const studentsWithHistory = await prisma.student.findMany({
-            where: studentWhere,
+        // Find students — scoped to admin's college automatically
+        const studentsWithHistory = await scopedDb.student.findMany({
             select: {
                 id: true,
                 firstName: true,
@@ -376,22 +377,24 @@ router.get("/analytics/alerts", async (req: AuthRequest, res: Response) => {
 // CSV export of student data for placement cells
 // ───────────────────────────────────────────────────────────────────
 
-router.get("/analytics/export", async (req: AuthRequest, res: Response) => {
+router.get(
+    "/analytics/export",
+    requirePermission(Permission.ADMIN_DATA_EXPORT),
+    async (req: AuthRequest, res: Response) => {
     try {
-        if (!req.user || (req.user.role !== "ADMIN" && req.user.role !== "SUPER_ADMIN")) {
-            res.status(403).json({ error: "Admin access required" });
+        const principal = req.auth?.principal;
+        if (!principal) {
+            res.status(401).json({ error: "Unauthorized" });
             return;
         }
+
+        const scopedDb = getScopedPrismaClient(principal);
 
         const batch = req.query.batch as string | undefined;
         const where: any = {};
         if (batch) where.batch = batch;
-        // College-scoped: ADMIN can only export their own college
-        if (req.user.role === "ADMIN" && req.user.collegeId) {
-            where.collegeId = req.user.collegeId;
-        }
 
-        const students = await prisma.student.findMany({
+        const students = await scopedDb.student.findMany({
             where,
             select: {
                 firstName: true,
@@ -435,10 +438,10 @@ router.get("/analytics/export", async (req: AuthRequest, res: Response) => {
             "Placed", "Package (LPA)", "Company",
         ];
 
-        const rows = students.map((s) => {
+        const rows = students.map((s: any) => {
             const jri = s.jriCalculations[0];
-            const lc = s.dsaProfiles.find((p) => p.platform === "LEETCODE");
-            const cf = s.dsaProfiles.find((p) => p.platform === "CODEFORCES");
+            const lc = s.dsaProfiles.find((p: any) => p.platform === "LEETCODE");
+            const cf = s.dsaProfiles.find((p: any) => p.platform === "CODEFORCES");
             const bestProject = s.projectAnalyses[0];
             const jriScore = jri?.jriScore ?? 0;
 
@@ -482,12 +485,18 @@ router.get("/analytics/export", async (req: AuthRequest, res: Response) => {
 // Body: { isPlaced, companyName?, packageOffered?, placementYear? }
 // ───────────────────────────────────────────────────────────────────
 
-router.patch("/students/:studentId/placement", async (req: AuthRequest, res: Response) => {
+router.patch(
+    "/students/:studentId/placement",
+    requirePermission(Permission.ADMIN_STUDENT_PLACEMENT_WRITE),
+    async (req: AuthRequest, res: Response) => {
     try {
-        if (!req.user || (req.user.role !== "ADMIN" && req.user.role !== "SUPER_ADMIN")) {
-            res.status(403).json({ error: "Admin access required" });
+        const principal = req.auth?.principal;
+        if (!principal) {
+            res.status(401).json({ error: "Unauthorized" });
             return;
         }
+
+        const scopedDb = getScopedPrismaClient(principal);
 
         const studentId = req.params.studentId as string;
         const { isPlaced, companyName, packageOffered, placementYear } = req.body;
@@ -497,23 +506,17 @@ router.patch("/students/:studentId/placement", async (req: AuthRequest, res: Res
             return;
         }
 
-        const student = await prisma.student.findUnique({
+        const student = await scopedDb.student.findUnique({
             where: { id: studentId },
             select: { id: true, collegeId: true },
         });
 
         if (!student) {
-            res.status(404).json({ error: "Student not found" });
+            res.status(404).json({ error: "Student not found or access denied" });
             return;
         }
 
-        // College-scoped: ADMIN can only update students in their college
-        if (req.user.role === "ADMIN" && student.collegeId !== req.user.collegeId) {
-            res.status(403).json({ error: "You can only update students in your college" });
-            return;
-        }
-
-        const updated = await prisma.student.update({
+        const updated = await scopedDb.student.update({
             where: { id: studentId },
             data: {
                 isPlaced,
@@ -545,25 +548,28 @@ router.patch("/students/:studentId/placement", async (req: AuthRequest, res: Res
 // Query params: ?batch=&department=&limit=50
 // ───────────────────────────────────────────────────────────────────
 
-router.get("/leaderboard", async (req: AuthRequest, res: Response) => {
+router.get(
+    "/leaderboard",
+    requirePermission(Permission.ADMIN_LEADERBOARD_READ),
+    async (req: AuthRequest, res: Response) => {
     try {
-        if (!req.user || (req.user.role !== "ADMIN" && req.user.role !== "SUPER_ADMIN")) {
-            res.status(403).json({ error: "Admin access required" });
+        const principal = req.auth?.principal;
+        if (!principal) {
+            res.status(401).json({ error: "Unauthorized" });
             return;
         }
+
+        const scopedDb = getScopedPrismaClient(principal);
 
         const batch = req.query.batch as string | undefined;
         const department = req.query.department as string | undefined;
         const limit = Math.min(Number(req.query.limit ?? 50), 200);
 
         const where: Record<string, unknown> = {};
-        if (req.user.role === "ADMIN" && req.user.collegeId) {
-            where.collegeId = req.user.collegeId;
-        }
         if (batch) where.batch = batch;
         if (department) where.department = department;
 
-        const students = await prisma.student.findMany({
+        const students = await scopedDb.student.findMany({
             where,
             select: {
                 id: true,
@@ -595,7 +601,7 @@ router.get("/leaderboard", async (req: AuthRequest, res: Response) => {
         });
 
         const ranked = students
-            .map((s) => {
+            .map((s: any) => {
                 const jri = s.jriCalculations[0];
                 const jriScore = jri?.jriScore ?? 0;
                 return {
@@ -615,9 +621,9 @@ router.get("/leaderboard", async (req: AuthRequest, res: Response) => {
                     lastUpdated: jri?.createdAt ?? null,
                 };
             })
-            .sort((a, b) => b.jriScore - a.jriScore)
+            .sort((a: any, b: any) => b.jriScore - a.jriScore)
             .slice(0, limit)
-            .map((s, idx) => ({ rank: idx + 1, ...s }));
+            .map((s: any, idx: any) => ({ rank: idx + 1, ...s }));
 
         res.status(200).json({
             total: ranked.length,

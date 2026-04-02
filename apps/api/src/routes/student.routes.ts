@@ -1,25 +1,29 @@
 import { Router, Response } from "express";
 import prisma from "../db";
-import { authenticate, AuthRequest } from "../middleware/auth.middleware";
+import {
+    authenticate,
+    AuthRequest,
+    Permission,
+    requirePermission
+} from "../middleware/auth.middleware";
 
 const router = Router();
 
 router.use(authenticate);
 
-// ───────────────────────────────────────────────────────────────────
-// GET /api/students/me/onboarding-status
-// Any authenticated student — returns completion checklist
-// ───────────────────────────────────────────────────────────────────
-
-router.get("/me/onboarding-status", async (req: AuthRequest, res: Response) => {
+router.get(
+    "/me/onboarding-status",
+    requirePermission(Permission.ONBOARDING_READ_SELF),
+    async (req: AuthRequest, res: Response) => {
     try {
-        if (!req.user) {
+        const principal = req.auth?.principal;
+        if (!principal) {
             res.status(401).json({ error: "Authentication required" });
             return;
         }
 
         const student = await prisma.student.findFirst({
-            where: { userId: req.user.userId },
+            where: { userId: principal.userId },
             select: {
                 id: true,
                 firstName: true,

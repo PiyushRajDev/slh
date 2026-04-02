@@ -26,6 +26,8 @@ model User {
   updatedAt    DateTime  @updatedAt
   lastLoginAt  DateTime?
 
+  sessions Session[]
+
   @@index([email])
   @@index([collegeId])
 }
@@ -35,6 +37,37 @@ enum Role {
   ADMIN
   SUPER_ADMIN
   RECRUITER
+}
+
+model Session {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash  String
+  expiresAt  DateTime
+  revokedAt  DateTime?
+  replacedBy String?
+  deviceId   String?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime  @default(now())
+
+  @@index([userId])
+  @@index([tokenHash])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  ipAddress String?
+  userAgent String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
 }
 
 model College {
@@ -78,10 +111,12 @@ model Student {
   githubAccessToken String?
   githubConnectedAt DateTime?
 
-  githubProfile   GitHubProfile?
-  dsaProfiles     DSAProfile[]
-  jriCalculations JRICalculation[]
-  projectAnalyses ProjectAnalysis[]
+  githubProfile          GitHubProfile?
+  dsaProfiles            DSAProfile[]
+  jriCalculations        JRICalculation[]
+  projectAnalyses        ProjectAnalysis[]
+  userCapabilityProfiles UserCapabilityProfile[]
+  skillGapReports        SkillGapReport[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -179,6 +214,37 @@ enum AnalysisStatus {
   FAILED
 }
 
+enum CapabilitySourceType {
+  JOB_LISTING
+  PROJECT_ANALYSIS
+  GITHUB_PROFILE
+  DSA_PROFILE
+  JRI_PROFILE
+}
+
+enum CapabilityMatchStatus {
+  MATCHED
+  PARTIAL
+  MISSING
+}
+
+enum SignalMappingSourceType {
+  PROJECT_PROFILE
+  PROJECT_SIGNAL
+  PROJECT_DIMENSION
+  PROJECT_TERM
+  GITHUB_TERM
+  DSA_PROFILE
+  JRI_PROFILE
+}
+
+enum SignalMappingMatcherType {
+  EXACT
+  CONTAINS
+  BOOLEAN_TRUE
+  THRESHOLD
+}
+
 model ProjectAnalysis {
   id               String         @id @default(cuid())
   studentId        String
@@ -204,4 +270,251 @@ model ProjectAnalysis {
   @@index([overallScore])
   @@index([analyzerVersion])
   @@index([studentId, createdAt])
+}
+
+model JobCluster {
+  id             String    @id @default(cuid())
+  clusterKey     String    @unique
+  roleSlug       String
+  roleTitle      String
+  seniority      String?
+  location       String?
+  employmentType String?
+  workMode       String?
+  sampleSize     Int       @default(0)
+  marketSignals  Json?
+  lastIngestedAt DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  jobListings       JobListing[]
+  jobCapabilityMaps JobCapabilityMap[]
+  skillGapReports   SkillGapReport[]
+
+  @@index([roleSlug, seniority])
+  @@index([updatedAt])
+}
+
+model JobListing {
+  id                    String     @id @default(cuid())
+  clusterId             String
+  cluster               JobCluster @relation(fields: [clusterId], references: [id])
+  source                String
+  externalId            String?
+  sourceUrl             String?
+  companyName           String?
+  title                 String
+  location              String?
+  employmentType        String?
+  workMode              String?
+  descriptionRaw        String
+  descriptionNormalized String
+  sourceHash            String     @unique
+  normalizedHash        String
+  postedAt              DateTime?
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+
+  capabilityMaps JobCapabilityMap[]
+
+  @@index([clusterId, normalizedHash])
+  @@index([clusterId, title])
+  @@index([clusterId, postedAt])
+}
+
+model Capability {
+  id                String       @id @default(cuid())
+  slug              String       @unique
+  name              String
+  category          String
+  description       String?
+  synonyms          Json?
+  recommendation    String?
+  projectSuggestion String?
+  parentId          String?
+  parent            Capability?  @relation("CapabilityTree", fields: [parentId], references: [id])
+  children          Capability[] @relation("CapabilityTree")
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  jobCapabilityMaps      JobCapabilityMap[]
+  userCapabilityEvidence UserCapabilityEvidence[]
+  reportCapabilities     SkillGapReportCapability[]
+  signalMappings         SignalMapping[]
+
+  @@index([category, name])
+}
+
+model JobCapabilityMap {
+  id                String     @id @default(cuid())
+  clusterId         String
+  cluster           JobCluster @relation(fields: [clusterId], references: [id])
+  jobListingId      String
+  jobListing        JobListing @relation(fields: [jobListingId], references: [id])
+  capabilityId      String
+  capability        Capability @relation(fields: [capabilityId], references: [id])
+  demandScore       Float
+  importance        Float
+  confidence        Float
+  evidence          Json?
+  extractionVersion String
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+
+  @@unique([jobListingId, capabilityId])
+  @@index([clusterId, capabilityId])
+}
+
+model SignalMapping {
+  id                   String                   @id @default(cuid())
+  sourceType           SignalMappingSourceType
+  matcherType          SignalMappingMatcherType
+  matcherKey           String
+  matcherValue         String?
+  targetCapabilitySlug String
+  capability           Capability               @relation(fields: [targetCapabilitySlug], references: [slug])
+  baseScore            Float                    @default(0)
+  scoreMultiplier      Float?
+  confidence           Float                    @default(0.7)
+  minThreshold         Float?
+  profileIds           Json?
+  evidenceTemplate     String?
+  isActive             Boolean                  @default(true)
+  createdAt            DateTime                 @default(now())
+  updatedAt            DateTime                 @updatedAt
+
+  @@index([sourceType, matcherKey, isActive])
+  @@index([targetCapabilitySlug, isActive])
+}
+
+model MarketFitConfig {
+  key         String   @id
+  valueNumber Float?
+  valueString String?
+  valueJson   Json?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model UserCapabilityProfile {
+  id                 String    @id @default(cuid())
+  studentId          String
+  student            Student   @relation(fields: [studentId], references: [id])
+  snapshotHash       String
+  sourceSummary      Json?
+  evidenceWindowDays Int       @default(180)
+  computedAt         DateTime  @default(now())
+  expiresAt          DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  capabilities UserCapabilityEvidence[]
+  reports      SkillGapReport[]
+
+  @@index([studentId, createdAt])
+  @@index([studentId, snapshotHash])
+}
+
+model UserCapabilityEvidence {
+  id           String                @id @default(cuid())
+  profileId    String
+  profile      UserCapabilityProfile @relation(fields: [profileId], references: [id])
+  capabilityId String
+  capability   Capability            @relation(fields: [capabilityId], references: [id])
+  sourceType   CapabilitySourceType
+  score        Float
+  confidence   Float
+  evidence     Json?
+  createdAt    DateTime              @default(now())
+
+  @@unique([profileId, capabilityId, sourceType])
+  @@index([profileId, capabilityId])
+}
+
+model SkillGapReport {
+  id                      String                @id @default(cuid())
+  studentId               String
+  student                 Student               @relation(fields: [studentId], references: [id])
+  clusterId               String
+  cluster                 JobCluster            @relation(fields: [clusterId], references: [id])
+  userCapabilityProfileId String
+  userCapabilityProfile   UserCapabilityProfile @relation(fields: [userCapabilityProfileId], references: [id])
+  requestedByUserId       String?
+  backgroundJobId         String?               @unique
+  status                  AnalysisStatus        @default(PENDING)
+  roleSlug                String
+  roleTitle               String
+  seniority               String?
+  location                String?
+  readinessScore          Float?
+  verdict                 String?
+  summary                 Json?
+  reportPayload           Json?
+  actionPlan              Json?
+  jobCount                Int                   @default(0)
+  errorMessage            String?
+  startedAt               DateTime?
+  completedAt             DateTime?
+  createdAt               DateTime              @default(now())
+  updatedAt               DateTime              @updatedAt
+
+  capabilities SkillGapReportCapability[]
+
+  @@index([studentId, createdAt])
+  @@index([clusterId, createdAt])
+  @@index([status, createdAt])
+}
+
+model SkillGapReportCapability {
+  id           String                @id @default(cuid())
+  reportId     String
+  report       SkillGapReport        @relation(fields: [reportId], references: [id])
+  capabilityId String
+  capability   Capability            @relation(fields: [capabilityId], references: [id])
+  matchStatus  CapabilityMatchStatus
+  demandScore  Float
+  userScore    Float
+  gapScore     Float
+  evidence     Json?
+  createdAt    DateTime              @default(now())
+
+  @@unique([reportId, capabilityId])
+  @@index([reportId, matchStatus])
+  @@index([capabilityId, matchStatus])
+}
+
+enum EmailType {
+  COLLEGE_WELCOME
+  STUDENT_WELCOME
+  WEEKLY_REPORT
+  ANALYSIS_COMPLETE
+  PASSWORD_RESET
+}
+
+enum EmailStatus {
+  SENT
+  FAILED
+  PENDING
+}
+
+model EmailLog {
+  id             String      @id @default(cuid())
+  type           EmailType
+  recipientEmail String
+  subject        String
+  status         EmailStatus @default(PENDING)
+  messageId      String?
+  errorMessage   String?
+  studentId      String?
+  collegeId      String?
+  metadata       Json?
+  sentAt         DateTime?
+  createdAt      DateTime    @default(now())
+
+  @@index([recipientEmail])
+  @@index([studentId])
+  @@index([collegeId])
+  @@index([type, status])
+  @@index([createdAt])
 }

@@ -1,19 +1,28 @@
 import { Router, Response } from "express";
-import { authenticate, AuthRequest } from "../middleware/auth.middleware";
+import {
+    authenticate,
+    AuthRequest,
+    Permission,
+    requirePermission
+} from "../middleware/auth.middleware";
 import { jriService } from "../services/jriService";
 
 const router = Router();
 
 router.use(authenticate);
 
-router.get("/profile", async (req: AuthRequest, res: Response) => {
+router.get(
+    "/profile",
+    requirePermission(Permission.JRI_READ_SELF),
+    async (req: AuthRequest, res: Response) => {
     try {
-        if (!req.user) {
+        const principal = req.auth?.principal;
+        if (!principal) {
             res.status(401).json({ error: "Unauthorized" });
             return;
         }
 
-        const profile = await jriService.getProfile(req.user.userId);
+        const profile = await jriService.getProfile(principal.userId);
         res.status(200).json(profile);
     } catch (error: unknown) {
         const message = error instanceof Error ? error.message : "Failed to fetch JRI profile";
@@ -27,15 +36,19 @@ router.get("/profile", async (req: AuthRequest, res: Response) => {
     }
 });
 
-router.post("/recalculate", async (req: AuthRequest, res: Response) => {
+router.post(
+    "/recalculate",
+    requirePermission(Permission.JRI_RECALCULATE_SELF),
+    async (req: AuthRequest, res: Response) => {
     try {
-        if (!req.user) {
+        const principal = req.auth?.principal;
+        if (!principal) {
             res.status(401).json({ error: "Unauthorized" });
             return;
         }
 
         const payload = req.body ?? {};
-        const profile = await jriService.recalculate(req.user.userId, {
+        const profile = await jriService.recalculate(principal.userId, {
             leetcodeUsername: typeof payload.leetcodeUsername === "string" ? payload.leetcodeUsername : undefined,
             codeforcesHandle: typeof payload.codeforcesHandle === "string" ? payload.codeforcesHandle : undefined,
             weights: payload.weights && typeof payload.weights === "object"
@@ -59,9 +72,13 @@ router.post("/recalculate", async (req: AuthRequest, res: Response) => {
     }
 });
 
-router.get("/verify/:platform/:username", async (req: AuthRequest, res: Response) => {
+router.get(
+    "/verify/:platform/:username",
+    requirePermission(Permission.JRI_VERIFY_SELF),
+    async (req: AuthRequest, res: Response) => {
     try {
-        if (!req.user) {
+        const principal = req.auth?.principal;
+        if (!principal) {
             res.status(401).json({ error: "Unauthorized" });
             return;
         }
@@ -79,7 +96,7 @@ router.get("/verify/:platform/:username", async (req: AuthRequest, res: Response
             return;
         }
 
-        const verified = await jriService.verifyPlatformAccount(req.user.userId, platform as any, username as string, token);
+        const verified = await jriService.verifyPlatformAccount(principal.userId, platform as any, username as string, token);
         res.status(200).json({ verified });
     } catch (error: unknown) {
         const message = error instanceof Error ? error.message : "Failed to verify account";

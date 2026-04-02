@@ -1,104 +1,44 @@
-const ACCESS_TOKEN_KEY = "slh_token";
-const REFRESH_TOKEN_KEY = "slh_refresh_token";
-const EXPIRY_SKEW_MS = 15_000;
+/**
+ * Common auth roles and helpers.
+ * Note: No window or localStorage logic here for TOKEN storage. 
+ * Token management is now handled by httpOnly cookies.
+ */
 
-type JwtPayload = {
-  exp?: number;
-};
+export function isAdmin(role: string | null | undefined): boolean {
+  return role === "ADMIN" || role === "SUPER_ADMIN";
+}
 
-function decodeJwtPayload(token: string): JwtPayload | null {
-  const encodedPayload = token.split(".")[1];
-  if (!encodedPayload) {
-    return null;
-  }
+export function isSuperAdmin(role: string | null | undefined): boolean {
+  return role === "SUPER_ADMIN";
+}
 
-  const decodeBase64 =
-    typeof globalThis.atob === "function" ? globalThis.atob.bind(globalThis) : null;
-  if (!decodeBase64) {
-    return null;
-  }
-
-  const normalized = encodedPayload.replace(/-/g, "+").replace(/_/g, "/");
-  const padding = normalized.length % 4;
-  const padded = padding === 0 ? normalized : `${normalized}${"=".repeat(4 - padding)}`;
-
-  try {
-    const decoded = decodeBase64(padded);
-    const payload = JSON.parse(decoded) as unknown;
-    if (!payload || typeof payload !== "object") {
-      return null;
-    }
-
-    return payload as JwtPayload;
-  } catch {
-    return null;
+/**
+ * Triggers events for UI state synchronization across components and tabs.
+ */
+export function notifyAuthCleared() {
+  if (typeof window !== "undefined") {
+    // 1. Internal window event for the current tab
+    window.dispatchEvent(new Event("auth-session-cleared"));
+    
+    // 2. Storage event for other tabs to synchronize
+    window.localStorage.setItem("slh-logout-trigger", Date.now().toString());
   }
 }
 
-function isAccessTokenExpired(token: string): boolean {
-  const payload = decodeJwtPayload(token);
-  if (!payload || typeof payload.exp !== "number" || !Number.isFinite(payload.exp)) {
-    return true;
-  }
-
-  const expiresAtMs = payload.exp * 1000;
-  return Date.now() >= expiresAtMs - EXPIRY_SKEW_MS;
-}
+// Legacy exports kept/modified to prevent breakages during refactor.
 
 export function getAccessToken(): string | null {
-  if (typeof window === "undefined") {
-    return null;
-  }
-
-  const token = window.localStorage.getItem(ACCESS_TOKEN_KEY);
-  if (!token) {
-    return null;
-  }
-
-  if (isAccessTokenExpired(token)) {
-    clearSessionTokens();
-    return null;
-  }
-
-  return token;
+  return null;
 }
 
 export function getRefreshToken(): string | null {
-  if (typeof window === "undefined") {
-    return null;
-  }
-
-  return window.localStorage.getItem(REFRESH_TOKEN_KEY);
+  return null;
 }
 
-export function setSessionTokens(accessToken: string, refreshToken?: string | null) {
-  if (typeof window === "undefined") {
-    return;
-  }
-
-  window.localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
-
-  if (refreshToken) {
-    window.localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
-  }
+export function setSessionTokens(_at: string, _rt?: string | null) {
+  // Logic moved to server-side cookies
 }
 
 export function clearSessionTokens() {
-  if (typeof window === "undefined") {
-    return;
-  }
-
-  window.localStorage.removeItem(ACCESS_TOKEN_KEY);
-  window.localStorage.removeItem(REFRESH_TOKEN_KEY);
-}
-
-export function hasSessionToken(): boolean {
-  return getAccessToken() !== null;
-}
-
-export function getUserRoleFromToken(): string | null {
-  const token = getAccessToken();
-  if (!token) return null;
-  const payload = decodeJwtPayload(token) as any;
-  return payload?.role || null;
+  notifyAuthCleared();
 }

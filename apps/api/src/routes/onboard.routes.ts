@@ -1,7 +1,13 @@
 import { Router, Response } from "express";
 import * as bcrypt from "bcrypt";
 import prisma from "../db";
-import { authenticate, AuthRequest } from "../middleware/auth.middleware";
+import {
+    authenticate,
+    AuthRequest,
+    Permission,
+    requirePermission
+} from "../middleware/auth.middleware";
+import { getScopedPrismaClient } from "../scoped-db";
 import {
     sendCollegeWelcomeEmail,
     sendStudentWelcomeEmail,
@@ -11,20 +17,11 @@ const router = Router();
 
 router.use(authenticate);
 
-// ───────────────────────────────────────────────────────────────────
-// POST /api/onboard/college
-// SUPER_ADMIN only — creates a college + its first admin user
-// Body: { name, shortName, domain?, location?, website?,
-//         adminEmail, adminPassword, adminFirstName, adminLastName }
-// ───────────────────────────────────────────────────────────────────
-
-router.post("/college", async (req: AuthRequest, res: Response) => {
+router.post(
+    "/college",
+    requirePermission(Permission.COLLEGE_ONBOARD_CREATE),
+    async (req: AuthRequest, res: Response) => {
     try {
-        if (!req.user || req.user.role !== "SUPER_ADMIN") {
-            res.status(403).json({ error: "Super-admin access required" });
-            return;
-        }
-
         const {
             name,
             shortName,
@@ -129,27 +126,29 @@ interface StudentImportRow {
     section?: string;
 }
 
-router.post("/colleges/:collegeId/bulk-import", async (req: AuthRequest, res: Response) => {
+router.post(
+    "/colleges/:collegeId/bulk-import",
+    requirePermission(Permission.STUDENT_BULK_IMPORT),
+    async (req: AuthRequest, res: Response) => {
     try {
-        if (!req.user) {
+        const principal = req.auth?.principal;
+        if (!principal) {
             res.status(401).json({ error: "Authentication required" });
             return;
         }
 
+        const scopedDb = getScopedPrismaClient(principal);
         const collegeId = req.params.collegeId as string;
 
-        // SUPER_ADMIN can import for any college; ADMIN only for their own
-        const isAdmin = req.user.role === "ADMIN" || req.user.role === "SUPER_ADMIN";
-        if (!isAdmin) {
-            res.status(403).json({ error: "Admin access required" });
-            return;
-        }
-        if (req.user.role === "ADMIN" && req.user.collegeId !== collegeId) {
+        // If principal is an ADMIN, they are already scoped by the scopedDb.
+        // We can check if they are trying to import for another college explicitly here for better error message
+        // but scopedDb would prevent it anyway by not finding the college or failing the transaction.
+        if (principal.role === "ADMIN" && principal.collegeId !== collegeId) {
             res.status(403).json({ error: "You can only import students for your own college" });
             return;
         }
 
-        const college = await prisma.college.findUnique({ where: { id: collegeId } });
+        const college = await scopedDb.college.findUnique({ where: { id: collegeId } });
         if (!college) {
             res.status(404).json({ error: "College not found" });
             return;
@@ -197,7 +196,7 @@ router.post("/colleges/:collegeId/bulk-import", async (req: AuthRequest, res: Re
             }
 
             // Check duplicates by email or rollNumber
-            const existing = await prisma.student.findFirst({
+            const existing = await scopedDb.student.findFirst({
                 where: { OR: [{ email: row.email }, { rollNumber: row.rollNumber }] },
                 select: { id: true },
             });
@@ -206,7 +205,7 @@ router.post("/colleges/:collegeId/bulk-import", async (req: AuthRequest, res: Re
                 continue;
             }
 
-            const existingUser = await prisma.user.findUnique({ where: { email: row.email } });
+            const existingUser = await scopedDb.user.findUnique({ where: { email: row.email } });
             if (existingUser) {
                 results.skipped++;
                 continue;
@@ -216,7 +215,7 @@ router.post("/colleges/:collegeId/bulk-import", async (req: AuthRequest, res: Re
             const passwordHash = await bcrypt.hash(tempPassword, 10);
 
             try {
-                const created = await prisma.$transaction(async (tx) => {
+                const created = await scopedDb.$transaction(async (tx: any) => {
                     const user = await tx.user.create({
                         data: {
                             email: row.email,
