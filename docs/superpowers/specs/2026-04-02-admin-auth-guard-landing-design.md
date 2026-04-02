@@ -32,7 +32,7 @@ A wrapper component that checks auth state on mount:
 ```ts
 interface AuthGuardProps {
   children: ReactNode;
-  requiredRole?: "ADMIN";  // only value needed today; SUPER_ADMIN implicitly passes
+  requiredRole?: "ADMIN" | "SUPER_ADMIN";
 }
 ```
 
@@ -42,9 +42,10 @@ interface AuthGuardProps {
 | No token | Redirect to `/login` |
 | Token present, no `requiredRole` | Render children (any authenticated user) |
 | Token present, `requiredRole="ADMIN"`, user is ADMIN or SUPER_ADMIN | Render children |
-| Token present, `requiredRole="ADMIN"`, user is STUDENT or RECRUITER | Redirect to `/dashboard?denied=1` |
+| Token present, `requiredRole="SUPER_ADMIN"`, user is SUPER_ADMIN only | Render children |
+| Token present, role mismatch | Redirect to `/dashboard?denied=1` |
 
-**SUPER_ADMIN** always passes an ADMIN role check (superset of ADMIN permissions).
+**SUPER_ADMIN** passes ADMIN checks (superset), but ADMIN does **not** pass SUPER_ADMIN checks.
 
 ### Toast for Denied Access
 
@@ -69,9 +70,9 @@ Styled as a subtle top banner with `bg-destructive/10 text-destructive border-de
 | `/admin/analytics` | Auth required + ADMIN role |
 | `/admin/leaderboard` | Auth required + ADMIN role |
 | `/admin/alerts` | Auth required + ADMIN role |
+| `/onboard/*` | Auth required + SUPER_ADMIN role |
 | `/login`, `/register` | Public |
 | `/`, `/u/*` | Public |
-| `/onboard/*` | Public |
 | `/github-connected` | Public |
 
 ### Implementation Approach
