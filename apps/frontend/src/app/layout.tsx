@@ -4,6 +4,7 @@ import Script from "next/script";
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CommandMenu } from "@/components/app/command-menu";
+import { AuthProvider } from "@/components/app/auth-context";
 import { THEME_STORAGE_KEY } from "@/lib/theme";
 
 const inter = Inter({
@@ -37,10 +38,12 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full bg-background font-sans text-sm leading-relaxed text-foreground">
-        <TooltipProvider>
-          {children}
-          <CommandMenu />
-        </TooltipProvider>
+        <AuthProvider>
+          <TooltipProvider>
+            {children}
+            <CommandMenu />
+          </TooltipProvider>
+        </AuthProvider>
       </body>
     </html>
   );
