@@ -21,7 +21,7 @@ export interface FinalScoreReportV4 {
         devops: DimensionScore;
         consistency: DimensionScore; // NEW V4 DIMENSION
     };
-    percentileRank: number;
+    percentileRank: number | null;
 }
 
 function safeNum(val: number | null | undefined, fallback = 0): number {
@@ -54,7 +54,10 @@ export function calculateScoreV4(
     const dupPercent = safeNum(metrics.duplication_percent, -1);
     const dryness = dupPercent < 0 ? 5 : dupPercent < 5 ? 5 : Math.max(0, 5 - (dupPercent / 4));
 
-    const lintScore = 5; // Placeholder
+    // Heuristic: penalise by long_functions and circular_deps as a lint proxy
+    const longFnPenalty = Math.min(5, safeNum(metrics.long_functions_count) * 0.5);
+    const circDepPenalty = Math.min(5, safeNum(metrics.circular_dependencies_count) * 1);
+    const lintScore = Math.max(0, 5 - longFnPenalty - circDepPenalty);
     const styleBonus = authenticity?.style_consistency != null ? Math.round(authenticity.style_consistency * 3) : 0;
     
     // Confidence Net: 0.7 + 0.3 * MetricConfidence
@@ -155,10 +158,8 @@ export function calculateScoreV4(
         benchmarkAlignment = Math.min(absoluteScore, adaptiveEliteAnchor);
     }
     
-    // Percentile rank (Historical Mock)
-    const mockHistoricalPercentile = absoluteScore > 80 ? 95 : absoluteScore > 60 ? 65 : 30;
-
-    const finalScore = Math.round((0.6 * absoluteScore) + (0.2 * mockHistoricalPercentile) + (0.2 * benchmarkAlignment));
+    // Final score: 80% absolute, 20% benchmark alignment (no mock percentile)
+    const finalScore = Math.round((0.8 * absoluteScore) + (0.2 * benchmarkAlignment));
 
     // ------------------------------------------------------------------------
     // V5 GLOBAL EVALUATION CONFIDENCE
@@ -174,7 +175,7 @@ export function calculateScoreV4(
         overallScore: Math.min(100, Math.max(0, finalScore)),
         evaluation_confidence: global_evaluation_confidence,
         confidence_status: global_confidence_status,
-        percentileRank: mockHistoricalPercentile,
+        percentileRank: null,
         dimensions: {
             codeQuality: { score: codeQualityScore, max: 25, breakdown: { logicDensity, functionHealth, dryness } },
             architecture: { score: archScore, max: 20, breakdown: { structureScore, circDepScore, fanOutScore, orphanScore } },
