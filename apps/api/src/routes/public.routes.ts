@@ -1,15 +1,18 @@
 import { Router, Request, Response } from "express";
 import prisma from "../db";
-import { 
-    computeTier, 
-    computeArchetype, 
-    computeDeveloperAttributes, 
-    tierColor, 
-    clamp, 
-    round 
+import {
+    computeTier,
+    computeArchetype,
+    computeDeveloperAttributes,
+    tierColor,
+    clamp,
+    round
 } from "../utils/jri-logic";
+import { publicLimiter } from "../auth/rate-limit";
 
 const router = Router();
+
+router.use(publicLimiter);
 
 // ───────────────────────────────────────────────────────────────────
 // GET /api/public/profile/:username

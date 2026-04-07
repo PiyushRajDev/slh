@@ -33,3 +33,10 @@ export const leetcodeLimiter = limiter(
     30,
     "Too many requests. Please try again later."
 );
+
+/** 60 req / min per IP — unauthenticated public endpoints (profile, badge, leaderboard) */
+export const publicLimiter = limiter(
+    60 * 1000,
+    60,
+    "Too many requests. Please slow down."
+);
