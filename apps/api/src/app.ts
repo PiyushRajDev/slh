@@ -20,7 +20,7 @@ const app = express();
 
 app.set("trust proxy", 1); // important behind proxy
 
-app.use(express.json());
+app.use(express.json({ limit: '1mb' }));
 app.use(cookieParser());
 
 // CORS configuration - allowing origins dynamically from environment

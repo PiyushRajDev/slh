@@ -2,7 +2,7 @@ import "dotenv/config";
 import app from "./app";
 import { registerScheduledJobs, startSchedulerWorker } from "./services/scheduler";
 
-const PORT = 3000;
+const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
 app.listen(PORT, async () => {
     console.log(`🚀 API running on http://localhost:${PORT}`);
