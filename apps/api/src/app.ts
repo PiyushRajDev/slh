@@ -15,6 +15,7 @@ import adminJobsRouter from "./routes/admin-jobs.routes";
 import studentJobsRouter from "./routes/student-jobs.routes";
 import jobIntelligenceRouter from "./routes/job-intelligence.routes";
 import { leetcodeLimiter } from "./auth/rate-limit";
+import healthRouter from "./routes/health.routes";
 
 const app = express();
 
@@ -60,6 +61,7 @@ app.use(cors({
     optionsSuccessStatus: 200 // Ensure Preflight requests return 200 OK
 }));
 
+app.use("/health", healthRouter);
 app.use("/auth", authRouter);
 app.use("/auth", githubAuthRouter);
 app.use("/leetcode/user", leetcodeLimiter, userRoutes);
