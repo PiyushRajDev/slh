@@ -22,7 +22,8 @@ import {
   ShieldCheck,
   LayoutDashboard,
   AlertCircle,
-  UserPlus
+  UserPlus,
+  Briefcase,
 } from "lucide-react";
 
 export default function AdminDashboardPage() {
@@ -119,6 +120,13 @@ export default function AdminDashboardPage() {
       href: "/admin/onboard",
       icon: UserPlus,
       cta: "Onboard Students"
+    },
+    {
+      title: "Job Management",
+      description: "Post job openings, manage company profiles, and track student applications and placement activity.",
+      href: "/admin/jobs",
+      icon: Briefcase,
+      cta: "Manage Jobs"
     }
   ];
 

@@ -11,7 +11,9 @@ import publicRouter from "./routes/public.routes";
 import adminRouter from "./routes/admin.routes";
 import onboardRouter from "./routes/onboard.routes";
 import studentRouter from "./routes/student.routes";
-import marketFitRouter from "./routes/market-fit.routes";
+import adminJobsRouter from "./routes/admin-jobs.routes";
+import studentJobsRouter from "./routes/student-jobs.routes";
+import jobIntelligenceRouter from "./routes/job-intelligence.routes";
 import { leetcodeLimiter } from "./auth/rate-limit";
 
 const app = express();
@@ -68,6 +70,8 @@ app.use("/api/public", publicRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/onboard", onboardRouter);
 app.use("/api/students", studentRouter);
-app.use("/market-fit", marketFitRouter);
+app.use("/api/admin", adminJobsRouter);
+app.use("/api/jobs", studentJobsRouter);
+app.use("/api/job-intelligence", jobIntelligenceRouter);
 
 export default app;

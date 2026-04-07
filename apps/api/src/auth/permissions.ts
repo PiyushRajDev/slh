@@ -21,12 +21,8 @@ export enum Permission {
     ADMIN_DATA_EXPORT = "admin.data.export",
     ADMIN_STUDENT_PLACEMENT_WRITE = "admin.student_placement.write",
     ADMIN_LEADERBOARD_READ = "admin.leaderboard.read",
-    MARKET_FIT_ANALYZE_SELF = "market_fit.analyze.self",
-    MARKET_FIT_ANALYZE_ANY = "market_fit.analyze.any",
-    MARKET_FIT_REPORT_READ_SELF = "market_fit.report.read.self",
-    MARKET_FIT_REPORT_READ_ANY = "market_fit.report.read.any",
-    MARKET_FIT_STATUS_READ_SELF = "market_fit.status.read.self",
-    MARKET_FIT_STATUS_READ_ANY = "market_fit.status.read.any"
+    JOB_INTELLIGENCE_ANALYZE = "job-intelligence.analyze",
+    JOB_INTELLIGENCE_READ = "job-intelligence.read"
 }
 
 const allPermissions = Object.values(Permission);
@@ -41,9 +37,8 @@ const studentPermissions: Permission[] = [
     Permission.JRI_RECALCULATE_SELF,
     Permission.JRI_VERIFY_SELF,
     Permission.ONBOARDING_READ_SELF,
-    Permission.MARKET_FIT_ANALYZE_SELF,
-    Permission.MARKET_FIT_REPORT_READ_SELF,
-    Permission.MARKET_FIT_STATUS_READ_SELF
+    Permission.JOB_INTELLIGENCE_ANALYZE,
+    Permission.JOB_INTELLIGENCE_READ
 ];
 
 const adminPermissions: Permission[] = [
@@ -56,16 +51,14 @@ const adminPermissions: Permission[] = [
     Permission.ADMIN_STUDENT_PLACEMENT_WRITE,
     Permission.ADMIN_LEADERBOARD_READ,
     Permission.STUDENT_BULK_IMPORT,
-    Permission.MARKET_FIT_ANALYZE_ANY,
-    Permission.MARKET_FIT_REPORT_READ_ANY,
-    Permission.MARKET_FIT_STATUS_READ_ANY
+    Permission.JOB_INTELLIGENCE_ANALYZE,
+    Permission.JOB_INTELLIGENCE_READ
 ];
 
 const recruiterPermissions: Permission[] = [
     Permission.PROFILE_READ_SELF,
     Permission.ANALYSIS_READ_ANY,
-    Permission.ADMIN_LEADERBOARD_READ,
-    Permission.MARKET_FIT_REPORT_READ_ANY
+    Permission.ADMIN_LEADERBOARD_READ
 ];
 
 const rolePermissionMap: Record<AuthRole, ReadonlySet<Permission>> = {

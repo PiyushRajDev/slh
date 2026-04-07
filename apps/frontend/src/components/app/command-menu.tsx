@@ -47,12 +47,7 @@ export function CommandMenu() {
       action: () => startTransition(() => router.push("/analyze")),
       hidden: isAdminUser || !user,
     },
-    {
-      label: "Market Fit",
-      shortcut: "G M",
-      action: () => startTransition(() => router.push("/dashboard/market-fit")),
-      hidden: isAdminUser || !user,
-    },
+
     {
       label: "Login",
       shortcut: "G L",

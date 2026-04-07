@@ -1,24 +1,19 @@
-import { CapabilityGapItem, CapabilityDemandSummary, MarketFitReportPayload, UserCapabilitySummary } from "./types";
 import { clamp, round } from "./utils";
+import { CapabilityGapItem, CapabilityDemandSummary, MarketFitReportPayload, UserCapabilitySummary } from "./types";
 
 type GapComputation = CapabilityGapItem & {
     matchStatus: "MATCHED" | "PARTIAL" | "MISSING";
 };
 
-type GapAnalysisOutput = Omit<
-    MarketFitReportPayload,
-    "baselineRole" | "baselineSeniority" | "sampleSize" | "generatedAt" | "dataFreshness" | "topMarketSignals"
->;
+type GapAnalysisOutput = Omit<MarketFitReportPayload, "baselineRole" | "baselineSeniority" | "sampleSize" | "generatedAt" | "dataFreshness" | "topMarketSignals">;
 
-function classifyGap(demandScore: number, userScore: number): GapComputation["matchStatus"] {
+function classifyGap(demandScore: number, userScore: number): "MATCHED" | "PARTIAL" | "MISSING" {
     if (userScore >= Math.max(0.55, demandScore * 0.85)) {
         return "MATCHED";
     }
-
     if (userScore >= Math.max(0.25, demandScore * 0.35)) {
         return "PARTIAL";
     }
-
     return "MISSING";
 }
 
@@ -26,10 +21,11 @@ export const gapAnalysisService = {
     analyze(input: {
         demand: CapabilityDemandSummary[];
         userCapabilities: UserCapabilitySummary[];
-    }): GapAnalysisOutput & { capabilityRows: GapComputation[] } {
+    }): GapAnalysisOutput & {
+        capabilityRows: GapComputation[];
+    } {
         const userByCapability = new Map(input.userCapabilities.map((item) => [item.capabilityId, item]));
         const rows: GapComputation[] = [];
-
         let weightedScore = 0;
         let totalWeight = 0;
 
@@ -57,7 +53,7 @@ export const gapAnalysisService = {
         }
 
         const readinessScore = Math.round((totalWeight === 0 ? 0 : (weightedScore / totalWeight) * 100));
-        const verdict: MarketFitReportPayload["verdict"] = readinessScore >= 75
+        const verdict = readinessScore >= 75
             ? "Competitive"
             : readinessScore >= 50
                 ? "Ready"

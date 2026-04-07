@@ -11,17 +11,17 @@ interface LearningPathProps {
 
 const priorityStyles = {
   critical: {
-    badge: "bg-red-500/15 text-red-400 border-0",
+    badge: "bg-red-500/15 text-red-600 dark:text-red-400 border-0",
     bar: "bg-red-500/40",
     label: "Critical",
   },
   high: {
-    badge: "bg-amber-500/15 text-amber-400 border-0",
+    badge: "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-0",
     bar: "bg-amber-500/40",
     label: "High",
   },
   medium: {
-    badge: "bg-blue-500/15 text-blue-400 border-0",
+    badge: "bg-blue-500/15 text-blue-600 dark:text-blue-400 border-0",
     bar: "bg-blue-500/40",
     label: "Medium",
   },

@@ -1,0 +1,273 @@
+<h2>Job Intelligence — Frontend UI</h2>
+<p class="subtitle">Page layout for /app/(student)/job-intelligence/page.tsx</p>
+
+<div class="mockup">
+  <div class="mockup-header">Job Intelligence Page — Full Layout</div>
+  <div class="mockup-body" style="padding: 0; background: #0a0a0f;">
+
+    <!-- Page Shell (existing PageShell component) -->
+    <div style="padding: 24px 32px; border-bottom: 1px solid #1a1a2e;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <h1 style="font-size: 22px; color: #fff; margin: 0;">Job Intelligence</h1>
+          <p style="color: #888; font-size: 13px; margin: 4px 0 0;">Analyze market demand and find your skill gaps</p>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <span style="background: #1a2e1a; color: #81c784; padding: 4px 10px; border-radius: 12px; font-size: 11px;">3 reports this month</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div style="padding: 20px 32px; background: #0f0f18; border-bottom: 1px solid #1a1a2e;">
+      <div style="display: flex; gap: 16px; align-items: flex-end;">
+        <div style="flex: 1;">
+          <label style="color: #888; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Job Role</label>
+          <div style="background: #1a1a2e; border: 1px solid #2a2a4e; border-radius: 6px; padding: 10px 14px; color: #fff; font-size: 14px;">
+            Backend Developer <span style="color: #555; float: right;">▼</span>
+          </div>
+        </div>
+        <div style="flex: 0.7;">
+          <label style="color: #888; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Experience</label>
+          <div style="background: #1a1a2e; border: 1px solid #2a2a4e; border-radius: 6px; padding: 10px 14px; color: #fff; font-size: 14px;">
+            0–2 years <span style="color: #555; float: right;">▼</span>
+          </div>
+        </div>
+        <div style="flex: 0.7;">
+          <label style="color: #888; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 6px;">Salary Range</label>
+          <div style="background: #1a1a2e; border: 1px solid #2a2a4e; border-radius: 6px; padding: 10px 14px; color: #fff; font-size: 14px;">
+            6–8 LPA <span style="color: #555; float: right;">▼</span>
+          </div>
+        </div>
+        <div>
+          <button style="background: #4f46e5; color: #fff; border: none; border-radius: 6px; padding: 10px 24px; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap;">
+            Analyze Market
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress Bar (shown during analysis) -->
+    <div style="padding: 16px 32px; background: #0d0d14;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="flex: 1; background: #1a1a2e; border-radius: 4px; height: 6px; overflow: hidden;">
+          <div style="background: linear-gradient(90deg, #4f46e5, #7c3aed); width: 65%; height: 100%; border-radius: 4px; transition: width 0.3s;"></div>
+        </div>
+        <span style="color: #a78bfa; font-size: 12px; white-space: nowrap;">Comparing your skills to market... (65%)</span>
+      </div>
+    </div>
+
+    <!-- Results Grid -->
+    <div style="padding: 24px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+
+      <!-- Left Column -->
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+
+        <!-- Readiness Score Card -->
+        <div style="background: #0f0f18; border: 1px solid #1a1a2e; border-radius: 10px; padding: 20px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <div style="color: #888; font-size: 12px; text-transform: uppercase;">Market Readiness</div>
+              <div style="color: #fff; font-size: 42px; font-weight: 700; margin: 4px 0;">67<span style="font-size: 18px; color: #888;">/100</span></div>
+              <div style="color: #fbbf24; font-size: 13px;">Competitive — close to ready</div>
+            </div>
+            <div style="width: 80px; height: 80px; border-radius: 50%; border: 4px solid #4f46e5; display: flex; align-items: center; justify-content: center;">
+              <span style="color: #a78bfa; font-size: 24px; font-weight: 700;">67%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Job Results -->
+        <div style="background: #0f0f18; border: 1px solid #1a1a2e; border-radius: 10px; padding: 20px;">
+          <div style="color: #fff; font-size: 15px; font-weight: 600; margin-bottom: 14px;">
+            Jobs Found <span style="color: #888; font-weight: 400; font-size: 13px;">(18 from 4 sources)</span>
+          </div>
+
+          <!-- Job Card -->
+          <div style="background: #1a1a2e; border-radius: 8px; padding: 14px; margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between;">
+              <div>
+                <div style="color: #fff; font-size: 14px; font-weight: 500;">Backend Engineer</div>
+                <div style="color: #888; font-size: 12px;">TechCorp · Remote · 6-8 LPA</div>
+              </div>
+              <span style="background: #1a2e1a; color: #81c784; padding: 2px 8px; border-radius: 4px; font-size: 11px; height: fit-content;">remotive</span>
+            </div>
+            <div style="display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;">
+              <span style="background: #2a1a3e; color: #ce93d8; padding: 2px 8px; border-radius: 4px; font-size: 11px;">Node.js</span>
+              <span style="background: #2a1a3e; color: #ce93d8; padding: 2px 8px; border-radius: 4px; font-size: 11px;">PostgreSQL</span>
+              <span style="background: #2a1a3e; color: #ce93d8; padding: 2px 8px; border-radius: 4px; font-size: 11px;">Docker</span>
+              <span style="background: #1a1a3e; color: #90caf9; padding: 2px 8px; border-radius: 4px; font-size: 11px;">+3 more</span>
+            </div>
+          </div>
+
+          <!-- Job Card 2 -->
+          <div style="background: #1a1a2e; border-radius: 8px; padding: 14px; margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between;">
+              <div>
+                <div style="color: #fff; font-size: 14px; font-weight: 500;">Junior API Developer</div>
+                <div style="color: #888; font-size: 12px;">StartupXYZ · Bangalore · 7 LPA</div>
+              </div>
+              <span style="background: #1a2e2e; color: #80cbc4; padding: 2px 8px; border-radius: 4px; font-size: 11px; height: fit-content;">adzuna</span>
+            </div>
+            <div style="display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;">
+              <span style="background: #2a1a3e; color: #ce93d8; padding: 2px 8px; border-radius: 4px; font-size: 11px;">Express</span>
+              <span style="background: #2a1a3e; color: #ce93d8; padding: 2px 8px; border-radius: 4px; font-size: 11px;">MongoDB</span>
+              <span style="background: #2a1a3e; color: #ce93d8; padding: 2px 8px; border-radius: 4px; font-size: 11px;">Redis</span>
+            </div>
+          </div>
+
+          <div style="color: #555; font-size: 12px; text-align: center; padding: 8px;">+ 16 more jobs</div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+
+        <!-- Skill Demand Chart -->
+        <div style="background: #0f0f18; border: 1px solid #1a1a2e; border-radius: 10px; padding: 20px;">
+          <div style="color: #fff; font-size: 15px; font-weight: 600; margin-bottom: 14px;">Skill Demand</div>
+
+          <!-- Bar chart rows -->
+          <div style="margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+              <span style="color: #ccc; font-size: 12px;">Node.js</span>
+              <span style="color: #e57373; font-size: 11px;">CRITICAL · 83%</span>
+            </div>
+            <div style="background: #1a1a2e; border-radius: 3px; height: 8px;">
+              <div style="background: #ef4444; width: 83%; height: 100%; border-radius: 3px;"></div>
+            </div>
+          </div>
+          <div style="margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+              <span style="color: #ccc; font-size: 12px;">PostgreSQL</span>
+              <span style="color: #ffb74d; font-size: 11px;">HIGH · 67%</span>
+            </div>
+            <div style="background: #1a1a2e; border-radius: 3px; height: 8px;">
+              <div style="background: #f59e0b; width: 67%; height: 100%; border-radius: 3px;"></div>
+            </div>
+          </div>
+          <div style="margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+              <span style="color: #ccc; font-size: 12px;">Docker</span>
+              <span style="color: #ffb74d; font-size: 11px;">HIGH · 56%</span>
+            </div>
+            <div style="background: #1a1a2e; border-radius: 3px; height: 8px;">
+              <div style="background: #f59e0b; width: 56%; height: 100%; border-radius: 3px;"></div>
+            </div>
+          </div>
+          <div style="margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+              <span style="color: #ccc; font-size: 12px;">TypeScript</span>
+              <span style="color: #81c784; font-size: 11px;">MEDIUM · 44%</span>
+            </div>
+            <div style="background: #1a1a2e; border-radius: 3px; height: 8px;">
+              <div style="background: #22c55e; width: 44%; height: 100%; border-radius: 3px;"></div>
+            </div>
+          </div>
+          <div style="margin-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+              <span style="color: #ccc; font-size: 12px;">Redis</span>
+              <span style="color: #81c784; font-size: 11px;">MEDIUM · 39%</span>
+            </div>
+            <div style="background: #1a1a2e; border-radius: 3px; height: 8px;">
+              <div style="background: #22c55e; width: 39%; height: 100%; border-radius: 3px;"></div>
+            </div>
+          </div>
+          <div>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+              <span style="color: #ccc; font-size: 12px;">GraphQL</span>
+              <span style="color: #64b5f6; font-size: 11px;">LOW · 22%</span>
+            </div>
+            <div style="background: #1a1a2e; border-radius: 3px; height: 8px;">
+              <div style="background: #3b82f6; width: 22%; height: 100%; border-radius: 3px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gap Analysis -->
+        <div style="background: #0f0f18; border: 1px solid #1a1a2e; border-radius: 10px; padding: 20px;">
+          <div style="color: #fff; font-size: 15px; font-weight: 600; margin-bottom: 14px;">Gap Analysis</div>
+
+          <!-- Matched -->
+          <div style="margin-bottom: 14px;">
+            <div style="color: #81c784; font-size: 12px; font-weight: 600; margin-bottom: 8px;">MATCHED (you have these)</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+              <span style="background: #1a2e1a; color: #81c784; padding: 4px 10px; border-radius: 4px; font-size: 12px;">Node.js <span style="opacity: 0.6;">· 5 repos</span></span>
+              <span style="background: #1a2e1a; color: #81c784; padding: 4px 10px; border-radius: 4px; font-size: 12px;">TypeScript <span style="opacity: 0.6;">· 3 projects</span></span>
+              <span style="background: #1a2e1a; color: #81c784; padding: 4px 10px; border-radius: 4px; font-size: 12px;">Express <span style="opacity: 0.6;">· 4 repos</span></span>
+            </div>
+          </div>
+
+          <!-- Partial -->
+          <div style="margin-bottom: 14px;">
+            <div style="color: #fbbf24; font-size: 12px; font-weight: 600; margin-bottom: 8px;">PARTIAL (related experience)</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+              <span style="background: #2e2a1a; color: #fbbf24; padding: 4px 10px; border-radius: 4px; font-size: 12px;">PostgreSQL <span style="opacity: 0.6;">· used MongoDB</span></span>
+              <span style="background: #2e2a1a; color: #fbbf24; padding: 4px 10px; border-radius: 4px; font-size: 12px;">Redis <span style="opacity: 0.6;">· used BullMQ</span></span>
+            </div>
+          </div>
+
+          <!-- Missing -->
+          <div>
+            <div style="color: #e57373; font-size: 12px; font-weight: 600; margin-bottom: 8px;">MISSING (need to learn)</div>
+            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+              <span style="background: #2e1a1a; color: #e57373; padding: 4px 10px; border-radius: 4px; font-size: 12px;">Docker <span style="opacity: 0.6;">· critical demand</span></span>
+              <span style="background: #2e1a1a; color: #e57373; padding: 4px 10px; border-radius: 4px; font-size: 12px;">CI/CD <span style="opacity: 0.6;">· high demand</span></span>
+              <span style="background: #2e1a1a; color: #e57373; padding: 4px 10px; border-radius: 4px; font-size: 12px;">GraphQL <span style="opacity: 0.6;">· low demand</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Roadmap (full width) -->
+    <div style="padding: 0 32px 32px;">
+      <div style="background: #0f0f18; border: 1px solid #1a1a2e; border-radius: 10px; padding: 20px;">
+        <div style="color: #fff; font-size: 15px; font-weight: 600; margin-bottom: 16px;">Learning Roadmap</div>
+
+        <div style="display: flex; gap: 16px;">
+          <!-- Phase 1 -->
+          <div style="flex: 1; background: #1a1a2e; border-radius: 8px; padding: 16px; border-left: 3px solid #ef4444;">
+            <div style="color: #e57373; font-size: 11px; font-weight: 600; margin-bottom: 6px;">PHASE 1 · 2-3 WEEKS</div>
+            <div style="color: #fff; font-size: 14px; font-weight: 500; margin-bottom: 8px;">Docker + Deployment</div>
+            <div style="color: #888; font-size: 12px; margin-bottom: 10px;">Skills: Docker, Docker Compose, CI/CD basics</div>
+            <div style="background: #0f0f18; border-radius: 6px; padding: 10px; margin-bottom: 8px;">
+              <div style="color: #a78bfa; font-size: 11px; font-weight: 600;">PROJECT</div>
+              <div style="color: #ccc; font-size: 12px;">Dockerize your Express API + add GitHub Actions pipeline</div>
+            </div>
+            <div style="color: #555; font-size: 11px;">Outcome: Deploy containerized API with automated tests</div>
+          </div>
+
+          <!-- Phase 2 -->
+          <div style="flex: 1; background: #1a1a2e; border-radius: 8px; padding: 16px; border-left: 3px solid #f59e0b;">
+            <div style="color: #ffb74d; font-size: 11px; font-weight: 600; margin-bottom: 6px;">PHASE 2 · 2-3 WEEKS</div>
+            <div style="color: #fff; font-size: 14px; font-weight: 500; margin-bottom: 8px;">PostgreSQL Deep Dive</div>
+            <div style="color: #888; font-size: 12px; margin-bottom: 10px;">Skills: PostgreSQL, migrations, indexing</div>
+            <div style="background: #0f0f18; border-radius: 6px; padding: 10px; margin-bottom: 8px;">
+              <div style="color: #a78bfa; font-size: 11px; font-weight: 600;">PROJECT</div>
+              <div style="color: #ccc; font-size: 12px;">Migrate MongoDB app to PostgreSQL with Prisma</div>
+            </div>
+            <div style="color: #555; font-size: 11px;">Outcome: Production-ready relational data layer</div>
+          </div>
+
+          <!-- Phase 3 -->
+          <div style="flex: 1; background: #1a1a2e; border-radius: 8px; padding: 16px; border-left: 3px solid #22c55e;">
+            <div style="color: #81c784; font-size: 11px; font-weight: 600; margin-bottom: 6px;">PHASE 3 · 3-4 WEEKS</div>
+            <div style="color: #fff; font-size: 14px; font-weight: 500; margin-bottom: 8px;">Full-Stack Capstone</div>
+            <div style="color: #888; font-size: 12px; margin-bottom: 10px;">Skills: Redis, GraphQL, system design</div>
+            <div style="background: #0f0f18; border-radius: 6px; padding: 10px; margin-bottom: 8px;">
+              <div style="color: #a78bfa; font-size: 11px; font-weight: 600;">PROJECT</div>
+              <div style="color: #ccc; font-size: 12px;">Build a job board API with caching, GraphQL layer, and rate limiting</div>
+            </div>
+            <div style="color: #555; font-size: 11px;">Outcome: Ship portfolio project covering all missing skills</div>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 14px; color: #888; font-size: 12px;">
+          Estimated total: 7-10 weeks · Priority order: Docker → PostgreSQL → Redis → GraphQL → CI/CD
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -339,7 +339,7 @@ export default function DashboardPage() {
       actions={
         <>
           {githubConnected ? (
-            <Badge className="border-0 bg-emerald-500/10 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-300">
+            <Badge className="border-0 bg-emerald-500/10 px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-400">
               GitHub connected
             </Badge>
           ) : (
@@ -353,12 +353,7 @@ export default function DashboardPage() {
               Connect GitHub
             </Button>
           )}
-          <Link
-            href="/dashboard/market-fit"
-            className={cn(buttonVariants({ variant: "outline", size: "lg" }), "h-10")}
-          >
-            Market fit
-          </Link>
+
           <Link href="/analyze" className={cn(buttonVariants({ size: "lg" }), "h-10")}>
             New analysis
           </Link>
@@ -397,7 +392,7 @@ export default function DashboardPage() {
       )}
 
       {/* ─── Tab Navigation ─── */}
-      <div className="flex items-center gap-1 rounded-xl border border-border/60 bg-card/60 p-1 backdrop-blur-sm">
+      <div className="flex items-center gap-1 rounded-xl border border-border/40 bg-card/60 p-1 backdrop-blur-sm dark:border-border/60">
         {TABS.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;

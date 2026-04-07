@@ -80,6 +80,8 @@ model College {
   settings  Json?
   students  Student[]
   users     User[]
+  companies Company[]
+  jobs      Job[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
@@ -115,6 +117,9 @@ model Student {
   dsaProfiles     DSAProfile[]
   jriCalculations JRICalculation[]
   projectAnalyses ProjectAnalysis[]
+  jobApplications        JobApplication[]
+  jobViews               JobView[]
+  jobIntelligenceReports JobIntelligenceReport[]
   userCapabilityProfiles UserCapabilityProfile[]
   skillGapReports        SkillGapReport[]
 
@@ -215,36 +220,6 @@ enum AnalysisStatus {
   FAILED
 }
 
-enum CapabilitySourceType {
-  JOB_LISTING
-  PROJECT_ANALYSIS
-  GITHUB_PROFILE
-  DSA_PROFILE
-  JRI_PROFILE
-}
-
-enum CapabilityMatchStatus {
-  MATCHED
-  PARTIAL
-  MISSING
-}
-
-enum SignalMappingSourceType {
-  PROJECT_PROFILE
-  PROJECT_SIGNAL
-  PROJECT_DIMENSION
-  PROJECT_TERM
-  GITHUB_TERM
-  DSA_PROFILE
-  JRI_PROFILE
-}
-
-enum SignalMappingMatcherType {
-  EXACT
-  CONTAINS
-  BOOLEAN_TRUE
-  THRESHOLD
-}
 
 model ProjectAnalysis {
   id               String         @id @default(cuid())
@@ -273,230 +248,245 @@ model ProjectAnalysis {
   @@index([studentId, createdAt])
 }
 
-model JobCluster {
-  id             String   @id @default(cuid())
-  clusterKey     String   @unique
-  roleSlug       String
-  roleTitle      String
-  seniority      String?
-  location       String?
-  employmentType String?
-  workMode       String?
-  sampleSize     Int      @default(0)
-  marketSignals  Json?
-  lastIngestedAt DateTime?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  jobListings      JobListing[]
-  jobCapabilityMaps JobCapabilityMap[]
-  skillGapReports   SkillGapReport[]
-
-  @@index([roleSlug, seniority])
-  @@index([updatedAt])
-}
-
-model JobListing {
-  id                    String   @id @default(cuid())
-  clusterId             String
-  cluster               JobCluster @relation(fields: [clusterId], references: [id])
-  source                String
-  externalId            String?
-  sourceUrl             String?
-  companyName           String?
-  title                 String
-  location              String?
-  employmentType        String?
-  workMode              String?
-  descriptionRaw        String
-  descriptionNormalized String
-  sourceHash            String   @unique
-  normalizedHash        String
-  postedAt              DateTime?
-  createdAt             DateTime @default(now())
-  updatedAt             DateTime @updatedAt
-
-  capabilityMaps JobCapabilityMap[]
-
-  @@index([clusterId, normalizedHash])
-  @@index([clusterId, title])
-  @@index([clusterId, postedAt])
-}
-
-model Capability {
-  id          String   @id @default(cuid())
-  slug        String   @unique
-  name        String
-  category    String
-  description String?
-  synonyms    Json?
-  recommendation   String?
-  projectSuggestion String?
-  parentId    String?
-  parent      Capability? @relation("CapabilityTree", fields: [parentId], references: [id])
-  children    Capability[] @relation("CapabilityTree")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  jobCapabilityMaps      JobCapabilityMap[]
-  userCapabilityEvidence UserCapabilityEvidence[]
-  reportCapabilities     SkillGapReportCapability[]
-  signalMappings         SignalMapping[]
-
-  @@index([category, name])
-}
-
-model JobCapabilityMap {
-  id                String   @id @default(cuid())
-  clusterId         String
-  cluster           JobCluster @relation(fields: [clusterId], references: [id])
-  jobListingId      String
-  jobListing        JobListing @relation(fields: [jobListingId], references: [id])
-  capabilityId      String
-  capability        Capability @relation(fields: [capabilityId], references: [id])
-  demandScore       Float
-  importance        Float
-  confidence        Float
-  evidence          Json?
-  extractionVersion String
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-
-  @@unique([jobListingId, capabilityId])
-  @@index([clusterId, capabilityId])
-}
-
-model SignalMapping {
-  id                  String                   @id @default(cuid())
-  sourceType          SignalMappingSourceType
-  matcherType         SignalMappingMatcherType
-  matcherKey          String
-  matcherValue        String?
-  targetCapabilitySlug String
-  capability          Capability               @relation(fields: [targetCapabilitySlug], references: [slug])
-  baseScore           Float                    @default(0)
-  scoreMultiplier     Float?
-  confidence          Float                    @default(0.7)
-  minThreshold        Float?
-  profileIds          Json?
-  evidenceTemplate    String?
-  isActive            Boolean                  @default(true)
-  createdAt           DateTime                 @default(now())
-  updatedAt           DateTime                 @updatedAt
-
-  @@index([sourceType, matcherKey, isActive])
-  @@index([targetCapabilitySlug, isActive])
-}
-
-model MarketFitConfig {
-  key         String   @id
-  valueNumber Float?
-  valueString String?
-  valueJson   Json?
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model UserCapabilityProfile {
-  id                 String   @id @default(cuid())
-  studentId          String
-  student            Student  @relation(fields: [studentId], references: [id])
-  snapshotHash       String
-  sourceSummary      Json?
-  evidenceWindowDays Int      @default(180)
-  computedAt         DateTime @default(now())
-  expiresAt          DateTime?
-  createdAt          DateTime @default(now())
-  updatedAt          DateTime @updatedAt
-
-  capabilities UserCapabilityEvidence[]
-  reports      SkillGapReport[]
-
-  @@index([studentId, createdAt])
-  @@index([studentId, snapshotHash])
-}
-
-model UserCapabilityEvidence {
-  id           String               @id @default(cuid())
-  profileId    String
-  profile      UserCapabilityProfile @relation(fields: [profileId], references: [id])
-  capabilityId String
-  capability   Capability           @relation(fields: [capabilityId], references: [id])
-  sourceType   CapabilitySourceType
-  score        Float
-  confidence   Float
-  evidence     Json?
-  createdAt    DateTime @default(now())
-
-  @@unique([profileId, capabilityId, sourceType])
-  @@index([profileId, capabilityId])
-}
-
-model SkillGapReport {
-  id                      String         @id @default(cuid())
-  studentId               String
-  student                 Student        @relation(fields: [studentId], references: [id])
-  clusterId               String
-  cluster                 JobCluster      @relation(fields: [clusterId], references: [id])
-  userCapabilityProfileId String
-  userCapabilityProfile   UserCapabilityProfile @relation(fields: [userCapabilityProfileId], references: [id])
-  requestedByUserId       String?
-  backgroundJobId         String?        @unique
-  status                  AnalysisStatus @default(PENDING)
-  roleSlug                String
-  roleTitle               String
-  seniority               String?
-  location                String?
-  readinessScore          Float?
-  verdict                 String?
-  summary                 Json?
-  reportPayload           Json?
-  actionPlan              Json?
-  jobCount                Int            @default(0)
-  errorMessage            String?
-  startedAt               DateTime?
-  completedAt             DateTime?
-  createdAt               DateTime       @default(now())
-  updatedAt               DateTime       @updatedAt
-
-  capabilities SkillGapReportCapability[]
-
-  @@index([studentId, createdAt])
-  @@index([clusterId, createdAt])
-  @@index([status, createdAt])
-}
-
-model SkillGapReportCapability {
-  id           String                @id @default(cuid())
-  reportId     String
-  report       SkillGapReport        @relation(fields: [reportId], references: [id])
-  capabilityId String
-  capability   Capability            @relation(fields: [capabilityId], references: [id])
-  matchStatus  CapabilityMatchStatus
-  demandScore  Float
-  userScore    Float
-  gapScore     Float
-  evidence     Json?
-  createdAt    DateTime @default(now())
-
-  @@unique([reportId, capabilityId])
-  @@index([reportId, matchStatus])
-  @@index([capabilityId, matchStatus])
-}
-
 enum EmailType {
   COLLEGE_WELCOME
   STUDENT_WELCOME
   WEEKLY_REPORT
   ANALYSIS_COMPLETE
   PASSWORD_RESET
+  JOB_MATCH_NOTIFICATION
+}
+
+enum ApplicationStatus {
+  APPLIED
+  SHORTLISTED
+  REJECTED
+  PLACED
+}
+
+model Company {
+  id        String   @id @default(cuid())
+  name      String
+  logoUrl   String?
+  website   String?
+  industry  String?
+  size      String?
+  location  String?
+  collegeId String
+  college   College  @relation(fields: [collegeId], references: [id])
+  jobs      Job[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([collegeId])
+}
+
+model Job {
+  id              String    @id @default(cuid())
+  title           String
+  description     String
+  descriptionUrl  String?
+  skills          String[]
+  capabilitySlugs String[]
+  ctc             String?
+  eligibility     String?
+  deadline        DateTime?
+  location        String?
+  jobType         String?
+  companyId       String
+  company         Company   @relation(fields: [companyId], references: [id])
+  collegeId       String
+  college         College   @relation(fields: [collegeId], references: [id])
+  applications    JobApplication[]
+  views           JobView[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([collegeId])
+  @@index([companyId])
+  @@index([deadline])
+}
+
+model JobApplication {
+  id         String            @id @default(cuid())
+  studentId  String
+  student    Student           @relation(fields: [studentId], references: [id])
+  jobId      String
+  job        Job               @relation(fields: [jobId], references: [id])
+  status     ApplicationStatus @default(APPLIED)
+  matchScore Float?
+  appliedAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+
+  @@unique([studentId, jobId])
+  @@index([studentId])
+  @@index([jobId])
+}
+
+model JobView {
+  id        String   @id @default(cuid())
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id])
+  jobId     String
+  job       Job      @relation(fields: [jobId], references: [id])
+  viewedAt  DateTime @default(now())
+
+  @@index([studentId])
+  @@index([jobId])
 }
 
 enum EmailStatus {
   SENT
   FAILED
   PENDING
+}
+
+model JobIntelligenceReport {
+  id              String         @id @default(cuid())
+  studentId       String
+  student         Student        @relation(fields: [studentId], references: [id])
+
+  status          AnalysisStatus @default(PENDING)
+
+  // Filters stored as columns for idempotency + queryability
+  role            String
+  experience      String
+  salary          String
+
+  // Pipeline tracking
+  stage           String?        // "fetching" | "extracting" | "analyzing_demand" | "building_profile" | "gap_analysis" | "roadmap"
+  progress        Int            @default(0)
+  progressMessage String?
+
+  // Stage results (JSON for flexibility; allows partial saves if a later stage fails)
+  jobs            Json?
+  skillsAnalysis  Json?
+  gapAnalysis     Json?
+  roadmap         Json?
+
+  // Queryable metrics (extracted from JSON to avoid parsing on every read)
+  jobsCount       Int?
+  topSkills       String[]
+  readinessScore  Int?
+
+  // Structured error: '{"stage":"...","message":"...","retryable":true}'
+  error           String?
+
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@index([studentId, createdAt])
+  @@index([studentId, role, experience, salary])
+  @@index([studentId, status])
+}
+
+model JobCache {
+  id                String   @id @default(cuid())
+
+  role              String
+  source            String   // "remotive" | "adzuna" | "web3career" | "workingnomads"
+
+  title             String
+  company           String?
+  location          String?
+  url               String   @unique
+
+  rawDescription    String   @db.Text
+
+  // Processing state
+  parsed            Boolean  @default(false)
+  extractionVersion Int      @default(1)
+
+  extractedSkills   Json?
+  normalizedSkills  String[]
+
+  salary            String?
+  experience        String?
+
+  createdAt         DateTime @default(now())
+  expiresAt         DateTime
+
+  @@index([role, source])
+  @@index([expiresAt])
+  @@index([parsed])
+}
+
+model SkillDemand {
+  id         String   @id @default(cuid())
+  role       String
+  skill      String
+  frequency  Int
+  importance Float
+  updatedAt  DateTime @updatedAt
+
+  @@unique([role, skill])
+  @@index([role])
+}
+
+model Capability {
+  id                String              @id @default(cuid())
+  slug              String              @unique
+  name              String
+  category          String
+  recommendation    String?
+  projectSuggestion String?
+  profiles          ProfileCapability[]
+  learningResources LearningResource[]
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+
+  @@index([slug])
+}
+
+model UserCapabilityProfile {
+  id           String              @id @default(cuid())
+  studentId    String
+  student      Student             @relation(fields: [studentId], references: [id])
+  capabilities ProfileCapability[]
+  reports      SkillGapReport[]
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+
+  @@index([studentId])
+}
+
+model ProfileCapability {
+  id           String                @id @default(cuid())
+  profileId    String
+  profile      UserCapabilityProfile @relation(fields: [profileId], references: [id])
+  capabilityId String
+  capability   Capability            @relation(fields: [capabilityId], references: [id])
+  score        Float
+  confidence   Float
+
+  @@unique([profileId, capabilityId])
+}
+
+model SkillGapReport {
+  id           String                @id @default(cuid())
+  studentId    String
+  student      Student               @relation(fields: [studentId], references: [id])
+  profileId    String
+  profile      UserCapabilityProfile @relation(fields: [profileId], references: [id])
+  jobId        String?
+  report       Json
+  createdAt    DateTime              @default(now())
+
+  @@index([studentId])
+  @@index([profileId])
+}
+
+model LearningResource {
+  id           String     @id @default(cuid())
+  capabilityId String
+  capability   Capability @relation(fields: [capabilityId], references: [id])
+  title        String
+  url          String
+  type         String // video, course, article
+  difficulty   String // beginner, intermediate, advanced
+  createdAt    DateTime   @default(now())
+
+  @@index([capabilityId])
 }
 
 model EmailLog {

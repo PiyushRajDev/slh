@@ -15,12 +15,6 @@ import {
   AnalysisFailureCode,
 } from "@/lib/analysis";
 import { JriProfileResponse } from "@/lib/jri";
-import {
-  MarketFitAnalyzeResponse,
-  MarketFitReportResponse,
-  MarketFitRequest,
-  MarketFitStatusResponse,
-} from "@/lib/market-fit";
 import { clearSessionTokens } from "@/lib/auth";
 
 export { ApiError } from "./api-base";
@@ -98,24 +92,6 @@ export function getLatestAnalysis() {
 
 export function getAnalysisById(id: string, init?: RequestInit) {
   return apiRequest<AnalysisRecord>(`/api/projects/analyses/${id}`, init);
-}
-
-export function submitMarketFitAnalysis(payload: MarketFitRequest) {
-  return apiRequest<MarketFitAnalyzeResponse>("/market-fit/analyze", {
-    method: "POST",
-    body: JSON.stringify({
-      role: payload.role,
-      seniority: payload.seniority,
-    }),
-  });
-}
-
-export function getMarketFitStatus(jobId: string) {
-  return apiRequest<MarketFitStatusResponse>(`/market-fit/status/${encodeURIComponent(jobId)}`);
-}
-
-export function getMarketFitReport(userId = "me") {
-  return apiRequest<MarketFitReportResponse>(`/market-fit/report/${encodeURIComponent(userId)}`);
 }
 
 export function getJriProfile() {
@@ -290,4 +266,245 @@ export function getPublicLeaderboard(college: string, params?: any) {
 
   const queryString = query.toString();
   return apiRequest<any>(`/api/public/leaderboard/${encodeURIComponent(college)}${queryString ? `?${queryString}` : ""}`);
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Placement Intelligence — Admin
+// ─────────────────────────────────────────────────────────────────
+
+export function getAdminCompanies() {
+  return apiRequest<{ companies: any[] }>("/api/admin/companies");
+}
+
+export function createAdminCompany(payload: {
+  name: string;
+  logoUrl?: string;
+  website?: string;
+  industry?: string;
+  size?: string;
+  location?: string;
+}) {
+  return apiRequest<{ company: any }>("/api/admin/companies", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function updateAdminCompany(id: string, payload: Partial<{
+  name: string;
+  logoUrl: string;
+  website: string;
+  industry: string;
+  size: string;
+  location: string;
+}>) {
+  return apiRequest<{ company: any }>(`/api/admin/companies/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function deleteAdminCompany(id: string) {
+  return apiRequest<{ success: boolean }>(`/api/admin/companies/${id}`, {
+    method: "DELETE",
+  });
+}
+
+export function getAdminJobs() {
+  return apiRequest<{ jobs: any[] }>("/api/admin/jobs");
+}
+
+export function createAdminJob(payload: {
+  title: string;
+  description: string;
+  descriptionUrl?: string;
+  companyId: string;
+  ctc?: string;
+  eligibility?: string;
+  deadline?: string;
+  location?: string;
+  jobType?: string;
+}) {
+  return apiRequest<{ job: any }>("/api/admin/jobs", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function updateAdminJob(id: string, payload: Partial<{
+  title: string;
+  description: string;
+  ctc: string;
+  eligibility: string;
+  deadline: string;
+  location: string;
+  jobType: string;
+}>) {
+  return apiRequest<{ job: any }>(`/api/admin/jobs/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+}
+
+export function deleteAdminJob(id: string) {
+  return apiRequest<{ success: boolean }>(`/api/admin/jobs/${id}`, {
+    method: "DELETE",
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Placement Intelligence — Student
+// ─────────────────────────────────────────────────────────────────
+
+export function getStudentJobs() {
+  return apiRequest<{ jobs: any[] }>("/api/jobs");
+}
+
+export function getJobMatchReport(jobId: string) {
+  return apiRequest<{ job: any; match: any; similarJobs: any[] }>(
+    `/api/jobs/${jobId}/match`
+  );
+}
+
+export function applyToJob(jobId: string) {
+  return apiRequest<{ application: any }>(`/api/jobs/${jobId}/apply`, {
+    method: "POST",
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Job Intelligence
+// ─────────────────────────────────────────────────────────────────
+
+export interface JIFilters {
+  role: string;
+  experience: string;
+  salary: string;
+  force?: boolean;
+}
+
+export interface JIAnalyzeResponse {
+  reportId: string;
+  status: string;
+  cached: boolean;
+}
+
+export interface JIReport {
+  id: string;
+  status: string;
+  role: string;
+  experience: string;
+  salary: string;
+  progress: number;
+  stage: string | null;
+  progressMessage: string | null;
+  jobs: any[] | null;
+  skillsAnalysis: any[] | null;
+  gapAnalysis: any | null;
+  roadmap: any | null;
+  jobsCount: number | null;
+  topSkills: string[];
+  readinessScore: number | null;
+  error: string | null;
+  createdAt: string;
+}
+
+export function analyzeMarket(filters: JIFilters) {
+  return apiRequest<JIAnalyzeResponse>("/api/job-intelligence/analyze", {
+    method: "POST",
+    body: JSON.stringify(filters),
+  });
+}
+
+export function getJIReport(reportId: string) {
+  return apiRequest<{ report: JIReport }>(`/api/job-intelligence/${reportId}`);
+}
+
+export function getJIHistory(page = 1, limit = 10) {
+  return apiRequest<{ reports: JIReport[]; page: number; limit: number }>(
+    `/api/job-intelligence/history?page=${page}&limit=${limit}`
+  );
+}
+
+export function cancelJIReport(reportId: string) {
+  return apiRequest<{ success: boolean }>(`/api/job-intelligence/${reportId}/cancel`, {
+    method: "POST",
+  });
+}
+
+export function openJIStream(
+  reportId: string,
+  handlers: {
+    onProgress: (event: { progress: number; stage: string; message: string }) => void;
+    onComplete: (payload: any) => void;
+    onFailed: (payload: any) => void;
+    onTimeout: (payload: any) => void;
+    onTransportError?: (payload: any) => void;
+  }
+) {
+  let source: EventSource | null = null;
+  let closed = false;
+
+  const closeSource = () => {
+    if (closed) return;
+    closed = true;
+    if (source) source.close();
+  };
+
+  const initStream = async () => {
+    if (closed) return;
+    try {
+      const response = await apiRequest<{ success: boolean; data: { streamToken: string } }>(
+        "/auth/stream-token",
+        { method: "POST" }
+      );
+      if (closed) return;
+
+      const token = response.data.streamToken;
+      const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3000";
+      const url = new URL(`/api/job-intelligence/stream/${reportId}`, apiBaseUrl);
+      url.searchParams.set("token", token);
+
+      source = new EventSource(url.toString(), { withCredentials: true });
+
+      source.addEventListener("progress", (event) => {
+        try {
+          handlers.onProgress(JSON.parse((event as MessageEvent).data));
+        } catch {
+          handlers.onTransportError?.({ code: "PARSE_ERROR", error: "Failed to parse progress event" });
+        }
+      });
+
+      source.addEventListener("complete", (event) => {
+        try { handlers.onComplete(JSON.parse((event as MessageEvent).data)); }
+        catch { handlers.onComplete({ reportId }); }
+        finally { closeSource(); }
+      });
+
+      source.addEventListener("failed", (event) => {
+        try { handlers.onFailed(JSON.parse((event as MessageEvent).data)); }
+        catch { handlers.onFailed({ error: "Analysis failed" }); }
+        finally { closeSource(); }
+      });
+
+      source.addEventListener("timeout", (event) => {
+        try { handlers.onTimeout(JSON.parse((event as MessageEvent).data)); }
+        catch { handlers.onTimeout({ error: "Stream timed out" }); }
+        finally { closeSource(); }
+      });
+
+      source.onerror = () => {
+        if (closed) return;
+        handlers.onTransportError?.({ code: "STREAM_DISCONNECTED", error: "Stream connection error" });
+        closeSource();
+      };
+    } catch {
+      if (closed) return;
+      handlers.onTransportError?.({ code: "AUTH_FAILED", error: "Failed to authenticate stream" });
+      closeSource();
+    }
+  };
+
+  initStream();
+  return closeSource;
 }

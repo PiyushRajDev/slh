@@ -42,42 +42,42 @@ export function AttributeRadar({ attributes, archetype }: AttributeRadarProps) {
           <ResponsiveContainer width="100%" height="100%">
             <RadarChart data={data} cx="50%" cy="50%" outerRadius="75%">
               <PolarGrid
-                stroke="oklch(1 0 0 / 0.08)"
+                stroke="var(--border)"
                 radialLines={true}
               />
               <PolarAngleAxis
                 dataKey="attribute"
-                tick={{ fill: "oklch(0.7 0 0)", fontSize: 11 }}
+                tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
               />
               <PolarRadiusAxis
                 angle={90}
                 domain={[0, 100]}
-                tick={{ fill: "oklch(0.5 0 0)", fontSize: 10 }}
+                tick={{ fill: "var(--muted-foreground)", fontSize: 10 }}
                 tickCount={5}
                 axisLine={false}
               />
               <Tooltip
                 contentStyle={{
-                  background: "oklch(0.18 0 0)",
-                  border: "1px solid oklch(1 0 0 / 0.1)",
+                  background: "var(--card)",
+                  border: "1px solid var(--border)",
                   borderRadius: "0.75rem",
                   fontSize: "13px",
                   padding: "8px 12px",
                 }}
-                labelStyle={{ color: "oklch(0.7 0 0)", marginBottom: 4 }}
-                itemStyle={{ color: "oklch(0.97 0 0)" }}
+                labelStyle={{ color: "var(--foreground)", marginBottom: 4 }}
+                itemStyle={{ color: "var(--primary)" }}
                 formatter={(value) => [`${value ?? 0}/100`, ""]}
               />
               <Radar
                 name="Score"
                 dataKey="value"
-                stroke="oklch(0.68 0.16 247)"
+                stroke="var(--primary)"
                 strokeWidth={2}
-                fill="oklch(0.68 0.16 247)"
+                fill="var(--primary)"
                 fillOpacity={0.15}
                 dot={{
                   r: 4,
-                  fill: "oklch(0.68 0.16 247)",
+                  fill: "var(--primary)",
                   strokeWidth: 0,
                 }}
               />

@@ -61,12 +61,12 @@ export function PageShell({
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-border/70 bg-card/70 backdrop-blur">
+      <header className="sticky top-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-md dark:border-border/70 dark:bg-card/70">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <div className="flex items-center gap-4">
             <Link
               href={mounted && isUserAdmin ? "/admin" : "/dashboard"}
-              className="rounded-lg border border-border/70 bg-background px-3 py-2 text-sm font-semibold tracking-[0.18em] text-foreground uppercase transition-colors hover:border-primary/40 hover:text-primary"
+              className="rounded-lg border border-border/50 bg-background px-3 py-2 text-sm font-semibold tracking-[0.18em] text-foreground uppercase transition-all hover:border-primary/50 hover:text-primary dark:border-border/70"
             >
               SLH
             </Link>
@@ -81,11 +81,12 @@ export function PageShell({
               {/* Student links */}
               {showStudentLinks && (
                 <>
-                  <Link href="/dashboard/market-fit" className={buttonVariants({ variant: "ghost" })}>
-                    Market Fit
-                  </Link>
+
                   <Link href="/analyze" className={buttonVariants({ variant: "ghost" })}>
                     Analyze
+                  </Link>
+                  <Link href="/jobs" className={buttonVariants({ variant: "ghost" })}>
+                    Jobs
                   </Link>
                 </>
               )}
@@ -101,6 +102,9 @@ export function PageShell({
                   </Link>
                   <Link href="/admin/alerts" className={buttonVariants({ variant: "ghost" })}>
                     Alerts
+                  </Link>
+                  <Link href="/admin/jobs" className={buttonVariants({ variant: "ghost" })}>
+                    Jobs
                   </Link>
                 </>
               )}

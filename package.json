@@ -8,8 +8,7 @@
   "scripts": {
     "dev": "echo 'Run apps individually'",
     "lint": "echo 'Add later'",
-    "test": "echo 'Add later'",
-    "seed:market-fit": "npm run seed -w @slh/market-fit-core"
+    "test": "echo 'Add later'"
   },
   "dependencies": {
     "@prisma/client": "^7.4.2",

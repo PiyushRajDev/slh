@@ -77,9 +77,9 @@ export function JriGrowthChart({ history }: JriGrowthChartProps) {
           <div
             className={`rounded-lg px-3 py-1.5 text-sm font-semibold ${
               totalGrowth > 0
-                ? "bg-emerald-500/10 text-emerald-400"
+                ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
                 : totalGrowth < 0
-                  ? "bg-red-500/10 text-red-400"
+                  ? "bg-red-500/10 text-red-600 dark:text-red-400"
                   : "bg-muted text-muted-foreground"
             }`}
           >
@@ -94,57 +94,57 @@ export function JriGrowthChart({ history }: JriGrowthChartProps) {
             <AreaChart data={data} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
               <defs>
                 <linearGradient id="jriGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="oklch(0.68 0.16 247)" stopOpacity={0.3} />
-                  <stop offset="100%" stopColor="oklch(0.68 0.16 247)" stopOpacity={0.02} />
+                  <stop offset="0%" stopColor="var(--primary)" stopOpacity={0.3} />
+                  <stop offset="100%" stopColor="var(--primary)" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid
                 strokeDasharray="3 3"
-                stroke="oklch(1 0 0 / 0.06)"
+                stroke="var(--border)"
                 vertical={false}
               />
               <XAxis
                 dataKey="date"
-                tick={{ fill: "oklch(0.7 0 0)", fontSize: 11 }}
+                tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
                 tickLine={false}
                 axisLine={false}
               />
               <YAxis
                 domain={[minScore, maxScore]}
-                tick={{ fill: "oklch(0.7 0 0)", fontSize: 11 }}
+                tick={{ fill: "var(--muted-foreground)", fontSize: 11 }}
                 tickLine={false}
                 axisLine={false}
               />
               <Tooltip
                 contentStyle={{
-                  background: "oklch(0.18 0 0)",
-                  border: "1px solid oklch(1 0 0 / 0.1)",
+                  background: "var(--card)",
+                  border: "1px solid var(--border)",
                   borderRadius: "0.75rem",
                   fontSize: "13px",
                   padding: "8px 12px",
                 }}
-                labelStyle={{ color: "oklch(0.7 0 0)", marginBottom: 4 }}
-                itemStyle={{ color: "oklch(0.97 0 0)" }}
+                labelStyle={{ color: "var(--foreground)", marginBottom: 4 }}
+                itemStyle={{ color: "var(--primary)" }}
                 formatter={(value) => [`${value ?? 0}`, "JRI Score"]}
                 labelFormatter={(label) => `${label}`}
               />
               <Area
                 type="monotone"
                 dataKey="score"
-                stroke="oklch(0.68 0.16 247)"
+                stroke="var(--primary)"
                 strokeWidth={2.5}
                 fill="url(#jriGradient)"
                 dot={{
                   r: 4,
-                  fill: "oklch(0.68 0.16 247)",
+                  fill: "var(--primary)",
                   strokeWidth: 2,
-                  stroke: "oklch(0.18 0 0)",
+                  stroke: "var(--card)",
                 }}
                 activeDot={{
                   r: 6,
-                  fill: "oklch(0.68 0.16 247)",
+                  fill: "var(--primary)",
                   strokeWidth: 2,
-                  stroke: "oklch(0.18 0 0)",
+                  stroke: "var(--card)",
                 }}
               />
             </AreaChart>
