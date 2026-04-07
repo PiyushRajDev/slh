@@ -59,6 +59,15 @@ async function log(opts: {
     });
 }
 
+function escapeHtml(str: string): string {
+    return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#x27;");
+}
+
 // ── Transactional email senders ──────────────────────────────────────────────
 
 export async function sendCollegeWelcomeEmail(opts: {
@@ -68,12 +77,15 @@ export async function sendCollegeWelcomeEmail(opts: {
     adminName: string;
     loginUrl: string;
 }): Promise<void> {
+    const safeAdminName = escapeHtml(opts.adminName);
+    const safeCollegeName = escapeHtml(opts.collegeName);
+    const safeLoginUrl = escapeHtml(opts.loginUrl);
     const subject = `Welcome to SkillLighthouse — ${opts.collegeName} is live!`;
     const html = `
-        <h2>Welcome, ${opts.adminName}!</h2>
-        <p>Your institution <strong>${opts.collegeName}</strong> has been successfully onboarded to SkillLighthouse.</p>
+        <h2>Welcome, ${safeAdminName}!</h2>
+        <p>Your institution <strong>${safeCollegeName}</strong> has been successfully onboarded to SkillLighthouse.</p>
         <p>You can now manage your students' portfolios and track their placement readiness.</p>
-        <p><a href="${opts.loginUrl}">Log in to your dashboard</a></p>
+        <p><a href="${safeLoginUrl}">Log in to your dashboard</a></p>
         <p>If you have any questions, reply to this email.</p>
     `;
     const result = await send(opts.adminEmail, subject, html);
@@ -94,12 +106,15 @@ export async function sendStudentWelcomeEmail(opts: {
     collegeName: string;
     loginUrl: string;
 }): Promise<void> {
+    const safeFirstName = escapeHtml(opts.firstName);
+    const safeCollegeName = escapeHtml(opts.collegeName);
+    const safeLoginUrl = escapeHtml(opts.loginUrl);
     const subject = 'Welcome to SkillLighthouse — build your portfolio';
     const html = `
-        <h2>Welcome, ${opts.firstName}!</h2>
-        <p>Your account at <strong>${opts.collegeName}</strong> is ready on SkillLighthouse.</p>
+        <h2>Welcome, ${safeFirstName}!</h2>
+        <p>Your account at <strong>${safeCollegeName}</strong> is ready on SkillLighthouse.</p>
         <p>Connect your GitHub and DSA profiles to start building your placement portfolio.</p>
-        <p><a href="${opts.loginUrl}">Get started</a></p>
+        <p><a href="${safeLoginUrl}">Get started</a></p>
     `;
     const result = await send(opts.email, subject, html);
     await log({
@@ -121,15 +136,17 @@ export async function sendWeeklyReportEmail(opts: {
     dsaScore: number;
     profileUrl: string;
 }): Promise<void> {
+    const safeFirstName = escapeHtml(opts.firstName);
+    const safeProfileUrl = escapeHtml(opts.profileUrl);
     const subject = `Your weekly SkillLighthouse report — JRI ${opts.jriScore.toFixed(1)}`;
     const html = `
-        <h2>Hi ${opts.firstName}, here's your weekly snapshot</h2>
+        <h2>Hi ${safeFirstName}, here's your weekly snapshot</h2>
         <table>
             <tr><td><strong>JRI Score</strong></td><td>${opts.jriScore.toFixed(1)}</td></tr>
             <tr><td><strong>GitHub Score</strong></td><td>${opts.githubScore.toFixed(1)}</td></tr>
             <tr><td><strong>DSA Score</strong></td><td>${opts.dsaScore.toFixed(1)}</td></tr>
         </table>
-        <p><a href="${opts.profileUrl}">View your full profile</a></p>
+        <p><a href="${safeProfileUrl}">View your full profile</a></p>
     `;
     const result = await send(opts.email, subject, html);
     await log({
@@ -150,12 +167,15 @@ export async function sendAnalysisCompleteEmail(opts: {
     overallScore: number;
     reportUrl: string;
 }): Promise<void> {
+    const safeFirstName = escapeHtml(opts.firstName);
+    const safeRepoUrl = escapeHtml(opts.repoUrl);
+    const safeReportUrl = escapeHtml(opts.reportUrl);
     const subject = `Analysis complete — score ${opts.overallScore}/100`;
     const html = `
-        <h2>Hi ${opts.firstName}, your project analysis is ready!</h2>
-        <p>Repository: <a href="${opts.repoUrl}">${opts.repoUrl}</a></p>
+        <h2>Hi ${safeFirstName}, your project analysis is ready!</h2>
+        <p>Repository: <a href="${safeRepoUrl}">${safeRepoUrl}</a></p>
         <p><strong>Overall Score: ${opts.overallScore}/100</strong></p>
-        <p><a href="${opts.reportUrl}">View detailed report</a></p>
+        <p><a href="${safeReportUrl}">View detailed report</a></p>
     `;
     const result = await send(opts.email, subject, html);
     await log({
