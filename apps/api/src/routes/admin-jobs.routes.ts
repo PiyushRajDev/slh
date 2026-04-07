@@ -7,7 +7,7 @@ import {
     requirePermission,
 } from "../middleware/auth.middleware";
 import { getScopedPrismaClient } from "../scoped-db";
-import { extractSkillsFromText } from "@slh/placement-engine";
+import { extractSkillsFromText, matchJobToStudent, computeQuickMatchScore } from "@slh/placement-engine";
 
 const router = Router();
 
@@ -326,6 +326,137 @@ router.delete("/jobs/:id", async (req: AuthRequest, res: Response) => {
         res.status(200).json({ success: true });
     } catch (error: unknown) {
         const message = error instanceof Error ? error.message : "Failed to delete job";
+        res.status(500).json({ error: message });
+    }
+});
+
+// GET /api/admin/jobs/:id/rankings
+router.get("/jobs/:id/rankings", async (req: AuthRequest, res: Response) => {
+    try {
+        const principal = req.auth?.principal;
+        if (!principal) {
+            res.status(401).json({ error: "Unauthorized" });
+            return;
+        }
+
+        const scopedDb = getScopedPrismaClient(principal) as any;
+        const collegeId = principal.collegeId;
+        const id = String(req.params.id);
+
+        const job = await prisma.job.findUnique({ where: { id } });
+        if (!job) {
+            res.status(404).json({ error: "Job not found" });
+            return;
+        }
+
+        const capabilitySlugs = job.capabilitySlugs as string[];
+        if (!capabilitySlugs || capabilitySlugs.length === 0) {
+            res.status(400).json({ error: "Job has no identified capabilities" });
+            return;
+        }
+
+        // Fetch capability definitions from the database
+        const capabilities = await prisma.capability.findMany({
+            where: { slug: { in: capabilitySlugs } },
+        });
+
+        const getCategoryDemandScore = (category: string) => {
+            const cat = category.toLowerCase();
+            if (["dsa", "algorithms"].includes(cat)) return 0.9;
+            if (["backend", "frontend"].includes(cat)) return 0.7;
+            if (["database", "devops", "cloud", "system design"].includes(cat)) return 0.6;
+            if (["framework", "language"].includes(cat)) return 0.5;
+            if (["tool"].includes(cat)) return 0.4;
+            return 0.5;
+        };
+
+        const jobDemands = capabilities.map(cap => ({
+            capabilityId: cap.id,
+            capabilitySlug: cap.slug,
+            capabilityName: cap.name,
+            category: cap.category || "general",
+            demandScore: getCategoryDemandScore(cap.category || "general"),
+            recommendation: cap.recommendation,
+            projectSuggestion: cap.projectSuggestion,
+        }));
+
+        const capabilityMap = new Map(capabilities.map(c => [c.slug.toLowerCase(), c]));
+
+        // Fetch students in this college who have capability profiles
+        const studentsWithProfiles = await scopedDb.student.findMany({
+            where: { collegeId },
+            select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true,
+                userCapabilityProfiles: {
+                    select: {
+                        capabilities: {
+                            select: {
+                                score: true,
+                                confidence: true,
+                                capabilityId: true,
+                                capability: {
+                                    select: { slug: true },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        const rankings = (studentsWithProfiles as any[]).map((student: any) => {
+            // Flatten capabilities across all profiles for this student
+            const allProfileCaps = student.userCapabilityProfiles.flatMap((p: any) => p.capabilities);
+            const profileSlugs = new Set(allProfileCaps.map((c: any) => c.capability.slug.toLowerCase()));
+
+            const studentSlugsMatched = capabilitySlugs.filter(slug =>
+                profileSlugs.has(slug.toLowerCase())
+            );
+
+            const studentCapabilities = studentSlugsMatched
+                .map(slug => {
+                    const cap = capabilityMap.get(slug.toLowerCase());
+                    if (!cap) return null;
+                    const profileCap = allProfileCaps.find(
+                        (c: any) => c.capability.slug.toLowerCase() === slug.toLowerCase()
+                    );
+                    return {
+                        capabilityId: cap.id,
+                        capabilitySlug: cap.slug,
+                        score: profileCap ? profileCap.score / 100 : 0.5,
+                        confidence: profileCap ? profileCap.confidence : 0.7,
+                    };
+                })
+                .filter((c): c is NonNullable<typeof c> => c !== null);
+
+            const quickScore = computeQuickMatchScore(capabilitySlugs, new Set(studentSlugsMatched));
+
+            let matchScore = 0;
+            if (studentCapabilities.length > 0 && jobDemands.length > 0) {
+                const report = matchJobToStudent(jobDemands, studentCapabilities);
+                matchScore = report.matchScore;
+            }
+
+            const finalScore = Math.round(0.7 * matchScore + 0.3 * quickScore);
+
+            return {
+                studentId: student.id,
+                name: `${student.firstName} ${student.lastName}`,
+                email: student.email,
+                quickScore,
+                matchScore,
+                finalScore,
+            };
+        });
+
+        rankings.sort((a: any, b: any) => b.finalScore - a.finalScore);
+
+        res.status(200).json({ jobId: job.id, rankings });
+    } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : "Failed to generate rankings";
         res.status(500).json({ error: message });
     }
 });
