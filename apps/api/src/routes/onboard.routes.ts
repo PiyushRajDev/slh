@@ -1,4 +1,5 @@
 import { Router, Response } from "express";
+import { randomBytes } from "crypto";
 import * as bcrypt from "bcrypt";
 import prisma from "../db";
 import {
@@ -211,7 +212,7 @@ router.post(
                 continue;
             }
 
-            const tempPassword = `SLH@${row.rollNumber}`;
+            const tempPassword = randomBytes(12).toString("base64url");
             const passwordHash = await bcrypt.hash(tempPassword, 10);
 
             try {
