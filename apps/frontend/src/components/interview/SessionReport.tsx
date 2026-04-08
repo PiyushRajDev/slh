@@ -1,10 +1,8 @@
 import { ReadinessDeltaBadge } from './ReadinessDeltaBadge';
-import { buttonVariants } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { CheckCircle2, XCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import Link from 'next/link';
 
 interface NextStep { priority: number; action: string; topic: string; }
 interface SessionReportProps {
@@ -138,14 +136,6 @@ export function SessionReport({
             </li>
           ))}
         </ol>
-      </div>
-
-      {/* Actions */}
-      <div className="flex gap-3 pt-2">
-        <Link href="/interview" className={buttonVariants()}>Practice Again</Link>
-        <Link href="/interview/sessions" className={buttonVariants({ variant: 'outline' })}>
-          View History
-        </Link>
       </div>
     </div>
   );
