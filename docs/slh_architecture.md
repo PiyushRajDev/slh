@@ -100,7 +100,7 @@
 **Purpose**: Student-facing portal for viewing JRI and improvement tracking
 
 **Features**:
-- JRI score display with visual breakdown
+- JRI scores will be shown with complete breakdown 
 - Historical JRI trend chart
 - GitHub projects listing with individual scores
 - DSA progress tracking
@@ -234,14 +234,14 @@ interface JWTPayload {
 ```
 
 #### C. Data Fetcher Services
-**Purpose**: Collect data from external sources
+**Purpose**: Collect data from the external sources
 
 **Services**:
 
 1. **GitHub Service**
    - Fetch user repositories
    - Analyze code metrics
-   - Track commit history
+   - Track commit the history
    - Detect tech stacks
 
 2. **LeetCode Scraper**
