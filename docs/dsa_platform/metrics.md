@@ -58,6 +58,13 @@ detects fake, borrowed, or copy-paste driven profiles
 
 zero or near-zero wrong submissions is treated as suspicious
 
+healthy_error_range_flag should therefore be evaluated relative to:
+
+number of problems attempted
+difficulty distribution
+account age/activity duration
+topic complexity
+
 
 
 8. learning velocity metrics
